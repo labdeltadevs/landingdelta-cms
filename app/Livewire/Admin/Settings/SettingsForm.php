@@ -21,12 +21,18 @@ class SettingsForm extends Component
         $keys = [
             'company_name', 'company_slogan', 'legal_notice',
             'about_history', 'about_mission', 'about_vision',
-            'about_values', 'about_quality_policy',
+            'about_values', 'about_quality_policy', 'about_milestones',
+            'work_with_us_title', 'work_with_us_description', 'work_with_us_body',
+            'social_linkedin', 'social_facebook', 'social_instagram', 'social_tiktok',
         ];
 
         foreach ($keys as $key) {
             $value = SiteSetting::get($key);
-            $this->settings[$key] = is_array($value) ? ($value['body'] ?? $value) : $value;
+            if ($key === 'about_milestones') {
+                $this->settings[$key] = is_string($value) ? $value : json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            } else {
+                $this->settings[$key] = is_array($value) ? ($value['body'] ?? $value) : $value;
+            }
         }
     }
 
@@ -34,8 +40,15 @@ class SettingsForm extends Component
     {
         $this->authorize('manage settings', SiteSetting::class);
 
+        $isSimple = [
+            'company_name', 'company_slogan', 'legal_notice',
+            'work_with_us_title', 'work_with_us_description',
+            'social_linkedin', 'social_facebook', 'social_instagram', 'social_tiktok',
+            'about_milestones',
+        ];
+
         foreach ($this->settings as $key => $value) {
-            SiteSetting::put($key, in_array($key, ['company_name', 'company_slogan', 'legal_notice']) ? $value : ['body' => $value]);
+            SiteSetting::put($key, in_array($key, $isSimple) ? $value : ['body' => $value]);
         }
 
         $this->dispatch('notify', message: 'Configuración guardada correctamente.');

@@ -1,3 +1,4 @@
+<div>
 <flux:heading>Categorías</flux:heading>
 <flux:subheading>Gestión de categorías de productos.</flux:subheading>
 
@@ -46,3 +47,4 @@
 </div>
 
 <div class="mt-4">{{ $categories->links() }}</div>
+</div>

@@ -1,3 +1,4 @@
+<div>
 <flux:heading>Rotafolios</flux:heading>
 <flux:subheading>Gestión de rotafolios o catálogos en PDF.</flux:subheading>
 
@@ -33,3 +34,4 @@
 </div>
 
 <div class="mt-4">{{ $brochures->links() }}</div>
+</div>

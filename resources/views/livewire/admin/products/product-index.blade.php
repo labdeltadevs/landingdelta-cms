@@ -1,3 +1,4 @@
+<div>
 <flux:heading>Productos</flux:heading>
 <flux:subheading>Gestión de productos del catálogo.</flux:subheading>
 
@@ -59,4 +60,5 @@
 
 <div class="mt-4">
     {{ $products->links(data: ['layout' => 'pagination']) }}
+</div>
 </div>

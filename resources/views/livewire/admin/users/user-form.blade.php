@@ -1,7 +1,8 @@
-<flux:heading>{{ $user?->exists ? 'Editar usuario' : 'Nuevo usuario' }}</flux:heading>
-<flux:subheading>{{ $user?->exists ? 'Actualiza los datos del usuario.' : 'Crea un nuevo usuario en el sistema.' }}</flux:subheading>
+<div>
+    <flux:heading>{{ $user?->exists ? 'Editar usuario' : 'Nuevo usuario' }}</flux:heading>
+    <flux:subheading>{{ $user?->exists ? 'Actualiza los datos del usuario.' : 'Crea un nuevo usuario en el sistema.' }}</flux:subheading>
 
-<form wire:submit.prevent="save" class="mt-6 space-y-6 max-w-2xl">
+    <form wire:submit.prevent="save" class="mt-6 space-y-6 max-w-2xl">
     <flux:field>
         <flux:label>Nombre</flux:label>
         <flux:input wire:model="name" placeholder="Nombre completo" />
@@ -40,8 +41,9 @@
         <flux:error name="role_id" />
     </flux:field>
 
-    <div class="flex items-center gap-4">
-        <flux:button type="submit" variant="primary">{{ $user?->exists ? 'Actualizar' : 'Crear' }}</flux:button>
-        <flux:button :href="route('admin.users.index')" wire:navigate variant="ghost">Cancelar</flux:button>
-    </div>
-</form>
+        <div class="flex items-center gap-4">
+            <flux:button type="submit" variant="primary">{{ $user?->exists ? 'Actualizar' : 'Crear' }}</flux:button>
+            <flux:button :href="route('admin.users.index')" wire:navigate variant="ghost">Cancelar</flux:button>
+        </div>
+    </form>
+</div>

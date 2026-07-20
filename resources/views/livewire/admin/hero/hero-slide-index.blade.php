@@ -1,3 +1,4 @@
+<div>
 <flux:heading>Slides del Hero</flux:heading>
 <flux:subheading>Gestión de los slides del carrusel principal.</flux:subheading>
 
@@ -40,4 +41,5 @@
             <p class="py-12 text-center text-sm text-zinc-400">No hay slides registrados.</p>
         </div>
     @endforelse
+</div>
 </div>

@@ -1,3 +1,4 @@
+<div>
 <flux:heading>Marcas</flux:heading>
 <flux:subheading>Gestión de marcas del laboratorio.</flux:subheading>
 
@@ -50,3 +51,4 @@
 </div>
 
 <div class="mt-4">{{ $brands->links() }}</div>
+</div>

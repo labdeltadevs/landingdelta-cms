@@ -5,15 +5,15 @@
 
         <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             @forelse ($brands as $brand)
-                <a href="{{ route('public.brands.show', $brand) }}" class="group flex flex-col items-center rounded-xl border border-zinc-200 p-8 transition hover:border-orange-200 hover:shadow-sm">
+                <a href="{{ route('public.brands.show', $brand) }}" class="group flex flex-col items-center rounded-xl border border-zinc-200 p-8 transition-all duration-300 hover:border-[#ff671f]/30 hover:shadow-lg hover:shadow-[#ff671f]/5 hover:-translate-y-1">
                     @if ($brand->logo_path)
-                        <div class="mb-4 h-24 grayscale transition group-hover:grayscale-0">
+                        <div class="mb-4 h-24 transition-all duration-300 group-hover:scale-110">
                             <img src="{{ $brand->logo_url }}" alt="{{ $brand->name }}" class="h-full object-contain" />
                         </div>
                     @else
                         <div class="mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-zinc-100 text-3xl font-bold text-zinc-400">{{ substr($brand->name, 0, 1) }}</div>
                     @endif
-                    <h3 class="font-semibold text-zinc-900 group-hover:text-orange-600">{{ $brand->name }}</h3>
+                    <h3 class="font-semibold text-zinc-900 group-hover:text-[#ff671f] transition-colors">{{ $brand->name }}</h3>
                 </a>
             @empty
                 <div class="col-span-full py-20 text-center text-zinc-400">No hay marcas registradas.</div>

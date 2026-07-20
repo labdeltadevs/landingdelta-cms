@@ -34,9 +34,9 @@
                         <div class="mt-4">
                             <h3 class="font-semibold text-zinc-900 group-hover:text-orange-600">{{ $product->name }}</h3>
                             <p class="mt-1 text-xs text-zinc-500">{{ $product->active_ingredient }}</p>
-                            @if ($product->approx_price)
+                            {{-- @if ($product->approx_price)
                                 <p class="mt-2 text-sm font-bold">{{ $product->formatted_price }}</p>
-                            @endif
+                            @endif --}}
                         </div>
                     </a>
                 @endforeach

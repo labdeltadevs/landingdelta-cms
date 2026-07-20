@@ -11,6 +11,8 @@ use App\Livewire\Admin\Categories\CategoryIndex;
 use App\Livewire\Admin\Hero\HeroSlideForm;
 use App\Livewire\Admin\Hero\HeroSlideIndex;
 use App\Livewire\Admin\Hero\HeroSlideReorder;
+use App\Livewire\Admin\JobOpenings\JobOpeningForm;
+use App\Livewire\Admin\JobOpenings\JobOpeningIndex;
 use App\Livewire\Admin\News\NewsForm;
 use App\Livewire\Admin\News\NewsIndex;
 use App\Livewire\Admin\Products\ProductForm;
@@ -29,8 +31,33 @@ use Spatie\Permission\Middleware\PermissionMiddleware;
 Route::view('/', 'public.home')->name('public.home');
 
 Route::get('/productos', function () {
+    $query = Product::query()->active()->with('brand', 'category');
+
+    $selectedCategory = null;
+    $categorySlug = request('category');
+    if ($categorySlug) {
+        $selectedCategory = \App\Models\Category::query()->where('slug', $categorySlug)->first();
+        if ($selectedCategory) {
+            $query->where('category_id', $selectedCategory->id);
+        }
+    }
+
+    $searchTerm = request('q');
+    if ($searchTerm) {
+        $like = '%'.$searchTerm.'%';
+        $query->where(function ($q) use ($like) {
+            $q->where('name', 'like', $like)
+              ->orWhere('active_ingredient', 'like', $like)
+              ->orWhere('description', 'like', $like);
+        });
+    }
+
     return view('public.products.index', [
-        'products' => Product::query()->active()->with('brand', 'category')->paginate(12),
+        'products' => $query->ordered()->paginate(10),
+        'categories' => \App\Models\Category::query()->active()->ordered()->withCount(['products' => function ($q) {
+            $q->active();
+        }])->get(),
+        'selectedCategory' => $selectedCategory,
     ]);
 })->name('public.products.index');
 
@@ -51,7 +78,28 @@ Route::get('/marcas/{brand:slug}', function (Brand $brand) {
     ]);
 })->name('public.brands.show');
 
-Route::view('/nosotros', 'public.about')->name('public.about');
+Route::get('/nosotros', function () {
+    $history = \App\Models\SiteSetting::get('about_history');
+    $mission = \App\Models\SiteSetting::get('about_mission');
+    $vision = \App\Models\SiteSetting::get('about_vision');
+    $values = \App\Models\SiteSetting::get('about_values');
+    $quality = \App\Models\SiteSetting::get('about_quality_policy');
+    $milestonesRaw = \App\Models\SiteSetting::get('about_milestones', '[]');
+    $milestones = is_string($milestonesRaw) ? json_decode($milestonesRaw, true) : (is_array($milestonesRaw) ? $milestonesRaw : []);
+
+    $yearsActive = now()->year - 1987;
+
+    return view('public.about', [
+        'history' => $history,
+        'mission' => $mission,
+        'vision' => $vision,
+        'values' => $values,
+        'quality' => $quality,
+        'milestones' => $milestones,
+        'branches' => \App\Models\Branch::query()->active()->ordered()->get(),
+        'yearsActive' => $yearsActive,
+    ]);
+})->name('public.about');
 Route::view('/contacto', 'public.contact')->name('public.contact');
 Route::view('/trabaja-con-nosotros', 'public.work-with-us')->name('public.work-with-us');
 
@@ -106,6 +154,10 @@ Route::middleware(['auth', 'verified', 'role:admin|editor|visor'])
         Route::get('/news', NewsIndex::class)->name('news.index');
         Route::get('/news/create', NewsForm::class)->name('news.create');
         Route::get('/news/{news}/edit', NewsForm::class)->name('news.edit');
+
+        Route::get('/job-openings', JobOpeningIndex::class)->name('job-openings.index');
+        Route::get('/job-openings/create', JobOpeningForm::class)->name('job-openings.create');
+        Route::get('/job-openings/{jobOpening}/edit', JobOpeningForm::class)->name('job-openings.edit');
 
         // Admin-only routes
         Route::middleware(PermissionMiddleware::class . ':manage users')

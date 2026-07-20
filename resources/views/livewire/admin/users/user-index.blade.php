@@ -1,3 +1,4 @@
+<div>
 <flux:heading>Usuarios</flux:heading>
 <flux:subheading>Gestión de usuarios del sistema.</flux:subheading>
 
@@ -44,3 +45,4 @@
 </div>
 
 <div class="mt-4">{{ $users->links() }}</div>
+</div>

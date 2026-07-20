@@ -1,3 +1,4 @@
+<div>
 <flux:heading>Sucursales</flux:heading>
 <flux:subheading>Gestión de sucursales y oficinas.</flux:subheading>
 
@@ -48,3 +49,4 @@
 </div>
 
 <div class="mt-4">{{ $branches->links() }}</div>
+</div>

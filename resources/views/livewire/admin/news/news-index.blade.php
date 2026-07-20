@@ -1,3 +1,4 @@
+<div>
 <flux:heading>Noticias</flux:heading>
 <flux:subheading>Gestión de noticias y comunicados.</flux:subheading>
 
@@ -46,3 +47,4 @@
 </div>
 
 <div class="mt-4">{{ $news->links() }}</div>
+</div>

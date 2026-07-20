@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Livewire\Admin\Brands;
+namespace App\Livewire\Admin\JobOpenings;
 
-use App\Models\Brand;
+use App\Models\JobOpening;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -14,62 +14,66 @@ use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 #[Layout('layouts.app')]
-#[Title('Marca')]
-class BrandForm extends Component
+#[Title('Oferta Laboral')]
+class JobOpeningForm extends Component
 {
     use WithFileUploads;
 
-    public ?Brand $brand = null;
+    public ?JobOpening $jobOpening = null;
 
-    public string $name = '';
+    public string $title = '';
 
     public string $description = '';
 
+    public string $valid_from = '';
+
+    public string $valid_until = '';
+
     public bool $is_active = true;
 
-    public $logo;
+    public $image;
 
-    public function mount(?Brand $brand = null): void
+    public function mount(?JobOpening $jobOpening = null): void
     {
-        $this->brand = $brand;
+        $this->jobOpening = $jobOpening;
 
-        if ($this->brand?->exists) {
-            $this->name = $this->brand->name;
-            $this->description = $this->brand->description ?? '';
-            $this->is_active = $this->brand->is_active;
+        if ($this->jobOpening?->exists) {
+            $this->title = $this->jobOpening->title;
+            $this->description = $this->jobOpening->description ?? '';
+            $this->valid_from = $this->jobOpening->valid_from?->format('Y-m-d') ?? '';
+            $this->valid_until = $this->jobOpening->valid_until?->format('Y-m-d') ?? '';
+            $this->is_active = $this->jobOpening->is_active;
         }
     }
 
     public function save(): void
     {
-        $this->authorize($this->brand?->exists ? 'update' : 'create', $this->brand ?? Brand::class);
+        $this->authorize($this->jobOpening?->exists ? 'update' : 'create', $this->jobOpening ?? JobOpening::class);
 
         $data = $this->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'valid_from' => 'required|date',
+            'valid_until' => 'required|date|after_or_equal:valid_from',
             'is_active' => 'boolean',
         ]);
 
-        $data['slug'] = $this->brand?->exists
-            ? Str::slug($this->name).'-'.$this->brand->id
-            : Str::slug($this->name).'-'.Str::lower(Str::random(5));
+        if ($this->image && is_string($this->image)) {
+            $data['image_path'] = $this->image;
 
-        if ($this->logo && is_string($this->logo)) {
-            $data['logo_path'] = $this->logo;
-
-            if ($this->brand?->exists && $this->brand->logo_path) {
-                Storage::disk('public')->delete($this->brand->logo_path);
+            if ($this->jobOpening?->exists && $this->jobOpening->image_path) {
+                Storage::disk('public')->delete($this->jobOpening->image_path);
             }
         }
 
-        if ($this->brand?->exists) {
-            $this->brand->update($data);
+        if ($this->jobOpening?->exists) {
+            $this->jobOpening->update($data);
         } else {
-            $this->brand = Brand::query()->create($data);
+            $this->jobOpening = JobOpening::query()->create($data);
         }
 
-        $this->dispatch('notify', message: 'Marca guardada correctamente.');
-        $this->redirect(route('admin.brands.index'), navigate: true);
+        $this->dispatch('notify', message: 'Oferta laboral guardada correctamente.');
+        $this->redirect(route('admin.job-openings.index'), navigate: true);
     }
 
     public function _finishUpload($name, $tmpPath, $isMultiple, $append = true): void
@@ -100,14 +104,14 @@ class BrandForm extends Component
 
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         $newFilename = Str::uuid().'.'.$extension;
-        $newPath = 'brands/'.$newFilename;
+        $newPath = 'job-openings/'.$newFilename;
 
         Storage::disk('public')->put($newPath, Storage::disk($disk)->get($storagePath));
 
         Storage::disk($disk)->delete($storagePath);
         Storage::disk($disk)->delete($storagePath.'.json');
 
-        $this->logo = $newPath;
+        $this->image = $newPath;
 
         $this->dispatch('upload:finished', name: $name, tmpFilenames: [$filename])->self();
         app('livewire')->updateProperty($this, $name, $newPath);
@@ -115,6 +119,6 @@ class BrandForm extends Component
 
     public function render(): View
     {
-        return view('livewire.admin.brands.brand-form');
+        return view('livewire.admin.job-openings.job-opening-form');
     }
 }

@@ -33,6 +33,9 @@
                     <flux:sidebar.item icon="newspaper" :href="route('admin.news.index')" :current="request()->routeIs('admin.news.*')" wire:navigate>
                         Noticias
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="briefcase" :href="route('admin.job-openings.index')" :current="request()->routeIs('admin.job-openings.*')" wire:navigate>
+                        Ofertas Laborales
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
