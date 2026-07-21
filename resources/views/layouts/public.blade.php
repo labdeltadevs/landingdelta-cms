@@ -320,8 +320,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             AOS.init({
-                duration: 600,
-                once: true,
+                duration: 800,
+                once: false,
                 offset: 80,
             });
         });

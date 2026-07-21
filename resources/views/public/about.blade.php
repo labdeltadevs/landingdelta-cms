@@ -13,6 +13,7 @@
         $hasQuality = ! blank($qualityBody);
         $hasBranches = $branches->count() > 0;
         $hasMilestones = count($milestones) > 0;
+        $firstYearGlobal = $hasMilestones ? (int) ($milestones[0]['year'] ?? 1987) : 1987;
 
         $historyParagraphs = $hasHistory ? array_filter(array_map('trim', explode("\n\n", $historyBody))) : [];
 
@@ -70,9 +71,9 @@
 
                 {{-- CTAs --}}
                 <div class="mt-10 flex flex-wrap justify-center gap-4">
-                    <a href="#story"
+                    <a href="#travesia"
                        class="group inline-flex items-center gap-2.5 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:bg-[#e55a1a] hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#ff671f]/30">
-                        <span>Descubre nuestra historia</span>
+                        <span>Explora nuestra travesía</span>
                         <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
                     </a>
                     <a href="{{ route('public.contact') }}"
@@ -85,7 +86,7 @@
 
             {{-- Scroll indicator --}}
             <div class="mt-20 flex justify-center" data-aos="fade-up" data-aos-delay="300">
-                <a href="#story" class="flex flex-col items-center gap-2 text-zinc-500 hover:text-zinc-300 transition-colors group">
+                <a href="#travesia" class="flex flex-col items-center gap-2 text-zinc-500 hover:text-zinc-300 transition-colors group">
                     <span class="text-[10px] font-medium uppercase tracking-[0.25em]">Descubre más</span>
                     <span class="flex h-9 w-6 items-start justify-center rounded-full border border-zinc-500 group-hover:border-zinc-300 transition-colors">
                         <span class="mt-1.5 h-2 w-1 rounded-full bg-zinc-500 group-hover:bg-zinc-300 animate-bounce"></span>
@@ -95,113 +96,123 @@
         </div>
     </section>
 
-    {{-- ============================================================ --}}
-    {{-- STORY / HISTORY — STORYTIME NARRATIVE                       --}}
-    {{-- ============================================================ --}}
-    @if ($hasHistory)
-        <section id="story" class="relative py-24 sm:py-32 bg-white overflow-hidden">
-            {{-- Decorative background --}}
-            <div class="absolute inset-0 pointer-events-none">
-                <div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-zinc-50 to-transparent"></div>
-                <div class="absolute top-40 left-10 w-72 h-72 rounded-full bg-[#ff671f]/[0.02] blur-3xl"></div>
-                <div class="absolute bottom-40 right-10 w-96 h-96 rounded-full bg-[#ff671f]/[0.02] blur-3xl"></div>
-            </div>
-
-            <div class="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-                {{-- Chapter header --}}
-                <div class="text-center mb-16" data-aos="fade-up">
-                    <span class="inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-[#ff671f]">
-                        <span class="h-px w-8 bg-[#ff671f]/30"></span>
-                        Capítulo I
-                        <span class="h-px w-8 bg-[#ff671f]/30"></span>
-                    </span>
-                    <h2 class="mt-6 text-4xl sm:text-5xl font-bold text-zinc-900 leading-tight">
-                        Nuestra <span class="text-[#ff671f]">historia</span>
-                    </h2>
-                    <p class="mt-3 text-sm text-zinc-400 max-w-md mx-auto">
-                        {{ $yearsActive }} años de compromiso con la salud y el bienestar de Bolivia
-                    </p>
-                </div>
-
-                {{-- Story content — flowing narrative --}}
-                <div class="space-y-8 sm:space-y-10 text-base sm:text-lg text-zinc-700 leading-[1.8] tracking-wide"
-                     data-aos="fade-up" data-aos-delay="100">
-
-                    {{-- Opening quote --}}
-                    <div class="relative pl-8 sm:pl-12 border-l-2 border-[#ff671f]/30">
-                        <svg class="absolute -left-3 -top-2 h-8 w-8 text-[#ff671f]/20" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151C7.563 6.068 6 8.789 6 11h4v10H0z"/>
-                        </svg>
-                        <p class="text-lg sm:text-xl text-zinc-900 font-medium italic leading-relaxed">
-                            {{ $historyParagraphs[0] ?? $historyBody }}
-                        </p>
-                    </div>
-
-                    {{-- Rest of paragraphs with drop caps --}}
-                    @foreach ($historyParagraphs as $idx => $paragraph)
-                        @if ($idx === 0) @continue @endif
-                        <div class="relative">
-                            @php
-                                $firstChar = mb_substr(trim($paragraph), 0, 1);
-                                $restText = mb_substr(trim($paragraph), 1);
-                                $isLetter = $firstChar && preg_match('/\pL/u', $firstChar);
-                            @endphp
-                            @if ($isLetter)
-                                <span aria-hidden="true" class="float-left text-5xl sm:text-6xl font-bold text-[#ff671f]/20 leading-none mr-3 mt-1 select-none pointer-events-none font-serif">{{ $firstChar }}</span>
-                            @endif
-                            <p class="text-zinc-600 leading-relaxed">{{ $restText ? $firstChar . $restText : $paragraph }}</p>
-                        </div>
-                    @endforeach
-                </div>
-
-                {{-- Milestone highlight --}}
-                @if ($hasMilestones)
-                    <div class="mt-16 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3" data-aos="fade-up" data-aos-delay="200">
-                        @foreach (array_slice($milestones, 0, 6) as $m)
-                            <div class="group relative rounded-xl border border-zinc-200/60 bg-zinc-50/50 p-4 text-center transition-all duration-300 hover:bg-white hover:shadow-md hover:border-[#ff671f]/20 hover:-translate-y-0.5">
-                                <div class="text-lg font-bold text-[#ff671f] tabular-nums">{{ $m['year'] }}</div>
-                                <div class="mt-0.5 text-[10px] font-medium text-zinc-500 uppercase tracking-wider leading-tight">{{ $m['title'] }}</div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-
-                {{-- Years counter --}}
-                <div class="mt-16 text-center" data-aos="fade-up">
-                    <div class="inline-flex items-center gap-3 rounded-full bg-zinc-100 px-6 py-3">
-                        <span class="text-2xl font-bold text-[#ff671f]">{{ $yearsActive }}</span>
-                        <span class="text-xs font-medium text-zinc-500 uppercase tracking-wider">Años de experiencia</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-    @endif
 
     {{-- ============================================================ --}}
-    {{-- DYNAMIC TIMELINE                                            --}}
+    {{-- LIFESPAN TIMELINE — "NUESTRA TRAVESÍA"                     --}}
     {{-- ============================================================ --}}
     @if ($hasMilestones)
-        <section class="relative py-24 sm:py-32 bg-gradient-to-b from-zinc-50 to-white overflow-hidden">
+        <section id="travesia" class="relative py-24 sm:py-32 bg-gradient-to-b from-zinc-50 to-white overflow-hidden">
+            {{-- Dot grid bg --}}
             <div class="absolute inset-0 opacity-[0.02] pointer-events-none"
                  style="background-image: radial-gradient(circle, #ff671f 1px, transparent 1px); background-size: 24px 24px;">
             </div>
-            <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            {{-- Soft radial orbs --}}
+            <div class="absolute -top-48 -right-48 h-[35rem] w-[35rem] rounded-full bg-[#ff671f]/5 blur-3xl"></div>
+            <div class="absolute -bottom-48 -left-48 h-[30rem] w-[30rem] rounded-full bg-[#ff671f]/3 blur-3xl"></div>
+
+            @php
+                $firstYear = (int) ($milestones[0]['year'] ?? 1987);
+                $lastYear = (int) (now()->year);
+                $totalSpan = max($lastYear - $firstYear, 1);
+                $decades = range(ceil($firstYear / 10) * 10, floor($lastYear / 10) * 10, 10);
+                if (empty($decades) || $decades[0] > $firstYear) {
+                    array_unshift($decades, $firstYear);
+                }
+                if (end($decades) !== $lastYear) {
+                    $decades[] = $lastYear;
+                }
+            @endphp
+
+            <div class="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                {{-- Header --}}
                 <div class="text-center" data-aos="fade-up">
                     <span class="inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-[#ff671f]">
                         <span class="h-px w-8 bg-[#ff671f]/30"></span>
-                        Capítulo II
+                        Capítulo I
                         <span class="h-px w-8 bg-[#ff671f]/30"></span>
                     </span>
                     <h2 class="mt-6 text-4xl sm:text-5xl font-bold text-zinc-900">Nuestra travesía</h2>
                     <p class="mt-3 text-sm text-zinc-400 max-w-lg mx-auto">Hitos que marcaron nuestro camino y nos impulsan hacia el futuro.</p>
                 </div>
 
-                <div class="relative mt-16">
-                    {{-- Vertical line --}}
-                    <div class="absolute left-8 md:left-1/2 top-0 h-full w-0.5 bg-gradient-to-b from-[#ff671f] via-[#ff671f]/30 to-transparent md:-translate-x-px"></div>
+                {{-- Lifespan Bar --}}
+                <div class="relative mt-16 mb-20" data-aos="fade-up" data-aos-delay="100">
+                    <div class="relative h-24 sm:h-28">
+                        {{-- Full-span track --}}
+                        <div class="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[#ff671f]/30 to-transparent"></div>
+                        {{-- Gradient fill line --}}
+                        <div class="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 bg-gradient-to-r from-[#ff671f] via-[#e55a1a] to-[#ff671f]"
+                             style="width: 100%; mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);">
+                        </div>
+                        {{-- Decade markers --}}
+                        <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-between px-2">
+                            @foreach ($decades as $decade)
+                                @php
+                                    $pos = ($decade - $firstYear) / $totalSpan * 100;
+                                    $isEdge = $decade === $firstYear || $decade === $lastYear;
+                                @endphp
+                                <div class="absolute flex flex-col items-center" style="left: {{ min(max($pos, 2), 98) }}%;">
+                                    <span class="h-2.5 w-2.5 rounded-full {{ $isEdge ? 'bg-[#ff671f] ring-2 ring-[#ff671f]/20' : 'bg-zinc-300' }} transition-all duration-300 hover:bg-[#ff671f] hover:ring-2 hover:ring-[#ff671f]/20"></span>
+                                    <span class="absolute top-5 text-[10px] font-semibold {{ $isEdge ? 'text-[#ff671f]' : 'text-zinc-400' }} tracking-wider whitespace-nowrap">
+                                        {{ $decade }}
+                                    </span>
+                                </div>
+                            @endforeach
+                        </div>
+                        {{-- Endcaps --}}
+                        <div class="absolute -top-1 left-0 text-xs font-bold text-[#ff671f] bg-white/80 px-2 py-0.5 rounded-r-full shadow-sm border border-[#ff671f]/10">
+                            {{ $firstYear }}
+                        </div>
+                        <div class="absolute -top-1 right-0 text-xs font-bold text-[#ff671f] bg-white/80 px-2 py-0.5 rounded-l-full shadow-sm border border-[#ff671f]/10">
+                            {{ $lastYear }}
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Vertical Timeline --}}
+                <div class="relative"
+                     x-data="{
+                         visible: [],
+                         scrollY: 0.5,
+                         init() {
+                             // Parallax tracking — runs before first paint
+                             const trackScroll = () => {
+                                 const rect = this.$el.getBoundingClientRect();
+                                 const wh = window.innerHeight;
+                                 this.scrollY = Math.max(0, Math.min(1, (wh - rect.top) / (wh + rect.height)));
+                             };
+                             trackScroll();
+                             window.addEventListener('scroll', trackScroll, { passive: true });
+
+                             // Node reveal — needs DOM ready
+                             this.$nextTick(() => {
+                                 this.$el.querySelectorAll('.timeline-node').forEach((node, i) => {
+                                     const obs = new IntersectionObserver((entries) => {
+                                         entries.forEach(entry => {
+                                             if (entry.isIntersecting) {
+                                                 setTimeout(() => {
+                                                     this.visible = [...this.visible, i];
+                                                 }, i * 120);
+                                                 obs.unobserve(entry.target);
+                                             }
+                                         });
+                                     }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+                                     obs.observe(node);
+                                 });
+                             });
+                         }
+                     }">
+                    {{-- Central spine (parallax) --}}
+                    <div class="absolute left-8 md:left-1/2 top-0 h-full w-0.5 bg-gradient-to-b from-[#ff671f] via-[#ff671f]/30 to-transparent transition-transform duration-100 ease-linear"
+                         :style="'transform: translateX(-0.125rem) translateY(' + ((scrollY - 0.5) * 100) + 'px)'"
+                         style="transform: translateX(-0.125rem)">
+                    </div>
 
                     @foreach ($milestones as $i => $m)
                         @php
+                            $isLeft = $i % 2 === 0;
+                            $hasImage = ! empty($m['image']);
+
                             $icons = [
                                 'sparkles' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 0 0-2.455 2.456Z"/></svg>',
                                 'trending-up' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"/></svg>',
@@ -211,32 +222,239 @@
                                 'forward' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z"/></svg>',
                                 'calendar' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"/></svg>',
                                 'shield-check' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>',
+                                'building' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>',
+                                'beaker' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/></svg>',
+                                'trophy' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M18.75 4.236c.982.143 1.954.317 2.916.52A6.003 6.003 0 0 1 16.27 9.728M18.75 4.236V4.5c0 2.108-.966 3.99-2.48 5.228m0 0a6.023 6.023 0 0 1-2.77.896m0 0a6.04 6.04 0 0 1-3-.011m0 0a6.023 6.023 0 0 1-2.77-.885"/></svg>',
+                                'scale' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0 0 12 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 0 1-2.031.352 5.988 5.988 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971Zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 0 1-2.031.352 5.989 5.989 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971Z"/></svg>',
+                                'heart' => '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"/></svg>',
                             ];
                             $iconSvg = $icons[$m['icon'] ?? ''] ?? $icons['calendar'];
                         @endphp
-                        <div class="relative flex items-start gap-5 md:gap-10 pb-14 md:pb-18 last:pb-0 group"
-                             data-aos="fade-up" data-aos-delay="{{ min($i * 60, 500) }}">
-                            {{-- Dot / Icon --}}
-                            <div class="relative z-10 flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#ff671f] to-[#e55a1a] text-white shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:shadow-[#ff671f]/30 md:h-14 md:w-14">
+
+                        {{-- Mobile: always left-aligned. Desktop: alternating. --}}
+                        <div class="timeline-node relative flex items-start gap-5 pb-16 last:pb-0 group md:gap-0 transition-all duration-700 ease-out"
+                             :class="visible.includes({{ $i }}) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12 pointer-events-none'">
+
+                            {{-- Desktop left side: card only for left-aligned items --}}
+                            <div class="hidden md:flex md:w-1/2 {{ $isLeft ? 'md:justify-end md:pr-12' : 'md:justify-start md:pl-12' }}">
+                                @if ($isLeft)
+                                    <div class="w-full max-w-lg">
+                                        @include('public.partials.milestone-card', [
+                                            'm' => $m,
+                                            'hasImage' => $hasImage,
+                                            'iconSvg' => $iconSvg,
+                                        ])
+                                    </div>
+                                @endif
+                            </div>
+
+                            {{-- Central dot --}}
+                            <div class="absolute left-8 md:left-1/2 z-10 flex h-14 w-14 -translate-x-7 md:-translate-x-7 items-center justify-center rounded-2xl bg-gradient-to-br from-[#ff671f] to-[#e55a1a] text-white shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:shadow-[#ff671f]/30 group-hover:rotate-6 md:h-16 md:w-16">
                                 {!! $iconSvg !!}
                             </div>
-                            {{-- Card --}}
-                            <div class="flex-1 rounded-2xl border border-zinc-200/60 bg-white p-6 md:p-7 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-[#ff671f]/20 relative overflow-hidden">
-                                <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff671f] via-[#ff671f]/40 to-transparent"></div>
-                                <div class="flex flex-wrap items-center gap-3 mb-2">
-                                    <span class="inline-flex items-center rounded-full bg-[#ff671f]/10 px-3 py-0.5 text-xs font-bold text-[#ff671f]">
-                                        {{ $m['year'] }}
-                                    </span>
-                                    <h3 class="text-base font-semibold text-zinc-900">{{ $m['title'] }}</h3>
-                                </div>
-                                @if ($m['desc'] ?? false)
-                                    <p class="text-sm text-zinc-500 leading-relaxed">{{ $m['desc'] }}</p>
+
+                            {{-- Mobile card (always right) --}}
+                            <div class="flex-1 pl-16 md:hidden">
+                                @include('public.partials.milestone-card', [
+                                    'm' => $m,
+                                    'hasImage' => $hasImage,
+                                    'iconSvg' => $iconSvg,
+                                ])
+                            </div>
+
+                            {{-- Desktop right side: card only for right-aligned items --}}
+                            <div class="hidden md:block md:w-1/2 {{ $isLeft ? 'md:pl-12' : 'md:pr-12' }}">
+                                @if (! $isLeft)
+                                    <div class="w-full max-w-lg">
+                                        @include('public.partials.milestone-card', [
+                                            'm' => $m,
+                                            'hasImage' => $hasImage,
+                                            'iconSvg' => $iconSvg,
+                                        ])
+                                    </div>
                                 @endif
                             </div>
                         </div>
                     @endforeach
                 </div>
             </div>
+        </section>
+    @endif
+
+    {{-- ============================================================ --}}
+    {{-- STORY / HISTORY — AGED NEWSPAPER DESIGN                      --}}
+    {{-- ============================================================ --}}
+    @if ($hasHistory)
+        {{-- =
+             AGED NEWSPAPER PAGE
+             Un diseño que evoca un periódico antiguo, desgastado por el tiempo,
+             con textura de papel amarillento, bordes irregulares, pliegues
+             y tipografía serif clásica.
+        = --}}
+        <section id="historia" class="relative overflow-hidden">
+            {{-- Paper background with grain/noise texture --}}
+            <div class="absolute inset-0 bg-[#f5f0e8]"
+                 style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%270 0 400 400%27 xmlns=%27http://www.w3.org/2000/svg%27%3E%3Cfilter id=%27noise%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.9%27 numOctaves=%274%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23noise)%27 opacity=%270.07%27/%3E%3C/svg%3E');">
+            </div>
+            {{-- Sepia/aged overlay gradient --}}
+            <div class="absolute inset-0 bg-gradient-to-b from-[#d4c5a9]/20 via-transparent to-[#c4b494]/30 pointer-events-none"></div>
+
+            {{-- Torn edge top --}}
+            <div class="absolute -top-1 left-0 right-0 h-8 bg-[#f5f0e8]"
+                 style="clip-path: polygon(0% 100%, 3% 40%, 7% 70%, 12% 30%, 18% 80%, 22% 20%, 28% 60%, 33% 50%, 38% 85%, 44% 35%, 50% 70%, 55% 25%, 61% 55%, 67% 40%, 72% 75%, 78% 30%, 83% 65%, 88% 45%, 93% 80%, 97% 35%, 100% 60%, 100% 100%, 0% 100%);"></div>
+
+            {{-- Stain/age marks --}}
+            <div class="absolute top-32 right-16 w-40 h-40 rounded-full bg-[#d4c5a9]/30 blur-2xl pointer-events-none"></div>
+            <div class="absolute bottom-48 left-12 w-56 h-56 rounded-full bg-[#c4b494]/20 blur-3xl pointer-events-none"></div>
+            <div class="absolute top-1/3 left-1/4 w-3 h-3 rounded-full bg-[#8b7355]/15 blur-sm pointer-events-none"></div>
+            <div class="absolute bottom-1/4 right-1/3 w-4 h-4 rounded-full bg-[#8b7355]/10 blur-sm pointer-events-none"></div>
+
+            {{-- Fold/crease effect across the page --}}
+            <div class="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#c4b494]/40 to-transparent pointer-events-none"></div>
+            <div class="absolute top-[calc(50%-8px)] left-0 right-0 h-4 bg-gradient-to-b from-transparent via-[#d4c5a9]/10 to-transparent pointer-events-none" style="clip-path: polygon(0% 0%, 100% 0%, 97% 100%, 3% 100%);"></div>
+
+            <div class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
+                {{-- ========== NEWSPAPER MASTHEAD ========== --}}
+                <div class="text-center mb-12" data-aos="fade-up">
+                    {{-- Chapter badge --}}
+                    <div class="mb-4">
+                        <span class="inline-flex items-center gap-2 px-3 py-1 text-[9px] font-serif uppercase tracking-[0.25em] text-[#8b7355] border border-[#8b7355]/20 rounded-sm bg-[#efe5d5]/30">
+                            <span class="w-2 h-px bg-[#8b7355]/30"></span>
+                            Capítulo II
+                            <span class="w-2 h-px bg-[#8b7355]/30"></span>
+                        </span>
+                    </div>
+                    {{-- Top rule --}}
+                    <div class="flex items-center gap-3 justify-center mb-3">
+                        <span class="block h-[1px] flex-1 max-w-24 bg-[#8b7355]/30"></span>
+                        <span class="text-[10px] font-serif italic text-[#8b7355] tracking-[0.3em]">EDICIÓN HISTÓRICA</span>
+                        <span class="block h-[1px] flex-1 max-w-24 bg-[#8b7355]/30"></span>
+                    </div>
+
+                    {{-- Newspaper nameplate --}}
+                    <h2 class="font-serif text-5xl sm:text-7xl font-bold tracking-tight text-[#3a3226] leading-[1.05]">
+                        <span class="block">La Historia</span>
+                        <span class="block text-2xl sm:text-3xl font-normal italic text-[#8b7355] tracking-[0.15em]">de Laboratorios Delta</span>
+                    </h2>
+
+                    {{-- Date line --}}
+                    <div class="mt-4 flex items-center gap-4 justify-center text-[10px] sm:text-xs text-[#8b7355] font-serif uppercase tracking-[0.25em]">
+                        <span class="h-px w-6 bg-[#8b7355]/20"></span>
+                        <span>{{ now()->format('d \d\e F \d\e Y') }}</span>
+                        <span class="h-px w-6 bg-[#8b7355]/20"></span>
+                    </div>
+
+                    {{-- Thick-thin rule under masthead --}}
+                    <div class="mt-5 space-y-[2px]">
+                        <span class="block h-[3px] bg-gradient-to-r from-transparent via-[#8b7355]/40 to-transparent"></span>
+                        <span class="block h-px bg-gradient-to-r from-transparent via-[#8b7355]/20 to-transparent"></span>
+                    </div>
+                </div>
+
+                {{-- ========== NEWSPAPER CONTENT ========== --}}
+                <div class="relative" data-aos="fade-up" data-aos-delay="100">
+                    {{-- Opening quote / lead paragraph --}}
+                    <div class="relative px-2 sm:px-4">
+                        {{-- Large drop cap for first paragraph --}}
+                        <div class="text-center sm:text-left">
+                            @php $_leadTrimmed = trim($historyParagraphs[0] ?? $historyBody); @endphp
+                            <span class="font-serif text-6xl sm:text-7xl font-bold text-[#3a3226] leading-none float-none sm:float-left mr-0 sm:mr-4 mb-2 sm:mb-0">{{ mb_substr($_leadTrimmed, 0, 1) }}</span>
+                            <p class="font-serif text-base sm:text-lg text-[#4a4236] leading-[1.9] italic first-line:font-bold">
+                                {{ mb_substr($_leadTrimmed, 1) }}
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- Column divider ornament --}}
+                    <div class="my-10 flex items-center gap-4 justify-center">
+                        <span class="block h-px flex-1 bg-[#8b7355]/20"></span>
+                        <svg class="w-6 h-6 text-[#8b7355]/30" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" d="M12 3v18M3 12h18M7.5 7.5l9 9M16.5 7.5l-9 9"/>
+                        </svg>
+                        <span class="block h-px flex-1 bg-[#8b7355]/20"></span>
+                    </div>
+
+                    {{-- Two-column layout for the rest of paragraphs --}}
+                    <div class="sm:columns-2 sm:gap-8 sm:space-y-0 space-y-6">
+                        @foreach ($historyParagraphs as $idx => $paragraph)
+                            @if ($idx === 0) @continue @endif
+                            <div class="break-inside-avoid mb-6 sm:mb-0 sm:pb-6">
+                                @php
+                                    $firstChar = mb_substr(trim($paragraph), 0, 1);
+                                    $restText = mb_substr(trim($paragraph), 1);
+                                @endphp
+                                <p class="font-serif text-sm sm:text-base text-[#4a4236] leading-[1.85] sm:text-justify text-left hyphens-auto">
+                                    @if ($firstChar && preg_match('/\pL/u', $firstChar))
+                                        <span class="font-serif font-bold text-2xl text-[#3a3226]/70 float-left mr-2 leading-none">{{ $firstChar }}</span>
+                                    @endif
+                                    {{ $restText ? $firstChar . $restText : $paragraph }}
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    {{-- Bottom rule --}}
+                    <div class="mt-12 space-y-[2px]">
+                        <span class="block h-px bg-gradient-to-r from-transparent via-[#8b7355]/20 to-transparent"></span>
+                        <span class="block h-[3px] bg-gradient-to-r from-transparent via-[#8b7355]/40 to-transparent"></span>
+                    </div>
+
+                    {{-- Footer slogan --}}
+                    <div class="mt-6 text-center">
+                    <p class="font-serif text-[11px] text-[#8b7355] italic tracking-[0.15em]">
+                        "Compromiso con la salud y el bienestar de Bolivia desde {{ $firstYearGlobal ?? 1987 }}"
+                    </p>
+                    </div>
+                </div>
+
+                {{-- ========== MILESTONE STAMP ROW ========== --}}
+                @if ($hasMilestones)
+                    <div class="mt-16" data-aos="fade-up" data-aos-delay="200">
+                        {{-- Ornamental rule --}}
+                        <div class="flex items-center gap-3 mb-8">
+                            <span class="h-px flex-1 bg-[#8b7355]/20"></span>
+                            <span class="font-serif text-[10px] text-[#8b7355] uppercase tracking-[0.3em]">Hitos</span>
+                            <span class="h-px flex-1 bg-[#8b7355]/20"></span>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            @foreach (array_slice($milestones, 0, 8) as $m)
+                                <div class="group relative border border-[#d4c5a9]/40 bg-[#f5f0e8]/60 p-4 text-center transition-all duration-300 hover:bg-[#efe5d5] hover:shadow-sm hover:-translate-y-0.5">
+                                    {{-- Decorative corner dots --}}
+                                    <span class="absolute top-1 left-1 w-1 h-1 rounded-full bg-[#8b7355]/20 group-hover:bg-[#8b7355]/40 transition-colors"></span>
+                                    <span class="absolute bottom-1 right-1 w-1 h-1 rounded-full bg-[#8b7355]/20 group-hover:bg-[#8b7355]/40 transition-colors"></span>
+                                    {{-- Year --}}
+                                    <div class="font-serif text-xl font-bold text-[#3a3226] tabular-nums">{{ $m['year'] }}</div>
+                                    {{-- Separator --}}
+                                    <div class="mx-auto my-1.5 w-6 h-px bg-[#8b7355]/20"></div>
+                                    {{-- Title --}}
+                                    <div class="font-serif text-[10px] text-[#8b7355] uppercase tracking-wider leading-tight">{{ $m['title'] }}</div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                {{-- ========== YEARS COUNTER WITH STAMP EFFECT ========== --}}
+                <div class="mt-16 text-center" data-aos="fade-up">
+                    {{-- Vintage stamp circle --}}
+                    <div class="relative inline-flex items-center justify-center">
+                        {{-- Stamp ring --}}
+                        <div class="absolute inset-0 rounded-full border-2 border-dashed border-[#8b7355]/25"></div>
+                        <div class="relative flex items-center gap-4 rounded-full bg-[#f5f0e8]/80 px-8 py-4">
+                            <span class="font-serif text-3xl sm:text-4xl font-bold text-[#3a3226] tabular-nums">{{ $yearsActive }}</span>
+                            <div class="text-left">
+                                <span class="block font-serif text-[10px] text-[#8b7355] uppercase tracking-[0.2em] leading-tight">Años de</span>
+                                <span class="block font-serif text-[10px] text-[#8b7355] uppercase tracking-[0.2em] leading-tight">Trayectoria</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Torn edge bottom --}}
+            <div class="absolute -bottom-1 left-0 right-0 h-8 bg-[#f5f0e8]"
+                 style="clip-path: polygon(0% 0%, 3% 60%, 7% 30%, 12% 70%, 18% 20%, 22% 80%, 28% 40%, 33% 60%, 38% 15%, 44% 65%, 50% 35%, 55% 75%, 61% 25%, 67% 55%, 72% 20%, 78% 70%, 83% 40%, 88% 60%, 93% 30%, 97% 65%, 100% 40%, 100% 0%, 0% 0%);"></div>
         </section>
     @endif
 
