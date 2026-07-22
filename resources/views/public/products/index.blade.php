@@ -6,7 +6,7 @@
     {{-- ============================================================ --}}
     {{-- HERO SECTION                                                --}}
     {{-- ============================================================ --}}
-    <section class="relative overflow-hidden bg-gradient-to-b from-zinc-900 to-zinc-800 py-20 sm:py-28">
+    <section class="relative overflow-hidden py-10 sm:py-10">
         <div class="absolute inset-0 opacity-[0.04] pointer-events-none"
              style="background-image: radial-gradient(circle, #ff671f 1px, transparent 1px); background-size: 24px 24px;">
         </div>
@@ -15,14 +15,14 @@
 
         <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="text-center" data-aos="fade-up">
-                <span class="inline-block text-[11px] font-semibold uppercase tracking-[0.2em] text-[#ff671f] mb-4">
+                <span class="inline-block text-[14px] font-semibold uppercase tracking-[0.2em] text-[#ff671f] mb-4">
                     Catálogo farmacéutico
                 </span>
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
                     Nuestros <span class="text-[#ff671f]">Productos</span>
                 </h1>
-                <p class="mt-4 text-base sm:text-lg text-zinc-300 max-w-2xl mx-auto">
-                    Explora nuestro catálogo completo con más de <strong class="text-white">{{ $totalProducts }}</strong> productos farmacéuticos de la más alta calidad.
+                <p class="mt-4 text-base sm:text-lg text-zinc-800 max-w-2xl mx-auto">
+                    Explora nuestro catálogo completo con más de <strong class="text-[#ff671f]">{{ $totalProducts }}</strong> productos farmacéuticos de la más alta calidad.
                 </p>
             </div>
 
@@ -35,7 +35,7 @@
                         </svg>
                         <input type="text" name="q" value="{{ request('q') }}"
                                placeholder="Buscar por nombre, principio activo..."
-                               class="w-full rounded-full border border-white/10 bg-white/10 backdrop-blur-md py-4 pl-12 pr-20 text-sm text-white placeholder:text-zinc-400
+                               class="w-full rounded-full border border-zinc-300 bg-white backdrop-blur-md py-4 pl-12 pr-20 text-sm text-zinc-800 placeholder:text-zinc-400
                                       focus:outline-none focus:ring-2 focus:ring-[#ff671f]/40 focus:border-[#ff671f]/30
                                       transition-all duration-300" />
                         <button type="submit"
@@ -58,7 +58,7 @@
     {{-- ============================================================ --}}
     {{-- CATEGORY FILTER PILLS                                       --}}
     {{-- ============================================================ --}}
-    <section class="py-8 bg-gradient-to-b from-zinc-900 to-zinc-50 border-b border-zinc-200/30">
+    <section class="py-8 border-b border-zinc-200/30">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="flex flex-wrap items-center justify-center gap-2" data-aos="fade-up" data-aos-delay="50">
                 {{-- "All" pill --}}

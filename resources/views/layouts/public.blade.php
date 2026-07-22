@@ -8,13 +8,13 @@
 
 <body class="bg-white text-zinc-900 font-sans antialiased">
     {{-- Floating Badge "Hecho en Bolivia" --}}
-    <div class="group fixed top-20 right-5 z-40 hidden sm:block bg-white rounded-full" data-aos="flip-down" data-aos-delay="800">
+    {{-- <div class="group fixed top-20 right-5 z-40 hidden sm:block bg-white rounded-full" data-aos="flip-down" data-aos-delay="800">
         <img src="{{ Storage::disk('public')->url('hecho_en_bolivia.png') }}" alt="Hecho en Bolivia"
             class="h-16 w-16 rounded-full object-cover ring-2 ring-white/50 shadow-lg
                         transition-all duration-300 group-hover:scale-110
                         group-hover:ring-[#ff671f] group-hover:drop-shadow-lg
                         group-hover:shadow-[#ff671f]/20 cursor-pointer" />
-    </div>
+    </div> --}}
 
     <style>
         [x-cloak] {
@@ -317,6 +317,7 @@
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    @livewireScripts
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             AOS.init({

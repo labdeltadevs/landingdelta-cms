@@ -1,4 +1,6 @@
-<div class="relative" x-data="{ open: false }" @click.away="open = false">
+<div class="relative" x-data="{ open: false }"
+     x-effect="if(open) $nextTick(() => $refs.searchInput?.focus())"
+     @click.away="open = false">
     {{-- Compact search icon button --}}
     <button @click="open = !open"
             class="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-500 transition-all hover:border-[#ff671f]/30 hover:text-[#ff671f] hover:shadow-sm"
@@ -23,10 +25,12 @@
             <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
             </svg>
-            <input wire:model.live.debounce.300ms="query"
+            <input wire:model.live.debounce.150ms="query"
                    type="text"
                    placeholder="Buscar productos..."
-                   class="w-full border-0 bg-transparent py-3 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-0" />
+                   autocomplete="off"
+                   class="w-full border-0 bg-transparent py-3 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-0"
+                   x-ref="searchInput" />
         </div>
 
         {{-- Results --}}
