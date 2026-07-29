@@ -16,10 +16,11 @@ use Illuminate\Support\Facades\Storage;
  * @property string $valid_from
  * @property string $valid_until
  * @property string|null $image_path
+ * @property string|null $application_email
  * @property bool $is_active
  * @property int $sort
  */
-#[Fillable(['title', 'description', 'valid_from', 'valid_until', 'image_path', 'is_active', 'sort'])]
+#[Fillable(['title', 'description', 'application_email', 'valid_from', 'valid_until', 'image_path', 'is_active', 'sort'])]
 class JobOpening extends Model
 {
     /** @use HasFactory<JobOpeningFactory> */

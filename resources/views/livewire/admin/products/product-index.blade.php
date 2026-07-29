@@ -16,7 +16,6 @@
                 <th class="px-4 py-3 text-left text-sm font-medium text-zinc-500">Nombre</th>
                 <th class="px-4 py-3 text-left text-sm font-medium text-zinc-500">Marca</th>
                 <th class="px-4 py-3 text-left text-sm font-medium text-zinc-500">Categoría</th>
-                <th class="px-4 py-3 text-left text-sm font-medium text-zinc-500">Precio aprox.</th>
                 <th class="px-4 py-3 text-center text-sm font-medium text-zinc-500">Destacado</th>
                 <th class="px-4 py-3 text-center text-sm font-medium text-zinc-500">Activo</th>
                 <th class="px-4 py-3"></th>
@@ -28,7 +27,6 @@
                     <td class="px-4 py-3 text-sm font-medium">{{ $product->name }}</td>
                     <td class="px-4 py-3 text-sm text-zinc-500">{{ $product->brand?->name ?? '—' }}</td>
                     <td class="px-4 py-3 text-sm text-zinc-500">{{ $product->category?->name ?? '—' }}</td>
-                    <td class="px-4 py-3 text-sm text-zinc-500">{{ $product->formatted_price }}</td>
                     <td class="px-4 py-3 text-center">
                         <flux:switch wire:click="toggleFeatured({{ $product->id }})" :checked="$product->is_featured" />
                     </td>
@@ -51,7 +49,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="px-4 py-12 text-center text-sm text-zinc-400">No hay productos registrados.</td>
+                    <td colspan="6" class="px-4 py-12 text-center text-sm text-zinc-400">No hay productos registrados.</td>
                 </tr>
             @endforelse
         </tbody>

@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Storage;
  * @property int $sort
  */
 #[Fillable([
-    'name', 'slug', 'active_ingredient', 'description', 'approx_price',
+    'name', 'slug', 'internal_code', 'active_ingredient', 'description', 'approx_price',
     'brand_id', 'category_id', 'main_image_path', 'is_active', 'is_featured', 'sort',
 ])]
 class Product extends Model
@@ -73,9 +73,9 @@ class Product extends Model
         $like = '%'.$term.'%';
 
         return $query->where(function (Builder $q) use ($like): void {
-            $q->where('name', 'like', $like)
-                ->orWhere('active_ingredient', 'like', $like)
-                ->orWhere('description', 'like', $like);
+            $q->where('name', 'ilike', $like)
+                ->orWhere('active_ingredient', 'ilike', $like)
+                ->orWhere('description', 'ilike', $like);
         });
     }
 

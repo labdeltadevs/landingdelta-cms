@@ -1,6 +1,9 @@
-<div class="relative" x-data="{ open: false }"
-     x-effect="if(open) $nextTick(() => $refs.searchInput?.focus())"
-     @click.away="open = false">
+<div class="relative"
+     x-data="{ open: false, selectedIndex: -1 }"
+     x-effect="if(open) $nextTick(() => { $refs.searchInput?.focus(); selectedIndex = -1; })"
+     @click.away="open = false"
+     @keydown.escape.window="open = false">
+
     {{-- Compact search icon button --}}
     <button @click="open = !open"
             class="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-500 transition-all hover:border-[#ff671f]/30 hover:text-[#ff671f] hover:shadow-sm"
@@ -18,8 +21,8 @@
          x-transition:leave="transition ease-in duration-150"
          x-transition:leave-start="opacity-100 scale-100"
          x-transition:leave-end="opacity-0 scale-95"
-         class="absolute right-0 top-full mt-2 w-80 origin-top-right rounded-xl border border-zinc-200 bg-white shadow-lg z-50 overflow-hidden"
-         @keydown.escape.window="open = false">
+         class="absolute right-0 top-full mt-2 w-80 origin-top-right rounded-xl border border-zinc-200 bg-white shadow-lg z-50 overflow-hidden">
+
         {{-- Input --}}
         <div class="relative border-b border-zinc-100">
             <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -29,24 +32,43 @@
                    type="text"
                    placeholder="Buscar productos..."
                    autocomplete="off"
+                   @input="selectedIndex = -1"
+                   @keydown.down.prevent="
+                     let items = $refs.resultsContainer.querySelectorAll('[data-result-index]');
+                     if (items.length) {
+                       selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+                       items[selectedIndex]?.scrollIntoView({ block: 'nearest' });
+                     }"
+                   @keydown.up.prevent="
+                     if (selectedIndex > 0) {
+                       selectedIndex--;
+                        $refs.resultsContainer.querySelector(`[data-result-index='${selectedIndex}']`)
+                          ?.scrollIntoView({ block: 'nearest' });
+                     }"
+                   @keydown.enter.prevent="
+                      let el = $refs.resultsContainer.querySelector(`[data-result-index='${selectedIndex}']`);
+                     if (el) { open = false; el.click(); }"
                    class="w-full border-0 bg-transparent py-3 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-0"
                    x-ref="searchInput" />
         </div>
 
         {{-- Results --}}
-        <div class="max-h-80 overflow-y-auto">
-            @if (strlen($query ?? '') > 0 && strlen($query ?? '') < 2)
+        <div class="max-h-80 overflow-y-auto" x-ref="resultsContainer">
+            @if (strlen($query) > 0 && strlen($query) < 2)
                 <div class="px-4 py-6 text-center text-xs text-zinc-400">
                     Escribe al menos 2 caracteres para buscar...
                 </div>
-            @elseif (strlen($query ?? '') >= 2 && count($results ?? []) === 0)
+            @elseif (strlen($query) >= 2 && count($results) === 0)
                 <div class="px-4 py-6 text-center text-xs text-zinc-400">
                     No se encontraron productos para "{{ $query }}"
                 </div>
-            @elseif (count($results ?? []) > 0)
+            @elseif (count($results) > 0)
                 <div class="divide-y divide-zinc-100">
-                    @foreach ($results as $product)
+                    @foreach ($results as $idx => $product)
                         <a href="{{ route('public.products.show', $product) }}"
+                           data-result-index="{{ $idx }}"
+                           wire:key="search-result-{{ $product->id }}"
+                           x-bind:class="{ 'bg-zinc-50': selectedIndex === {{ $idx }} }"
                            class="flex items-center gap-3 px-4 py-3 transition hover:bg-zinc-50"
                            @click="open = false">
                             <div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg bg-zinc-100">
@@ -58,9 +80,6 @@
                                 <p class="truncate text-sm font-medium text-zinc-900">{{ $product->name }}</p>
                                 <p class="truncate text-xs text-zinc-500">{{ $product->active_ingredient }}</p>
                             </div>
-                            @if ($product->approx_price)
-                                <span class="flex-shrink-0 text-xs font-medium text-zinc-500">{{ $product->formatted_price }}</span>
-                            @endif
                         </a>
                     @endforeach
                 </div>

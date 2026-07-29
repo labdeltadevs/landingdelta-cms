@@ -13,7 +13,6 @@
     $previewDesc = $description ?: ($product?->description ?? '');
     $previewBrand = $brand_id ? $brands->firstWhere('id', $brand_id)?->name : null;
     $previewCategory = $category_id ? $categories->firstWhere('id', $category_id)?->name : null;
-    $previewPrice = $approx_price ?? $product?->approx_price;
     $previewActive = $is_active;
     $previewFeatured = $is_featured;
     $previewInitial = $previewName ? strtoupper(substr($previewName, 0, 1)) : 'P';
@@ -40,11 +39,6 @@
                         <flux:error name="active_ingredient" />
                     </flux:field>
 
-                    <flux:field>
-                        <flux:label>Precio aprox. (Bs.)</flux:label>
-                        <flux:input wire:model="approx_price" type="number" step="0.01" placeholder="0.00" />
-                        <flux:error name="approx_price" />
-                    </flux:field>
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -132,11 +126,6 @@
                             @endif
                         </div>
 
-                        @if ($previewPrice)
-                            <div class="absolute bottom-3 right-3 rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-zinc-800 shadow-sm backdrop-blur-sm">
-                                Bs. {{ number_format($previewPrice, 2) }}
-                            </div>
-                        @endif
                     </div>
 
                     {{-- CONTENIDO --}}

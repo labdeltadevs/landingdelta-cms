@@ -15,6 +15,13 @@
             <flux:error name="description" />
         </flux:field>
 
+        <flux:field>
+            <flux:label>Correo de postulación</flux:label>
+            <flux:input wire:model="application_email" type="email" placeholder="rrhh@laboratoriosdelta.net" />
+            <flux:description>Los interesados enviarán su CV a esta dirección.</flux:description>
+            <flux:error name="application_email" />
+        </flux:field>
+
         <div class="grid grid-cols-2 gap-4">
             <flux:field>
                 <flux:label>Vigente desde</flux:label>

@@ -81,7 +81,7 @@
 
                 {{-- Title --}}
                 <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight">
-                    Conozcan nuestra
+                    Conoce nuestra
                     <br>
                     <span class="text-[#ff671f] relative inline-block">
                         historia
@@ -107,14 +107,6 @@
                         <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5"
                             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </a>
-                    <a href="{{ route('public.contact') }}"
-                        class="group inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/5 backdrop-blur-sm px-7 py-3.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-white/10 hover:border-white/30">
-                        Contáctanos
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                         </svg>
                     </a>
                 </div>
@@ -352,7 +344,7 @@
                     <h2 class="font-serif text-5xl sm:text-7xl font-bold tracking-tight text-[#3a3226] leading-[1.05]">
                         <span class="block">La Historia</span>
                         <span class="block text-2xl sm:text-3xl font-normal italic text-[#8b7355] tracking-[0.15em]">de
-                            Laboratorios Delta</span>
+                            LABORATORIOS DELTA</span>
                     </h2>
 
                     {{-- Date line --}}
@@ -379,11 +371,13 @@
                         <div class="relative h-full flex flex-col justify-center">
                             {{-- Large drop cap for first paragraph --}}
                             <div class="text-center sm:text-left">
-                                @php $_leadTrimmed = trim($historyParagraphs[0] ?? $historyBody); @endphp
+                                @php
+                                    $_leadTrimmed = trim($historyParagraphs[0] ?? $historyBody);
+                                @endphp
                                 <span
-                                    class="font-serif text-6xl sm:text-7xl font-bold text-[#3a3226] leading-none float-none sm:float-left mr-0 sm:mr-4 mb-2 sm:mb-0">{{ mb_substr($_leadTrimmed, 0, 1) }}</span>
+                                    class="font-serif text-6xl sm:text-7xl font-bold text-[#3a3226] text-justify leading-none float-none sm:float-left mr-0 sm:mr-4 mb-2 sm:mb-0">{{ mb_substr($_leadTrimmed, 0, 1) }}</span>
                                 <p
-                                    class="font-serif text-base sm:text-lg text-[#4a4236] leading-[1.9] italic first-line:font-bold">
+                                    class="font-serif text-base sm:text-lg text-[#4a4236] leading-[1.9] text-justify italic first-line:font-bold">
                                     {{ mb_substr($_leadTrimmed, 1) }}
                                 </p>
                             </div>

@@ -21,6 +21,7 @@ class JobOpeningFactory extends Factory
             'valid_from' => now()->subDays(fake()->numberBetween(0, 15))->format('Y-m-d'),
             'valid_until' => now()->addDays(fake()->numberBetween(15, 60))->format('Y-m-d'),
             'image_path' => null,
+            'application_email' => 'rrhh@laboratoriosdelta.net',
             'is_active' => true,
             'sort' => 0,
         ];

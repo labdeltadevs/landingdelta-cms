@@ -1,9 +1,9 @@
 <?php
 
-use App\Livewire\Admin\Brands\BrandForm;
-use App\Livewire\Admin\Brands\BrandIndex;
 use App\Livewire\Admin\Branches\BranchForm;
 use App\Livewire\Admin\Branches\BranchIndex;
+use App\Livewire\Admin\Brands\BrandForm;
+use App\Livewire\Admin\Brands\BrandIndex;
 use App\Livewire\Admin\Brochures\BrochureForm;
 use App\Livewire\Admin\Brochures\BrochureIndex;
 use App\Livewire\Admin\Categories\CategoryForm;
@@ -20,9 +20,13 @@ use App\Livewire\Admin\Products\ProductIndex;
 use App\Livewire\Admin\Settings\SettingsForm;
 use App\Livewire\Admin\Users\UserForm;
 use App\Livewire\Admin\Users\UserIndex;
+use App\Models\Branch;
 use App\Models\Brand;
+use App\Models\Brochure;
+use App\Models\Category;
 use App\Models\News;
 use App\Models\Product;
+use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 
@@ -36,7 +40,7 @@ Route::get('/productos', function () {
     $selectedCategory = null;
     $categorySlug = request('category');
     if ($categorySlug) {
-        $selectedCategory = \App\Models\Category::query()->where('slug', $categorySlug)->first();
+        $selectedCategory = Category::query()->where('slug', $categorySlug)->first();
         if ($selectedCategory) {
             $query->where('category_id', $selectedCategory->id);
         }
@@ -47,14 +51,14 @@ Route::get('/productos', function () {
         $like = '%'.$searchTerm.'%';
         $query->where(function ($q) use ($like) {
             $q->where('name', 'like', $like)
-              ->orWhere('active_ingredient', 'like', $like)
-              ->orWhere('description', 'like', $like);
+                ->orWhere('active_ingredient', 'like', $like)
+                ->orWhere('description', 'like', $like);
         });
     }
 
     return view('public.products.index', [
-        'products' => $query->ordered()->paginate(10),
-        'categories' => \App\Models\Category::query()->active()->ordered()->withCount(['products' => function ($q) {
+        'products' => $query->ordered()->paginate(12),
+        'categories' => Category::query()->active()->ordered()->withCount(['products' => function ($q) {
             $q->active();
         }])->get(),
         'selectedCategory' => $selectedCategory,
@@ -79,12 +83,12 @@ Route::get('/marcas/{brand:slug}', function (Brand $brand) {
 })->name('public.brands.show');
 
 Route::get('/nosotros', function () {
-    $history = \App\Models\SiteSetting::get('about_history');
-    $mission = \App\Models\SiteSetting::get('about_mission');
-    $vision = \App\Models\SiteSetting::get('about_vision');
-    $values = \App\Models\SiteSetting::get('about_values');
-    $quality = \App\Models\SiteSetting::get('about_quality_policy');
-    $milestonesRaw = \App\Models\SiteSetting::get('about_milestones', '[]');
+    $history = SiteSetting::get('about_history');
+    $mission = SiteSetting::get('about_mission');
+    $vision = SiteSetting::get('about_vision');
+    $values = SiteSetting::get('about_values');
+    $quality = SiteSetting::get('about_quality_policy');
+    $milestonesRaw = SiteSetting::get('about_milestones', '[]');
     $milestones = is_string($milestonesRaw) ? json_decode($milestonesRaw, true) : (is_array($milestonesRaw) ? $milestonesRaw : []);
 
     $yearsActive = now()->year - 1987;
@@ -96,7 +100,7 @@ Route::get('/nosotros', function () {
         'values' => $values,
         'quality' => $quality,
         'milestones' => $milestones,
-        'branches' => \App\Models\Branch::query()->active()->ordered()->get(),
+        'branches' => Branch::query()->active()->ordered()->get(),
         'yearsActive' => $yearsActive,
     ]);
 })->name('public.about');
@@ -105,7 +109,7 @@ Route::view('/trabaja-con-nosotros', 'public.work-with-us')->name('public.work-w
 
 Route::get('/rotafolios', function () {
     return view('public.brochures.index', [
-        'brochures' => \App\Models\Brochure::query()->active()->ordered()->get(),
+        'brochures' => Brochure::query()->active()->ordered()->get(),
     ]);
 })->name('public.brochures.index');
 
@@ -160,14 +164,14 @@ Route::middleware(['auth', 'verified', 'role:admin|editor|visor'])
         Route::get('/job-openings/{jobOpening}/edit', JobOpeningForm::class)->name('job-openings.edit');
 
         // Admin-only routes
-        Route::middleware(PermissionMiddleware::class . ':manage users')
+        Route::middleware(PermissionMiddleware::class.':manage users')
             ->group(function () {
                 Route::get('/users', UserIndex::class)->name('users.index');
                 Route::get('/users/create', UserForm::class)->name('users.create');
                 Route::get('/users/{user}/edit', UserForm::class)->name('users.edit');
             });
 
-        Route::middleware(PermissionMiddleware::class . ':manage settings')
+        Route::middleware(PermissionMiddleware::class.':manage settings')
             ->group(function () {
                 Route::get('/settings', SettingsForm::class)->name('settings.index');
             });

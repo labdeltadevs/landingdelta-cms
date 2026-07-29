@@ -253,8 +253,7 @@
                     <span class="text-[10px] font-medium uppercase tracking-[0.25em]">Descubre más</span>
                     <span
                         class="flex h-9 w-6 items-start justify-center rounded-full border border-white group-hover:border-zinc-300 transition-colors">
-                        <span
-                            class="mt-1.5 h-2 w-1 rounded-full bg-white group-hover:bg-white animate-bounce"></span>
+                        <span class="mt-1.5 h-2 w-1 rounded-full bg-white group-hover:bg-white animate-bounce"></span>
                     </span>
                 </a>
             </div>
@@ -265,154 +264,180 @@
     {{-- SECTION 2: BRANDS CAROUSEL · 3-SLOT PEEK                     --}}
     {{-- ============================================================ --}}
     @if ($brands->isNotEmpty())
+        <style>
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        </style>
+
         <section class="relative overflow-hidden bg-gradient-to-b from-zinc-50 to-white py-24" x-data="{
-            current: 0,
+            current: 1,
             total: {{ $brands->count() }},
             autoplay: null,
-            init() { this.startAutoplay(); },
-            startAutoplay() {
-                this.autoplay = setInterval(() => {
-                    this.current = (this.current + 1) % this.total;
-                }, 4000);
-            },
-            prev() {
-                this.current = (this.current - 1 + this.total) % this.total;
-                clearInterval(this.autoplay);
+            scroller: null,
+            init() {
+                this.scroller = this.$refs.scroller;
                 this.startAutoplay();
+
+                this.scroller.addEventListener('scroll', () => {
+                    clearTimeout(this.scrollTimeout);
+                    this.scrollTimeout = setTimeout(() => {
+                        this.current = Math.round(this.scroller.scrollLeft / this.scroller.offsetWidth) + 1;
+                    }, 100);
+                });
+            },
+            startAutoplay() {
+                this.autoplay = setInterval(() => this.next(), 5000);
+            },
+            stopAutoplay() {
+                clearInterval(this.autoplay);
             },
             next() {
-                this.current = (this.current + 1) % this.total;
-                clearInterval(this.autoplay);
-                this.startAutoplay();
+                this.current = this.current >= this.total ? 1 : this.current + 1;
+                this.scrollToCard();
+            },
+            prev() {
+                this.current = this.current <= 1 ? this.total : this.current - 1;
+                this.scrollToCard();
             },
             goTo(i) {
                 this.current = i;
-                clearInterval(this.autoplay);
-                this.startAutoplay();
+                this.scrollToCard();
             },
-            get prevIndex() { return (this.current - 1 + this.total) % this.total; },
-            get nextIndex() { return (this.current + 1) % this.total; }
+            scrollToCard() {
+                const scrollAmount = (this.current - 1) * this.scroller.offsetWidth;
+                this.scroller.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+            }
         }"
-            data-aos="fade-up">
+            @mouseenter="stopAutoplay()" @mouseleave="startAutoplay()" data-aos="fade-up">
 
-            <div class="text-center mb-12">
+            <div class="text-center mb-16 max-w-2xl mx-auto px-4">
                 <span
-                    class="inline-block text-[11px] font-semibold uppercase tracking-[0.2em] text-[#ff671f] mb-3">Distribución
-                    exclusiva</span>
-                <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900">Nuestras <span
-                        class="text-[#ff671f]">Marcas</span></h2>
-                <p class="mt-3 text-sm text-zinc-500 max-w-lg mx-auto">Conoce las marcas que representamos y
-                    distribuimos en todo Bolivia.</p>
+                    class="inline-block text-[11px] font-semibold uppercase tracking-[0.25em] text-[#ff671f] mb-4 px-3 py-1 rounded-full bg-[#ff671f]/10">
+                    Distribución exclusiva
+                </span>
+                <h2 class="text-3xl sm:text-5xl font-bold tracking-tight text-zinc-900">
+                    Nuestras <span class="text-[#ff671f]">Marcas</span>
+                </h2>
+                <p class="mt-4 text-base text-zinc-500 leading-relaxed">
+                    Conoce las marcas de alta calidad que representamos y distribuimos en todo Bolivia.
+                </p>
             </div>
 
-            {{-- Carousel with real before/after peek --}}
-            <div class="relative mx-auto max-w-4xl px-4 sm:px-6" @mouseenter="clearInterval(autoplay)"
-                @mouseleave="startAutoplay()">
-
-                {{-- 3-slot container --}}
-                <div class="relative min-h-[340px] sm:min-h-[380px] flex items-center justify-center">
-                    @foreach ($brands as $idx => $brand)
-                        {{-- Previous card (left, translucent) --}}
-                        <div x-show="{{ $idx }} === prevIndex"
-                            x-transition:enter="transition ease-out duration-400"
-                            x-transition:enter-start="opacity-0 scale-75 -translate-x-12"
-                            x-transition:enter-end="opacity-50 scale-90 translate-x-0"
-                            class="absolute left-0 top-1/2 -translate-y-1/2 w-[22%] pointer-events-none">
-                            <div
-                                class="bg-white/40 backdrop-blur-sm rounded-2xl border border-white/10 p-4 text-center opacity-50 scale-90">
-                                @if ($brand->logo_path)
-                                    <img src="{{ $brand->logo_url }}" alt=""
-                                        class="h-12 w-12 sm:h-16 sm:w-16 mx-auto object-contain" />
-                                @else
-                                    <div
-                                        class="h-12 w-12 sm:h-16 sm:w-16 mx-auto rounded-xl bg-gradient-to-br from-[#ff671f]/10 to-[#ff671f]/5 flex items-center justify-center text-lg sm:text-2xl font-bold text-[#ff671f]/40">
-                                        {{ substr($brand->name, 0, 1) }}</div>
-                                @endif
-                                <p class="mt-2 text-xs font-semibold text-zinc-600 truncate">{{ $brand->name }}</p>
-                            </div>
-                        </div>
-
-                        {{-- Current card (center, full) --}}
-                        <div x-show="{{ $idx }} === current"
-                            x-transition:enter="transition ease-out duration-700"
-                            x-transition:enter-start="opacity-0 scale-95"
-                            x-transition:enter-end="opacity-100 scale-100"
-                            class="absolute inset-x-[15%] top-1/2 -translate-y-1/2 z-10">
-                            <div
-                                class="bg-white/70 backdrop-blur-xl rounded-2xl border border-white/20 p-6 sm:p-8 shadow-xl shadow-black/5 text-center">
-                                <div class="flex justify-center mb-4">
-                                    @if ($brand->logo_path)
-                                        <img src="{{ $brand->logo_url }}" alt="{{ $brand->name }}"
-                                            class="h-20 w-20 sm:h-28 sm:w-28 object-contain" />
-                                    @else
-                                        <div
-                                            class="h-20 w-20 sm:h-28 sm:w-28 rounded-2xl bg-gradient-to-br from-[#ff671f]/10 to-[#ff671f]/5 flex items-center justify-center text-3xl sm:text-4xl font-bold text-[#ff671f]/60">
-                                            {{ substr($brand->name, 0, 1) }}</div>
-                                    @endif
-                                </div>
-                                <h3 class="text-lg sm:text-xl font-bold text-zinc-900">{{ $brand->name }}</h3>
-                                @if ($brand->description)
-                                    <p class="mt-2 text-sm text-zinc-500 leading-relaxed max-w-xs mx-auto">
-                                        {{ $brand->description }}</p>
-                                @endif
-                                <a href="{{ route('public.brands.show', $brand) }}"
-                                    class="mt-5 inline-flex items-center gap-2 rounded-full bg-[#ff671f] px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition-all hover:bg-[#e55a1a] hover:-translate-y-0.5">
-                                    Ver productos
-                                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-
-                        {{-- Next card (right, translucent) --}}
-                        <div x-show="{{ $idx }} === nextIndex"
-                            x-transition:enter="transition ease-out duration-400"
-                            x-transition:enter-start="opacity-0 scale-75 translate-x-12"
-                            x-transition:enter-end="opacity-50 scale-90 translate-x-0"
-                            class="absolute right-0 top-1/2 -translate-y-1/2 w-[22%] pointer-events-none">
-                            <div
-                                class="bg-white/40 backdrop-blur-sm rounded-2xl border border-white/10 p-4 text-center opacity-50 scale-90">
-                                @if ($brand->logo_path)
-                                    <img src="{{ $brand->logo_url }}" alt=""
-                                        class="h-12 w-12 sm:h-16 sm:w-16 mx-auto object-contain" />
-                                @else
-                                    <div
-                                        class="h-12 w-12 sm:h-16 sm:w-16 mx-auto rounded-xl bg-gradient-to-br from-[#ff671f]/10 to-[#ff671f]/5 flex items-center justify-center text-lg sm:text-2xl font-bold text-[#ff671f]/40">
-                                        {{ substr($brand->name, 0, 1) }}</div>
-                                @endif
-                                <p class="mt-2 text-xs font-semibold text-zinc-600 truncate">{{ $brand->name }}</p>
-                            </div>
-                        </div>
-                    @endforeach
+            {{-- Carousel Container --}}
+            <div class="relative">
+                {{-- Edge Fades --}}
+                <div
+                    class="absolute inset-y-0 left-0 z-10 w-1/4 sm:w-32 bg-gradient-to-r from-zinc-50 to-transparent pointer-events-none">
+                </div>
+                <div
+                    class="absolute inset-y-0 right-0 z-10 w-1/4 sm:w-32 bg-gradient-to-l from-zinc-50 to-transparent pointer-events-none">
                 </div>
 
-                {{-- Navigation arrows --}}
+                {{-- Navigation Buttons --}}
                 <button @click="prev()"
-                    class="absolute -left-2 sm:left-2 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm shadow-lg border border-white/30 text-zinc-600 transition-all hover:bg-[#ff671f] hover:text-white hover:border-[#ff671f] z-20">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    class="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-xl border border-zinc-100 text-zinc-700 transition-all hover:bg-[#ff671f] hover:text-white hover:scale-110">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5"
+                        viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                     </svg>
                 </button>
                 <button @click="next()"
-                    class="absolute -right-2 sm:right-2 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm shadow-lg border border-white/30 text-zinc-600 transition-all hover:bg-[#ff671f] hover:text-white hover:border-[#ff671f] z-20">
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    class="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-xl border border-zinc-100 text-zinc-700 transition-all hover:bg-[#ff671f] hover:text-white hover:scale-110">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5"
+                        viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                     </svg>
                 </button>
+
+                {{-- Scroller --}}
+                <div x-ref="scroller"
+                    class="flex overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-hide pb-12 pt-4">
+
+                    @foreach ($brands as $idx => $brand)
+                        <div class="snap-center shrink-0 w-full sm:w-[calc(100%-8rem)] sm:mx-auto px-4 sm:px-8">
+                            {{-- Card Container: Split Layout --}}
+                            <div
+                                class="relative max-w-4xl mx-auto bg-white rounded-[2rem] border border-zinc-100 shadow-2xl shadow-zinc-200/60 overflow-hidden">
+
+                                {{-- Grid Layout: 1 col on mobile, 2 cols on desktop --}}
+                                <div class="grid grid-cols-1 md:grid-cols-2 items-stretch">
+
+                                    {{-- Left Side: Full Image Area --}}
+                                    <div
+                                        class="relative bg-zinc-50 flex items-center justify-center p-8 sm:p-12 min-h-[280px] md:min-h-[420px]">
+                                        {{-- Decorative Pattern --}}
+                                        <div class="absolute inset-0 opacity-50"
+                                            style="background-image: radial-gradient(#e4e4e7 1px, transparent 1px); background-size: 16px 16px;">
+                                        </div>
+
+                                        <div class="relative w-full h-full flex items-center justify-center">
+                                            @if ($brand->logo_path)
+                                                {{-- Full Image --}}
+                                                <img src="{{ $brand->logo_url }}" alt="{{ $brand->name }}"
+                                                    class="w-full h-full object-contain drop-shadow-md" />
+                                            @else
+                                                {{-- Fallback --}}
+                                                <div
+                                                    class="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl bg-gradient-to-br from-[#ff671f]/20 to-[#ff671f]/5 flex items-center justify-center text-6xl sm:text-7xl font-bold text-[#ff671f] shadow-inner">
+                                                    {{ substr($brand->name, 0, 1) }}
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    {{-- Right Side: Content Centered --}}
+                                    <div
+                                        class="relative p-8 sm:p-12 md:p-16 flex flex-col justify-center text-left border-t md:border-t-0 md:border-l border-zinc-100">
+
+                                        <h3 class="text-3xl sm:text-4xl font-bold text-zinc-900 tracking-tight">
+                                            {{ $brand->name }}</h3>
+
+                                        @if ($brand->description)
+                                            <p class="mt-4 text-base sm:text-lg text-zinc-500 leading-relaxed">
+                                                {{ $brand->description }}
+                                            </p>
+                                        @endif
+
+                                        <div class="mt-8">
+                                            <a href="{{ route('public.brands.show', $brand) }}"
+                                                class="inline-flex items-center gap-2 rounded-full bg-[#ff671f] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all hover:bg-[#e55a1a] hover:-translate-y-1 hover:shadow-orange-500/40">
+                                                Ver productos
+                                                <svg class="h-4 w-4" fill="none" stroke="currentColor"
+                                                    stroke-width="2.5" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- Decorative Blurred Orb for color pop --}}
+                                <div
+                                    class="absolute top-0 right-0 w-40 h-40 bg-[#ff671f]/5 rounded-full blur-3xl pointer-events-none">
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
 
-            {{-- Dots --}}
-            <div class="flex justify-center gap-2 mt-8" data-aos="fade-up" data-aos-delay="200">
+            {{-- Progress Bar Indicator --}}
+            <div class="flex justify-center items-center gap-3 mt-8">
                 @foreach ($brands as $i => $brand)
-                    <button @click="goTo({{ $i }})" class="h-2 rounded-full transition-all duration-500"
-                        :class="current === {{ $i }} ? 'w-8 bg-[#ff671f] shadow-[0_0_8px_rgba(255,103,31,0.4)]' :
-                            'w-2 bg-zinc-300 hover:bg-zinc-400'"></button>
+                    <button @click="goTo({{ $i + 1 }})"
+                        class="h-2 rounded-full transition-all duration-500 ease-out"
+                        :class="current === {{ $i + 1 }} ? 'w-10 bg-[#ff671f]' : 'w-2 bg-zinc-200 hover:bg-zinc-300'">
+                    </button>
                 @endforeach
             </div>
-            </div>
+
         </section>
     @endif
 

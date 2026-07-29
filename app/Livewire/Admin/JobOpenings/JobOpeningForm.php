@@ -25,6 +25,8 @@ class JobOpeningForm extends Component
 
     public string $description = '';
 
+    public string $application_email = '';
+
     public string $valid_from = '';
 
     public string $valid_until = '';
@@ -40,6 +42,7 @@ class JobOpeningForm extends Component
         if ($this->jobOpening?->exists) {
             $this->title = $this->jobOpening->title;
             $this->description = $this->jobOpening->description ?? '';
+            $this->application_email = $this->jobOpening->application_email ?? '';
             $this->valid_from = $this->jobOpening->valid_from?->format('Y-m-d') ?? '';
             $this->valid_until = $this->jobOpening->valid_until?->format('Y-m-d') ?? '';
             $this->is_active = $this->jobOpening->is_active;
@@ -53,6 +56,7 @@ class JobOpeningForm extends Component
         $data = $this->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'application_email' => 'nullable|email|max:255',
             'valid_from' => 'required|date',
             'valid_until' => 'required|date|after_or_equal:valid_from',
             'is_active' => 'boolean',
