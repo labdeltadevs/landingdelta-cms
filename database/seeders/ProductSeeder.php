@@ -18,31 +18,37 @@ class ProductSeeder extends Seeder
         $products = [
             [
                 'name' => 'ACETAZOLAMIDA 250 mg',
+                'internal_code' => 'ACZ-250',
                 'active_ingredient' => 'Acetazolamida',
                 'category_index' => 0,
             ],
             [
                 'name' => 'ACETILCISTEÍNA 600 mg',
+                'internal_code' => 'ACT-600',
                 'active_ingredient' => 'Acetilcisteína',
                 'category_index' => 0,
             ],
             [
                 'name' => 'ACICLOVIR 400 mg',
+                'internal_code' => 'ACV-400',
                 'active_ingredient' => 'Aciclovir',
                 'category_index' => 0,
             ],
             [
                 'name' => 'AMBROXOL JARABE 15mg/5ml',
+                'internal_code' => 'AMB-15',
                 'active_ingredient' => 'Ambroxol',
                 'category_index' => 1,
             ],
             [
                 'name' => 'AMOXICILINA 500 mg',
+                'internal_code' => 'AMX-500',
                 'active_ingredient' => 'Amoxicilina',
                 'category_index' => 0,
             ],
             [
                 'name' => 'ACICLOVIR CREMA 5%',
+                'internal_code' => 'ACV-5',
                 'active_ingredient' => 'Aciclovir',
                 'category_index' => 2,
             ],
@@ -53,6 +59,7 @@ class ProductSeeder extends Seeder
         foreach ($products as $i => $product) {
             Product::query()->create([
                 'name' => $product['name'],
+                'internal_code' => $product['internal_code'],
                 'slug' => Str::slug($product['name']),
                 'active_ingredient' => $product['active_ingredient'],
                 'description' => fake()->paragraph(),
