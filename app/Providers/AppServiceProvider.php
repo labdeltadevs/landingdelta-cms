@@ -2,20 +2,22 @@
 
 namespace App\Providers;
 
-use App\Models\Brand;
 use App\Models\Branch;
+use App\Models\Brand;
 use App\Models\Brochure;
 use App\Models\Category;
 use App\Models\HeroSlide;
+use App\Models\JobOpening;
 use App\Models\News;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use App\Models\User;
-use App\Policies\BrandPolicy;
 use App\Policies\BranchPolicy;
+use App\Policies\BrandPolicy;
 use App\Policies\BrochurePolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\HeroSlidePolicy;
+use App\Policies\JobOpeningPolicy;
 use App\Policies\NewsPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\SiteSettingPolicy;
@@ -51,6 +53,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Branch::class, BranchPolicy::class);
         Gate::policy(HeroSlide::class, HeroSlidePolicy::class);
         Gate::policy(Brochure::class, BrochurePolicy::class);
+        Gate::policy(JobOpening::class, JobOpeningPolicy::class);
         Gate::policy(News::class, NewsPolicy::class);
         Gate::policy(SiteSetting::class, SiteSettingPolicy::class);
     }

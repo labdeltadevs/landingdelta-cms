@@ -5,24 +5,25 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class PermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         $permissions = [
-            'access admin',
-            'manage users',
-            'manage settings',
-            'view content',
-            'create content',
-            'update content',
-            'delete content',
-            'manage hero',
-            'manage brochures',
-            'manage news',
+            'view.products', 'edit.products',
+            'view.brands', 'edit.brands',
+            'view.categories', 'edit.categories',
+            'view.branches', 'edit.branches',
+            'view.hero', 'edit.hero',
+            'view.brochures', 'edit.brochures',
+            'view.news', 'edit.news',
+            'view.job-openings', 'edit.job-openings',
+            'view.users', 'edit.users',
+            'view.settings', 'edit.settings',
         ];
 
         foreach ($permissions as $permission) {
@@ -34,20 +35,26 @@ class PermissionSeeder extends Seeder
 
         $editor = Role::findOrCreate('editor', 'web');
         $editor->givePermissionTo([
-            'access admin',
-            'view content',
-            'create content',
-            'update content',
-            'delete content',
-            'manage hero',
-            'manage brochures',
-            'manage news',
+            'view.products', 'edit.products',
+            'view.brands', 'edit.brands',
+            'view.categories', 'edit.categories',
+            'view.branches', 'edit.branches',
+            'view.hero', 'edit.hero',
+            'view.brochures', 'edit.brochures',
+            'view.news', 'edit.news',
+            'view.job-openings', 'edit.job-openings',
         ]);
 
         $visor = Role::findOrCreate('visor', 'web');
         $visor->givePermissionTo([
-            'access admin',
-            'view content',
+            'view.products',
+            'view.brands',
+            'view.categories',
+            'view.branches',
+            'view.hero',
+            'view.brochures',
+            'view.news',
+            'view.job-openings',
         ]);
     }
 }

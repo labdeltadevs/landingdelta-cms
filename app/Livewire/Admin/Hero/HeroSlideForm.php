@@ -2,9 +2,9 @@
 
 namespace App\Livewire\Admin\Hero;
 
+use App\Models\Brand;
 use App\Models\HeroSlide;
 use App\Models\Product;
-use App\Models\Brand;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

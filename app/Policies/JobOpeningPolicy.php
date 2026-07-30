@@ -9,26 +9,26 @@ class JobOpeningPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->can('view content');
+        return $user->can('view.job-openings');
     }
 
     public function view(User $user, JobOpening $jobOpening): bool
     {
-        return $user->can('view content');
+        return $user->can('view.job-openings');
     }
 
     public function create(User $user): bool
     {
-        return $user->can('manage news');
+        return $user->can('edit.job-openings');
     }
 
     public function update(User $user, JobOpening $jobOpening): bool
     {
-        return $user->can('manage news');
+        return $user->can('edit.job-openings');
     }
 
     public function delete(User $user, JobOpening $jobOpening): bool
     {
-        return $user->can('manage news');
+        return $user->can('edit.job-openings');
     }
 }

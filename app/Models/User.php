@@ -32,6 +32,7 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory;
+
     use HasRoles;
     use Notifiable;
 
@@ -78,6 +79,10 @@ class User extends Authenticatable
 
     public function canEditContent(): bool
     {
-        return $this->can('create content');
+        return $this->hasAnyPermission([
+            'edit.products', 'edit.brands', 'edit.categories',
+            'edit.branches', 'edit.hero', 'edit.brochures',
+            'edit.news', 'edit.job-openings',
+        ]);
     }
 }

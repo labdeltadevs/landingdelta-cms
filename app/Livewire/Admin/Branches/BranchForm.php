@@ -13,11 +13,17 @@ use Livewire\Component;
 class BranchForm extends Component
 {
     public ?Branch $branch = null;
+
     public string $name = '';
+
     public string $city = '';
+
     public string $address = '';
+
     public string $phone = '';
+
     public string $phone_2 = '';
+
     public string $email = '';
 
     public function mount(?Branch $branch = null): void

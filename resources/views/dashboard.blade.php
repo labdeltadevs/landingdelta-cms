@@ -24,10 +24,16 @@
         @endforeach
     </div>
 
-    @can('create content')
+    @can('edit.products')
         <div class="mt-8 flex items-center gap-4">
             <flux:button :href="route('admin.products.create')" wire:navigate icon="plus">Nuevo producto</flux:button>
-            <flux:button :href="route('admin.news.create')" wire:navigate icon="plus">Nueva noticia</flux:button>
+            @can('edit.news')
+                <flux:button :href="route('admin.news.create')" wire:navigate icon="plus">Nueva noticia</flux:button>
+            @endcan
+        </div>
+    @elseif (auth()->user()->hasAnyPermission(['view.products', 'view.news', 'view.brands', 'view.categories', 'view.branches', 'view.hero', 'view.brochures', 'view.job-openings', 'view.users', 'view.settings']))
+        <div class="mt-8">
+            <flux:text class="text-zinc-500">Tenés acceso de solo lectura a las secciones del panel.</flux:text>
         </div>
     @endcan
 </x-layouts::app>

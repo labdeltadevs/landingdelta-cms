@@ -4,17 +4,19 @@ namespace App\Livewire\Admin\Categories;
 
 use App\Models\Category;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-use Illuminate\Support\Str;
 
 #[Layout('layouts.app')]
 #[Title('Categoría')]
 class CategoryForm extends Component
 {
     public ?Category $category = null;
+
     public string $name = '';
+
     public string $description = '';
 
     public function mount(?Category $category = null): void

@@ -34,8 +34,12 @@
                             <flux:dropdown align="end">
                                 <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
                                 <flux:menu>
-                                    <flux:menu.item :href="route('admin.job-openings.edit', $job)" wire:navigate icon="pencil">Editar</flux:menu.item>
-                                    <flux:menu.item wire:click="delete({{ $job->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                                    @can('update', $job)
+                                        <flux:menu.item :href="route('admin.job-openings.edit', $job)" wire:navigate icon="pencil">Editar</flux:menu.item>
+                                    @endcan
+                                    @can('delete', $job)
+                                        <flux:menu.item wire:click="delete({{ $job->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                                    @endcan
                                 </flux:menu>
                             </flux:dropdown>
                         </flux:table.cell>

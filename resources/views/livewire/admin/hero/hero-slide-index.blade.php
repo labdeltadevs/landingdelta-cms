@@ -3,7 +3,7 @@
 <flux:subheading>Gestión de los slides del carrusel principal.</flux:subheading>
 
 <div class="mt-6 flex items-center justify-between gap-4">
-    @can('manage hero', App\Models\HeroSlide::class)
+    @can('create', App\Models\HeroSlide::class)
         <flux:button :href="route('admin.hero.reorder')" wire:navigate icon="arrows-up-down" variant="ghost">Reordenar</flux:button>
         <flux:button :href="route('admin.hero.create')" wire:navigate icon="plus">Nuevo slide</flux:button>
     @endcan
@@ -27,8 +27,10 @@
                     <flux:dropdown align="end">
                         <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
                         <flux:menu>
-                            @can('manage hero')
+                            @can('update', $slide)
                                 <flux:menu.item :href="route('admin.hero.edit', $slide)" wire:navigate icon="pencil">Editar</flux:menu.item>
+                            @endcan
+                            @can('delete', $slide)
                                 <flux:menu.item wire:click="delete({{ $slide->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
                             @endcan
                         </flux:menu>

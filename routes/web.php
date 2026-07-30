@@ -125,53 +125,68 @@ Route::get('/noticias/{news:slug}', function (News $news) {
 
 // === Admin Routes ===
 
-Route::middleware(['auth', 'verified', 'role:admin|editor|visor'])
+Route::middleware(['auth', 'verified'])
     ->prefix('admin')->name('admin.')->group(function () {
 
         Route::view('/', 'dashboard')->name('dashboard');
 
-        Route::get('/products', ProductIndex::class)->name('products.index');
-        Route::get('/products/create', ProductForm::class)->name('products.create');
-        Route::get('/products/{product}/edit', ProductForm::class)->name('products.edit');
+        Route::middleware(PermissionMiddleware::class.':view.products')->group(function () {
+            Route::get('/products', ProductIndex::class)->name('products.index');
+            Route::get('/products/create', ProductForm::class)->name('products.create');
+            Route::get('/products/{product}/edit', ProductForm::class)->name('products.edit');
+        });
 
-        Route::get('/brands', BrandIndex::class)->name('brands.index');
-        Route::get('/brands/create', BrandForm::class)->name('brands.create');
-        Route::get('/brands/{brand}/edit', BrandForm::class)->name('brands.edit');
+        Route::middleware(PermissionMiddleware::class.':view.brands')->group(function () {
+            Route::get('/brands', BrandIndex::class)->name('brands.index');
+            Route::get('/brands/create', BrandForm::class)->name('brands.create');
+            Route::get('/brands/{brand}/edit', BrandForm::class)->name('brands.edit');
+        });
 
-        Route::get('/categories', CategoryIndex::class)->name('categories.index');
-        Route::get('/categories/create', CategoryForm::class)->name('categories.create');
-        Route::get('/categories/{category}/edit', CategoryForm::class)->name('categories.edit');
+        Route::middleware(PermissionMiddleware::class.':view.categories')->group(function () {
+            Route::get('/categories', CategoryIndex::class)->name('categories.index');
+            Route::get('/categories/create', CategoryForm::class)->name('categories.create');
+            Route::get('/categories/{category}/edit', CategoryForm::class)->name('categories.edit');
+        });
 
-        Route::get('/branches', BranchIndex::class)->name('branches.index');
-        Route::get('/branches/create', BranchForm::class)->name('branches.create');
-        Route::get('/branches/{branch}/edit', BranchForm::class)->name('branches.edit');
+        Route::middleware(PermissionMiddleware::class.':view.branches')->group(function () {
+            Route::get('/branches', BranchIndex::class)->name('branches.index');
+            Route::get('/branches/create', BranchForm::class)->name('branches.create');
+            Route::get('/branches/{branch}/edit', BranchForm::class)->name('branches.edit');
+        });
 
-        Route::get('/hero', HeroSlideIndex::class)->name('hero.index');
-        Route::get('/hero/create', HeroSlideForm::class)->name('hero.create');
-        Route::get('/hero/{heroSlide}/edit', HeroSlideForm::class)->name('hero.edit');
-        Route::get('/hero/reorder', HeroSlideReorder::class)->name('hero.reorder');
+        Route::middleware(PermissionMiddleware::class.':view.hero')->group(function () {
+            Route::get('/hero', HeroSlideIndex::class)->name('hero.index');
+            Route::get('/hero/create', HeroSlideForm::class)->name('hero.create');
+            Route::get('/hero/{heroSlide}/edit', HeroSlideForm::class)->name('hero.edit');
+            Route::get('/hero/reorder', HeroSlideReorder::class)->name('hero.reorder');
+        });
 
-        Route::get('/brochures', BrochureIndex::class)->name('brochures.index');
-        Route::get('/brochures/create', BrochureForm::class)->name('brochures.create');
-        Route::get('/brochures/{brochure}/edit', BrochureForm::class)->name('brochures.edit');
+        Route::middleware(PermissionMiddleware::class.':view.brochures')->group(function () {
+            Route::get('/brochures', BrochureIndex::class)->name('brochures.index');
+            Route::get('/brochures/create', BrochureForm::class)->name('brochures.create');
+            Route::get('/brochures/{brochure}/edit', BrochureForm::class)->name('brochures.edit');
+        });
 
-        Route::get('/news', NewsIndex::class)->name('news.index');
-        Route::get('/news/create', NewsForm::class)->name('news.create');
-        Route::get('/news/{news}/edit', NewsForm::class)->name('news.edit');
+        Route::middleware(PermissionMiddleware::class.':view.news')->group(function () {
+            Route::get('/news', NewsIndex::class)->name('news.index');
+            Route::get('/news/create', NewsForm::class)->name('news.create');
+            Route::get('/news/{news}/edit', NewsForm::class)->name('news.edit');
+        });
 
-        Route::get('/job-openings', JobOpeningIndex::class)->name('job-openings.index');
-        Route::get('/job-openings/create', JobOpeningForm::class)->name('job-openings.create');
-        Route::get('/job-openings/{jobOpening}/edit', JobOpeningForm::class)->name('job-openings.edit');
+        Route::middleware(PermissionMiddleware::class.':view.job-openings')->group(function () {
+            Route::get('/job-openings', JobOpeningIndex::class)->name('job-openings.index');
+            Route::get('/job-openings/create', JobOpeningForm::class)->name('job-openings.create');
+            Route::get('/job-openings/{jobOpening}/edit', JobOpeningForm::class)->name('job-openings.edit');
+        });
 
-        // Admin-only routes
-        Route::middleware(PermissionMiddleware::class.':manage users')
+        Route::middleware(PermissionMiddleware::class.':view.users')
             ->group(function () {
                 Route::get('/users', UserIndex::class)->name('users.index');
                 Route::get('/users/create', UserForm::class)->name('users.create');
                 Route::get('/users/{user}/edit', UserForm::class)->name('users.edit');
             });
 
-        Route::middleware(PermissionMiddleware::class.':manage settings')
+        Route::middleware(PermissionMiddleware::class.':view.settings')
             ->group(function () {
                 Route::get('/settings', SettingsForm::class)->name('settings.index');
             });

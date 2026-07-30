@@ -128,7 +128,7 @@
                         <div>
                             <h3 class="text-sm font-semibold text-zinc-900 mb-3">Descripción</h3>
                             <div class="prose prose-sm prose-zinc max-w-none text-zinc-600 leading-relaxed">
-                                {{ $product->description }}
+                                {!! $product->description !!}
                             </div>
                         </div>
                     @endif

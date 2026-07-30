@@ -17,10 +17,15 @@ class BrochureForm extends Component
     use WithFileUploads;
 
     public ?Brochure $brochure = null;
+
     public string $title = '';
+
     public string $description = '';
+
     public string $line = '';
+
     public bool $is_active = true;
+
     public $file;
 
     public function mount(?Brochure $brochure = null): void

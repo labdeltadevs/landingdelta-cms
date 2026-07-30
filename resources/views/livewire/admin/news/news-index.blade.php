@@ -4,7 +4,7 @@
 
 <div class="mt-6 flex items-center justify-between gap-4">
     <flux:input wire:model.live.debounce.300ms="search" placeholder="Buscar noticias..." class="max-w-sm" />
-    @can('manage news', App\Models\News::class)
+    @can('create', App\Models\News::class)
         <flux:button :href="route('admin.news.create')" wire:navigate icon="plus">Nueva noticia</flux:button>
     @endcan
 </div>
@@ -31,8 +31,12 @@
                         <flux:dropdown align="end">
                             <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
                             <flux:menu>
-                                <flux:menu.item :href="route('admin.news.edit', $item)" wire:navigate icon="pencil">Editar</flux:menu.item>
-                                <flux:menu.item wire:click="delete({{ $item->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                                @can('update', $item)
+                                    <flux:menu.item :href="route('admin.news.edit', $item)" wire:navigate icon="pencil">Editar</flux:menu.item>
+                                @endcan
+                                @can('delete', $item)
+                                    <flux:menu.item wire:click="delete({{ $item->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                                @endcan
                             </flux:menu>
                         </flux:dropdown>
                     </td>

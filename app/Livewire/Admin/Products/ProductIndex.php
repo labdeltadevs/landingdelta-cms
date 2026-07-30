@@ -7,7 +7,6 @@ use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 #[Layout('layouts.app')]
@@ -29,14 +28,14 @@ class ProductIndex extends Component
     {
         $product = Product::query()->findOrFail($id);
         $this->authorize('update', $product);
-        $product->update(['is_featured' => !$product->is_featured]);
+        $product->update(['is_featured' => ! $product->is_featured]);
     }
 
     public function toggleActive(int $id): void
     {
         $product = Product::query()->findOrFail($id);
         $this->authorize('update', $product);
-        $product->update(['is_active' => !$product->is_active]);
+        $product->update(['is_active' => ! $product->is_active]);
     }
 
     public function delete(int $id): void

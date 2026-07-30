@@ -9,26 +9,26 @@ class BrandPolicy
 {
     public function viewAny(User $user): bool
     {
-        return $user->can('view content');
+        return $user->can('view.brands');
     }
 
     public function view(User $user, Brand $brand): bool
     {
-        return $user->can('view content');
+        return $user->can('view.brands');
     }
 
     public function create(User $user): bool
     {
-        return $user->can('create content');
+        return $user->can('edit.brands');
     }
 
     public function update(User $user, Brand $brand): bool
     {
-        return $user->can('update content');
+        return $user->can('edit.brands');
     }
 
     public function delete(User $user, Brand $brand): bool
     {
-        return $user->can('delete content');
+        return $user->can('edit.brands');
     }
 }

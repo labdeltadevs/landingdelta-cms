@@ -18,242 +18,439 @@
     {{-- ============================================================ --}}
     {{-- SECTION 1: HERO · EDITORIAL PREMIUM                          --}}
     {{-- ============================================================ --}}
-    <section class="relative min-h-[90vh] flex items-center overflow-hidden">
+    @php
+        $backgroundSlides = [
+            Storage::disk('public')->url('fondo-a.jpeg'),
+            Storage::disk('public')->url('fondo-b.jpeg'),
+            Storage::disk('public')->url('fondo-c.jpeg'),
+            Storage::disk('public')->url('fondo-d.jpeg'),
+            Storage::disk('public')->url('fondo-e.jpeg'),
+            Storage::disk('public')->url('fondo-f.jpeg'),
+        ];
 
-        {{-- ===== BACKGROUND SLIDESHOW WITH CROSSFADE ===== --}}
-        <div class="absolute inset-0" x-data="{
-            slides: [
-                '{{ Storage::disk('public')->url('fondo-a.jpeg') }}',
-                '{{ Storage::disk('public')->url('fondo-b.jpeg') }}',
-                '{{ Storage::disk('public')->url('fondo-c.jpeg') }}',
-                '{{ Storage::disk('public')->url('fondo-d.jpeg') }}',
-                '{{ Storage::disk('public')->url('fondo-e.jpeg') }}',
-                '{{ Storage::disk('public')->url('fondo-f.jpeg') }}',
+        $heroSlides = $slides
+            ->map(
+                fn($slide) => [
+                    'title' => $slide->title,
+                    'subtitle' => $slide->subtitle,
+                    'cta_label' => $slide->cta_label,
+                    'cta_url' => $slide->cta_url,
+                ],
+            )
+            ->values()
+            ->all();
+
+        $jsonFlags = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE;
+
+        $galardones = [
+            [
+                'icon' => '<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>',
+                'label' => '30+ años',
+                'sub' => 'de experiencia',
             ],
-            current: 0
-        }" x-init="setInterval(() => { current = (current + 1) % slides.length }, 7500)">
-            {{-- Image layers — all in DOM, only one visible via opacity --}}
+            [
+                'icon' => '<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m9 12.75 2.25 2.25L15 9.75"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 2.714A11.96 11.96 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/>
+                </svg>',
+                'label' => 'Orgullo',
+                'sub' => 'boliviano',
+            ],
+            [
+                'icon' => '<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>
+                </svg>',
+                'label' => 'Presencia',
+                'sub' => 'en el eje troncal',
+            ],
+        ];
+    @endphp
+
+    <section id="inicio" class="relative isolate flex min-h-[90vh] items-center overflow-hidden bg-zinc-100">
+
+        <style>
+            [x-cloak] {
+                display: none !important;
+            }
+        </style>
+
+        {{-- ================================================= --}}
+        {{-- BACKGROUND SLIDESHOW                               --}}
+        {{-- ================================================= --}}
+        <div class="absolute inset-0" aria-hidden="true" x-data='{ slides: {!! json_encode($backgroundSlides, $jsonFlags) !!}, current: 0 }'
+            x-init="setInterval(() => {
+                current = (current + 1) % slides.length
+            }, 7500)">
+
+            {{-- Imágenes --}}
             <template x-for="(src, i) in slides" :key="i">
-                <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1500 ease-out"
-                    :style="`background-image: url('${src}'); opacity: ${current === i ? 1 : 0};`">
+                <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[1500ms] ease-out"
+                    :style="{
+                        backgroundImage: 'url(' + src + ')',
+                        opacity: current === i ? 1 : 0
+                    }">
                 </div>
             </template>
 
-            {{-- Gradient overlays (static, on top of all images) --}}
-            <div class="absolute inset-0 pointer-events-none"
-                style="background:
-                     linear-gradient(to bottom, rgba(50,50,50,0.30), rgba(50,50,50,0.30), rgba(50,50,50,0.30)),
-                     linear-gradient(to right, rgba(50,50,50,0.25), transparent, rgba(50,50,50,0.25)),
-                     radial-gradient(circle at 50% 50%, rgba(255,103,31,0.08) 0%, transparent 50%),
-                     radial-gradient(circle, rgba(255,103,31,0.06) 1.5px, transparent 1.5px);
-                 background-size: cover, cover, cover, 28px 28px;">
+            {{-- Destellos decorativos --}}
+            <div class="absolute -left-32 top-1/4 h-80 w-80 rounded-full bg-[#ff671f]/20 blur-3xl">
             </div>
 
-            {{-- Progress bar — resets on each slide change --}}
-            <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-white/5">
-                <div class="h-full bg-gradient-to-r from-[#ff671f]/60 to-[#ff671f]/30" x-init="function animate() {
+            <div class="absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-[#ff671f]/10 blur-3xl">
+            </div>
+
+            {{-- Overlay claro para mejorar la legibilidad --}}
+            <div class="pointer-events-none absolute inset-0"
+                style="background:
+                linear-gradient(
+                    90deg,
+                    rgba(200,200,200,0.68) 0%,
+                    rgba(200,200,200,0.54) 52%,
+                    rgba(200,200,200,0.60) 100%
+                ),
+                linear-gradient(
+                    180deg,
+                    rgba(200,200,200,0.28) 0%,
+                    rgba(200,200,200,0.20) 45%,
+                    rgba(200,200,200,0.68) 100%
+                );">
+            </div>
+
+            {{-- Patrón sutil --}}
+            <div class="pointer-events-none absolute inset-0 opacity-40"
+                style="
+                background-image: radial-gradient(
+                    circle,
+                    rgba(255,103,31,0.16) 1px,
+                    transparent 1.5px
+                );
+                background-size: 32px 32px;
+            ">
+            </div>
+
+            {{-- Barra de progreso --}}
+            <div class="absolute bottom-0 left-0 right-0 h-1 bg-zinc-900/10">
+                <div class="h-full bg-gradient-to-r from-[#ff671f] to-[#ff671f]/30" x-init="const resetProgress = () => {
                     $el.style.transition = 'none';
                     $el.style.width = '0%';
-                    void $el.offsetHeight; // force reflow
-                    $el.style.transition = 'width 6000ms linear';
-                    requestAnimationFrame(() => $el.style.width = '100%');
-                }
-                animate();
-                $watch('current', animate);">
+
+                    void $el.offsetWidth;
+
+                    $el.style.transition = 'width 7500ms linear';
+
+                    requestAnimationFrame(() => {
+                        $el.style.width = '100%';
+                    });
+                };
+
+                resetProgress();
+                $watch('current', resetProgress);">
                 </div>
             </div>
         </div>
 
-        {{-- ======================== --}}
-        {{-- MAIN CONTENT CONTAINER   --}}
-        {{-- ======================== --}}
-        <div class="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        {{-- ================================================= --}}
+        {{-- CONTENIDO PRINCIPAL                               --}}
+        {{-- ================================================= --}}
+        <div class="relative z-10 mx-auto w-full max-w-7xl px-4 py-4 sm:px-4 sm:py-8 lg:px-4 lg:py-8">
 
-            {{-- Glass panel container --}}
+            {{-- Panel principal glassmorphism --}}
             <div
-                class="rounded-2xl bg-black/30 backdrop-blur-lg border border-white/[0.08] p-6 sm:p-8 lg:p-12 shadow-2xl shadow-black/40">
+                class="relative overflow-hidden rounded-[2rem] border border-white/[0.72] bg-white/[0.48] shadow-2xl shadow-zinc-900/10 backdrop-blur-2xl">
 
-                <div class="flex flex-col lg:flex-row lg:items-center gap-8 lg:gap-16">
+                {{-- Decoración interna --}}
+                <div
+                    class="pointer-events-none absolute -right-32 -top-32 h-80 w-80 rounded-full bg-[#ff671f]/10 blur-3xl">
+                </div>
 
-                    {{-- === LEFT ZONE: Main content === --}}
-                    <div class="flex-1 flex flex-col justify-center">
+                <div
+                    class="pointer-events-none absolute -bottom-40 -left-32 h-80 w-80 rounded-full bg-white/50 blur-3xl">
+                </div>
 
-                        {{-- Slides --}}
-                        @if ($slides->isNotEmpty())
-                            <div x-data="{ current: 0, total: {{ $slides->count() }} }" x-init="setInterval(() => { current = (current + 1) % total }, 6000)" class="mb-8">
-                                <template
-                                    x-for="(slide, i) in {{ json_encode($slides->map(fn($s) => ['title' => $s->title, 'subtitle' => $s->subtitle, 'cta_label' => $s->cta_label, 'cta_url' => $s->cta_url])) }}"
-                                    :key="i">
-                                    <div x-show="current === i" x-transition:enter="transition ease-out duration-700"
-                                        x-transition:enter-start="opacity-0 translate-y-4"
-                                        x-transition:enter-end="opacity-100 translate-y-0"
-                                        x-transition:leave="transition ease-in duration-500"
-                                        x-transition:leave-start="opacity-100 translate-y-0"
-                                        x-transition:leave-end="opacity-0 -translate-y-4">
-                                        <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight tracking-tight drop-shadow-lg"
-                                            x-text="slide.title"></h1>
-                                        <p class="mt-4 text-base sm:text-lg lg:text-xl text-zinc-200/80 leading-relaxed"
-                                            x-text="slide.subtitle"></p>
-                                        <a x-show="slide.cta_label" :href="slide.cta_url"
-                                            class="mt-5 inline-flex items-center gap-2 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all duration-300 hover:bg-[#e55a1a] hover:shadow-orange-500/50 hover:-translate-y-0.5 hover:scale-105">
-                                            <span x-text="slide.cta_label"></span>
-                                            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </template>
-                                <div class="flex gap-2 mt-6">
-                                    <template x-for="(_, i) in total" :key="i">
-                                        <button @click="current = i"
-                                            class="h-1.5 rounded-full transition-all duration-500 ease-out"
-                                            :class="current === i ? 'w-8 bg-[#ff671f] shadow-[0_0_10px_rgba(255,103,31,0.5)]' :
-                                                'w-1.5 bg-white/30 hover:bg-white/50'"></button>
-                                    </template>
-                                </div>
+                <div class="relative z-10 p-5 sm:p-4 lg:p-6">
+
+                    <div class="flex flex-col gap-10 lg:flex-row lg:items-stretch lg:gap-16">
+
+                        {{-- ================================================= --}}
+                        {{-- ZONA IZQUIERDA                                    --}}
+                        {{-- ================================================= --}}
+                        <div class="min-w-0 flex-1">
+
+                            {{-- Logo --}}
+                            <div class="mb-7 flex items-center justify-center" data-aos="fade-up">
+                                <img src="{{ Storage::disk('public')->url('logo_delta.png') }}"
+                                    alt="Laboratorios Delta S.A."
+                                    class="h-36 w-auto max-w-[440px] object-contain drop-shadow-md sm:h-20 lg:h-36">
                             </div>
-                        @endif
 
-                        {{-- Logo stamp --}}
-                        <div data-aos="fade-up" data-aos-delay="100" class="mb-10">
-                            <img src="{{ Storage::disk('public')->url('logo_delta.png') }}"
-                                alt="Laboratorios Delta S.A."
-                                class="h-16 sm:h-24 lg:h-28 object-contain drop-shadow-lg" />
-                        </div>
+                            {{-- Badge
+                            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-[#ff671f]/20 bg-[#ff671f]/10 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#d95417]"
+                                data-aos="fade-up" data-aos-delay="80">
 
-                        {{-- Tagline with editorial accent --}}
-                        <div data-aos="fade-up" data-aos-delay="200" class="mb-10">
-                            <div class="flex items-center gap-4 mb-5">
-                                <span class="h-px w-12 bg-[#ff671f]/60"></span>
                                 <span
-                                    class="text-[14px] font-semibold uppercase tracking-[0.25em] text-[#ff671f] drop-shadow-sm">
-                                    Lider en la industria farmacéutica Boliviana
-                                </span>
-                            </div>
-                            <p
-                                class="text-md sm:text-md lg:text-md text-white/95 leading-relaxed max-w-2xl font-light drop-shadow-sm">
-                                Comprometidos con la salud y el bienestar de los bolivianos,
-                                ofreciendo productos farmacéuticos de la más alta calidad.
-                            </p>
-                        </div>
+                                    class="h-2 w-2 rounded-full bg-[#ff671f] shadow-[0_0_0_4px_rgba(255,103,31,0.12)]"></span>
+                                <span>Salud que transforma</span>
+                            </div> --}}
 
-                        {{-- CTAs --}}
-                        <div class="flex flex-wrap gap-4" data-aos="fade-up" data-aos-delay="300">
-                            <a href="{{ route('public.products.index') }}"
-                                class="group inline-flex items-center gap-2.5 rounded-full bg-[#ff671f] px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-orange-500/25 transition-all duration-300 hover:bg-[#e55a1a] hover:shadow-orange-500/50 hover:-translate-y-1 hover:scale-105">
-                                Explorar productos
-                                <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                                    fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                                </svg>
-                            </a>
-                            <a href="{{ route('public.about') }}"
-                                class="group inline-flex items-center gap-2.5 rounded-full border border-white/25 bg-white/[0.12] backdrop-blur-md px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:bg-white/[0.20] hover:border-white/50 hover:-translate-y-1 hover:scale-105">
-                                Nuestra historia
-                                <svg class="h-4 w-4 opacity-60 transition-transform duration-300 group-hover:translate-x-1"
-                                    fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
+                            {{-- Slides de contenido --}}
+                            @if (count($heroSlides) > 0)
+                                <div x-data="{ current: 0, total: {{ count($heroSlides) }} }" x-init="setInterval(() => {
+                                    current = (current + 1) % total
+                                }, 7500)" class="mb-2" aria-live="polite">
 
-                    {{-- === RIGHT ZONE: Achievement timeline === --}}
-                    <div class="flex-shrink-0 flex flex-col justify-center" data-aos="zoom-in" data-aos-delay="400">
-                        <div class="relative pl-8 border-l-2 border-white/10">
-                            @php
-                                $galardones = [
-                                    [
-                                        'icon' =>
-                                            '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>',
-                                        'label' => '30+ años',
-                                        'sub' => 'de experiencia',
-                                    ],
-                                    [
-                                        'icon' =>
-                                            '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>',
-                                        'label' => 'Orgullo',
-                                        'sub' => 'boliviano',
-                                    ],
-                                    [
-                                        'icon' =>
-                                            '<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg>',
-                                        'label' => 'Eje',
-                                        'sub' => 'troncal',
-                                    ],
-                                ];
-                            @endphp
-                            @foreach ($galardones as $g)
-                                <div class="relative pb-10 last:pb-0 group" data-aos="fade-left"
-                                    data-aos-delay="{{ 500 + $loop->index * 100 }}">
-                                    {{-- Timeline connector dot --}}
-                                    <div
-                                        class="absolute -left-[5px] top-6 w-2.5 h-2.5 rounded-full bg-[#ff671f] border-2 border-white/20 shadow-[0_0_12px_rgba(255,103,31,0.4)] transition-all duration-500 group-hover:shadow-[0_0_20px_rgba(255,103,31,0.6)] group-hover:scale-125">
+                                    <div class="relative min-h-[270px] sm:min-h-[245px] lg:min-h-[270px]">
+
+                                        <template x-for='(slide, i) in {!! json_encode($heroSlides, $jsonFlags) !!}' :key="i">
+
+                                            <div x-cloak x-show="current === i"
+                                                x-transition:enter="transition duration-700 ease-out"
+                                                x-transition:enter-start="translate-y-3 opacity-0"
+                                                x-transition:enter-end="translate-y-0 opacity-100"
+                                                x-transition:leave="transition duration-500 ease-in"
+                                                x-transition:leave-start="translate-y-0 opacity-100"
+                                                x-transition:leave-end="-translate-y-3 opacity-0"
+                                                class="absolute inset-x-0 top-0">
+
+                                                <h1
+                                                    class="max-w-4xl text-4xl font-bold leading-[1.05] tracking-[-0.035em] text-zinc-900 sm:text-5xl lg:text-6xl">
+                                                    <span x-text="slide.title"></span>
+                                                </h1>
+
+                                                <p
+                                                    class="mt-5 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
+                                                    <span x-text="slide.subtitle"></span>
+                                                </p>
+
+                                                <a x-show="slide.cta_label" :href="slide.cta_url || '#'"
+                                                    class="group mt-6 inline-flex items-center gap-2 rounded-full bg-[#ff671f] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:-translate-y-1 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2">
+
+                                                    <span x-text="slide.cta_label"></span>
+
+                                                    <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                                                        fill="none" stroke="currentColor" stroke-width="2"
+                                                        viewBox="0 0 24 24" aria-hidden="true">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </template>
                                     </div>
 
-                                    <div class="flex items-start gap-4">
-                                        <div class="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#ff671f]/40 to-[#ff671f]/15 border border-[#ff671f]/30 text-[#ff671f] flex-shrink-0 transition-all duration-500 group-hover:scale-110 group-hover:shadow-[0_0_24px_rgba(255,103,31,0.35)]"
-                                            style="animation: pulse-glow 3s ease-in-out infinite; animation-delay: {{ $loop->index * 0.5 }}s">
-                                            {!! $g['icon'] !!}
-                                        </div>
-                                        <div class="pt-1">
-                                            <span
-                                                class="block text-sm font-bold text-white leading-tight drop-shadow-sm">{{ $g['label'] }}</span>
-                                            <span
-                                                class="block text-xs text-white/80 mt-0.5 drop-shadow-sm">{{ $g['sub'] }}</span>
-                                        </div>
+                                    {{-- Indicadores --}}
+                                    <div class="flex items-center gap-2 pt-3">
+                                        <template x-for="(_, i) in total" :key="i">
+                                            <button type="button" @click="current = i"
+                                                :aria-label="'Mostrar diapositiva ' + (i + 1)"
+                                                :aria-current="current === i ? 'true' : 'false'"
+                                                class="h-2 rounded-full transition-all duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2"
+                                                :class="current === i ?
+                                                    'w-9 bg-[#ff671f] shadow-[0_0_12px_rgba(255,103,31,0.45)]' :
+                                                    'w-2 bg-zinc-900/20 hover:bg-zinc-900/40'">
+                                            </button>
+                                        </template>
                                     </div>
                                 </div>
-                            @endforeach
+                            @else
+                                {{-- Contenido alternativo si no existen slides --}}
+                                <div class="mb-2 min-h-[200px] sm:min-h-[245px] lg:min-h-[200px]">
+                                    <h1
+                                        class="max-w-4xl text-3xl leading-[1.05] tracking-[-0.035em] text-zinc-900 sm:text-5xl lg:text-6xl">
+                                        Cuidando la salud de nuestra gente
+                                    </h1>
+
+                                    <p class="mt-5 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
+                                        Comprometidos con la salud y el bienestar de los bolivianos,
+                                        ofreciendo productos farmacéuticos de la más alta calidad.
+                                    </p>
+                                </div>
+                            @endif
+
+                            {{-- Mensaje institucional --}}
+                            <div class="mb-8 max-w-2xl border-l-2 border-[#ff671f] pl-4" data-aos="fade-up"
+                                data-aos-delay="150">
+
+                                <p class="text-sm font-semibold uppercase tracking-[0.2em] text-[#d95417]">
+                                    Líder en la industria farmacéutica boliviana
+                                </p>
+                            </div>
+
+                            {{-- Botones principales --}}
+                            <div class="flex flex-wrap items-center gap-3" data-aos="fade-up" data-aos-delay="250">
+
+                                <a href="{{ route('public.products.index') }}"
+                                    class="group inline-flex items-center gap-2.5 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:-translate-y-1 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2">
+
+                                    <span>Explorar productos</span>
+
+                                    <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+                                        fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                        aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                    </svg>
+                                </a>
+
+                                <a href="{{ route('public.about') }}"
+                                    class="group inline-flex items-center gap-2.5 rounded-full border border-zinc-900/10 bg-white/[0.42] px-7 py-3.5 text-sm font-semibold text-zinc-800 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[#ff671f]/30 hover:bg-white/[0.72] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2">
+
+                                    <span>Nuestra historia</span>
+
+                                    <svg class="h-4 w-4 text-zinc-500 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[#ff671f]"
+                                        fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                        aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+
+                        {{-- ================================================= --}}
+                        {{-- ZONA DERECHA                                      --}}
+                        {{-- ================================================= --}}
+                        <div class="w-full lg:w-[36%] lg:max-w-md" data-aos="fade-left" data-aos-delay="300">
+
+                            <div
+                                class="h-full rounded-[1.5rem] border border-white/[0.75] bg-white/[0.56] p-5 shadow-lg shadow-zinc-900/[0.06] backdrop-blur-xl sm:p-6">
+
+                                {{-- Encabezado --}}
+                                <div class="flex items-start justify-between gap-4">
+                                    <div>
+                                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#d95417]">
+                                            Nuestra trayectoria
+                                        </p>
+
+                                        <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
+                                            Hechos que nos mueven
+                                        </h2>
+
+                                        <p class="mt-3 text-sm leading-relaxed text-zinc-500">
+                                            Una historia construida con calidad, cercanía y compromiso.
+                                        </p>
+                                    </div>
+
+                                    <div
+                                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#ff671f]/10 text-[#ff671f]">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5"
+                                            viewBox="0 0 24 24" aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m9-9H3" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                {{-- Logros --}}
+                                <div class="mt-6 space-y-3">
+                                    @foreach ($galardones as $g)
+                                        <div
+                                            class="group flex items-center gap-3 rounded-2xl border border-white/[0.80] bg-white/[0.46] p-3.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#ff671f]/30 hover:bg-white/[0.75] hover:shadow-md">
+
+                                            <div
+                                                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#ff671f]/20 bg-[#ff671f]/10 text-[#ff671f] transition-transform duration-300 group-hover:scale-110">
+                                                {!! $g['icon'] !!}
+                                            </div>
+
+                                            <div class="min-w-0">
+                                                <span class="block text-sm font-bold leading-tight text-zinc-800">
+                                                    {{ $g['label'] }}
+                                                </span>
+
+                                                <span class="mt-0.5 block text-xs text-zinc-500">
+                                                    {{ $g['sub'] }}
+                                                </span>
+                                            </div>
+
+                                            <svg class="ml-auto h-4 w-4 shrink-0 text-[#ff671f]/40 transition-all duration-300 group-hover:translate-x-1 group-hover:text-[#ff671f]"
+                                                fill="none" stroke="currentColor" stroke-width="1.8"
+                                                viewBox="0 0 24 24" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M9 5.25 15.75 12 9 18.75" />
+                                            </svg>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- ================================================= --}}
+                    {{-- ESTADÍSTICAS                                      --}}
+                    {{-- ================================================= --}}
+                    <div class="mt-10 border-t border-zinc-900/10 pt-6" data-aos="fade-up" data-aos-delay="400">
+
+                        <div class="grid grid-cols-3 divide-x divide-zinc-900/10">
+
+                            <div class="group px-2 text-center">
+                                <p
+                                    class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500 sm:text-xs">
+                                    Portafolio
+                                </p>
+
+                                <p
+                                    class="mt-1 text-2xl font-bold text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:text-3xl lg:text-4xl">
+                                    +{{ $productsCount }}
+                                </p>
+
+                                <p class="mt-1 text-[11px] text-zinc-500 sm:text-xs">
+                                    productos
+                                </p>
+                            </div>
+
+                            <div class="group px-2 text-center">
+                                <p
+                                    class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500 sm:text-xs">
+                                    Alcance
+                                </p>
+
+                                <p
+                                    class="mt-1 text-2xl font-bold text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:text-3xl lg:text-4xl">
+                                    +{{ $brands->count() }}
+                                </p>
+
+                                <p class="mt-1 text-[11px] text-zinc-500 sm:text-xs">
+                                    marcas
+                                </p>
+                            </div>
+
+                            <div class="group px-2 text-center">
+                                <p
+                                    class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500 sm:text-xs">
+                                    Presencia
+                                </p>
+
+                                <p
+                                    class="mt-1 text-2xl font-bold text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:text-3xl lg:text-4xl">
+                                    9
+                                </p>
+
+                                <p class="mt-1 text-[11px] text-zinc-500 sm:text-xs">
+                                    departamentos
+                                </p>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            {{-- === STATS BAR: Integrated floating bar === --}}
-            <div class="mt-10 lg:mt-12 grid grid-cols-3 divide-x divide-white/10 rounded-2xl bg-black/50 backdrop-blur-lg border border-white/[0.08] overflow-hidden"
-                data-aos="fade-up" data-aos-delay="500">
-                <div class="py-5 text-center group">
-                    <p class="text-xs sm:text-sm text-white/80 mt-1 font-medium tracking-wide drop-shadow-sm">Cobertura
-                        en</p>
-                    <p
-                        class="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#ff671f] transition-all duration-300 group-hover:scale-110">
-                        + {{ $productsCount }}</p>
-                    <p class="text-xs sm:text-sm text-white/80 mt-1 font-medium tracking-wide drop-shadow-sm">Productos
-                    </p>
-                </div>
-                <div class="py-5 text-center group">
-                    <p class="text-xs sm:text-sm text-white/80 mt-1 font-medium tracking-wide drop-shadow-sm">Cobertura
-                        en</p>
-                    <p
-                        class="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#ff671f] transition-all duration-300 group-hover:scale-110">
-                        + {{ $brands->count() }}</p>
-                    <p class="text-xs sm:text-sm text-white/80 mt-1 font-medium tracking-wide drop-shadow-sm">Marcas
-                    </p>
-                </div>
-                <div class="py-5 text-center group">
-                    <p class="text-xs sm:text-sm text-white/80 mt-1 font-medium tracking-wide drop-shadow-sm">Cobertura
-                        en los</p>
-                    <p
-                        class="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#ff671f] transition-all duration-300 group-hover:scale-110">
-                        9</p>
-                    <p class="text-xs sm:text-sm text-white/80 mt-1 font-medium tracking-wide drop-shadow-sm">
-                        Departamentos</p>
-                </div>
-            </div>
-            {{-- Scroll indicator --}}
-            <div class="flex mt-6 justify-center" data-aos="fade-up" data-aos-delay="300">
+            {{-- Indicador de scroll --}}
+            <div class="mt-6 flex justify-center" data-aos="fade-up" data-aos-delay="500">
+
                 <a href="#travesia"
-                    class="flex flex-col items-center gap-2 text-white hover:text-white transition-colors group">
-                    <span class="text-[10px] font-medium uppercase tracking-[0.25em]">Descubre más</span>
+                    class="group inline-flex flex-col items-center gap-2 rounded-full px-4 py-2 text-zinc-600 transition-colors hover:text-[#d95417] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2">
+
+                    <span class="text-[10px] font-semibold uppercase tracking-[0.25em]">
+                        Descubre más
+                    </span>
+
                     <span
-                        class="flex h-9 w-6 items-start justify-center rounded-full border border-white group-hover:border-zinc-300 transition-colors">
-                        <span class="mt-1.5 h-2 w-1 rounded-full bg-white group-hover:bg-white animate-bounce"></span>
+                        class="flex h-9 w-6 items-start justify-center rounded-full border border-zinc-900/20 bg-white/[0.38] backdrop-blur-sm transition-colors group-hover:border-[#ff671f]/50">
+
+                        <span class="mt-1.5 h-2 w-1 rounded-full bg-[#ff671f] animate-bounce">
+                        </span>
                     </span>
                 </a>
             </div>

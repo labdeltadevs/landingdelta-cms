@@ -3,7 +3,7 @@
 <flux:subheading>Gestión de rotafolios o catálogos en PDF.</flux:subheading>
 
 <div class="mt-6 flex items-center justify-between gap-4">
-    @can('manage brochures', App\Models\Brochure::class)
+    @can('create', App\Models\Brochure::class)
         <flux:button :href="route('admin.brochures.create')" wire:navigate icon="plus">Nuevo rotafolio</flux:button>
     @endcan
 </div>
@@ -20,8 +20,12 @@
                 <flux:dropdown align="end">
                     <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
                     <flux:menu>
-                        <flux:menu.item :href="route('admin.brochures.edit', $brochure)" wire:navigate icon="pencil">Editar</flux:menu.item>
-                        <flux:menu.item wire:click="delete({{ $brochure->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                        @can('update', $brochure)
+                            <flux:menu.item :href="route('admin.brochures.edit', $brochure)" wire:navigate icon="pencil">Editar</flux:menu.item>
+                        @endcan
+                        @can('delete', $brochure)
+                            <flux:menu.item wire:click="delete({{ $brochure->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                        @endcan
                     </flux:menu>
                 </flux:dropdown>
             </div>

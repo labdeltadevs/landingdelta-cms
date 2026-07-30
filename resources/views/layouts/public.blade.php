@@ -31,9 +31,9 @@
             <nav class="relative hidden md:flex flex-1 items-center justify-center gap-1 text-sm font-medium">
                 {{-- Floating Logo Button --}}
                 <a href="{{ route('public.home') }}"
-                    class="absolute -bottom-7 left-0 z-20 flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-lg shadow-gray-800 ring-2 ring-white transition-all duration-300 hover:scale-110 hover:shadow-[#ff671f]/20 hover:ring-[#ff671f]/30 group">
+                    class="absolute -bottom-7 left-0 z-20 flex h-16 w-16 items-center justify-center rounded-full bg-white shadow-lg shadow-gray-400 ring-1 ring-white transition-all duration-500 hover:scale-125 hover:shadow-[#ff671f]/10 hover:ring-[#ff671f]/30 group">
                     <img src="{{ Storage::disk('public')->url('matraz_naranja_no_bg.png') }}" alt="Laboratorios Delta"
-                        class="h-auto w-auto object-contain transition-transform duration-300 group-hover:rotate-12" />
+                        class="h-auto w-auto object-contain transition-transform duration-300" />
                 </a>
 
                 {{-- Standalone pills: Productos, Marcas, Catálogos --}}

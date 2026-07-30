@@ -3,14 +3,13 @@
 namespace App\Livewire\Admin\News;
 
 use App\Models\News;
-use App\Models\NewsImage;
 use App\Services\FileUploader;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Str;
 
 #[Layout('layouts.app')]
 #[Title('Noticia')]
@@ -19,11 +18,17 @@ class NewsForm extends Component
     use WithFileUploads;
 
     public ?News $news = null;
+
     public string $title = '';
+
     public string $excerpt = '';
+
     public string $body = '';
+
     public bool $is_active = true;
+
     public $published_at = '';
+
     public $cover;
 
     public function mount(?News $news = null): void

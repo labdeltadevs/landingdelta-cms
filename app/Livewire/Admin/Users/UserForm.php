@@ -5,19 +5,26 @@ namespace App\Livewire\Admin\Users;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
-use Livewire\Components\WithAuthorization;
 use Livewire\Component;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 #[Layout('layouts.app')]
 class UserForm extends Component
 {
     public ?User $user = null;
+
     public string $name = '';
+
     public string $email = '';
+
     public string $password = '';
+
     public string $password_confirmation = '';
+
     public ?int $role_id = null;
+
+    public array $permissions = [];
 
     public function mount(?User $user = null): void
     {
@@ -26,6 +33,7 @@ class UserForm extends Component
             $this->name = $user->name;
             $this->email = $user->email;
             $this->role_id = $user->roles()->first()?->id;
+            $this->permissions = $user->getPermissionNames()->toArray();
         }
     }
 
@@ -39,7 +47,7 @@ class UserForm extends Component
             'role_id' => 'required|exists:roles,id',
         ];
 
-        if (!$this->user?->exists) {
+        if (! $this->user?->exists) {
             $rules['password'] = 'required|string|min:8|confirmed';
         }
 
@@ -56,6 +64,8 @@ class UserForm extends Component
         $role = Role::findById($this->role_id, 'web');
         $this->user->syncRoles([$role->name]);
 
+        $this->user->syncPermissions($this->permissions);
+
         $this->dispatch('notify', message: 'Usuario guardado correctamente.');
         $this->redirect(route('admin.users.index'), navigate: true);
     }
@@ -64,6 +74,7 @@ class UserForm extends Component
     {
         return view('livewire.admin.users.user-form', [
             'roles' => Role::query()->where('guard_name', 'web')->get(),
+            'allPermissions' => Permission::query()->where('guard_name', 'web')->orderBy('name')->get(),
         ]);
     }
 }

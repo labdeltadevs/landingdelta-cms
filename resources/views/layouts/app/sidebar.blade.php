@@ -12,41 +12,57 @@
 
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Contenido')" class="grid">
-                    <flux:sidebar.item icon="shopping-cart" :href="route('admin.products.index')" :current="request()->routeIs('admin.products.*')" wire:navigate>
-                        Productos
-                    </flux:sidebar.item>
-                    <flux:sidebar.item icon="building-storefront" :href="route('admin.brands.index')" :current="request()->routeIs('admin.brands.*')" wire:navigate>
-                        Marcas
-                    </flux:sidebar.item>
-                    <flux:sidebar.item icon="folder" :href="route('admin.categories.index')" :current="request()->routeIs('admin.categories.*')" wire:navigate>
-                        Categorías
-                    </flux:sidebar.item>
-                    <flux:sidebar.item icon="map-pin" :href="route('admin.branches.index')" :current="request()->routeIs('admin.branches.*')" wire:navigate>
-                        Sucursales
-                    </flux:sidebar.item>
-                    <flux:sidebar.item icon="photo" :href="route('admin.hero.index')" :current="request()->routeIs('admin.hero.*')" wire:navigate>
-                        Hero Slides
-                    </flux:sidebar.item>
-                    <flux:sidebar.item icon="document-text" :href="route('admin.brochures.index')" :current="request()->routeIs('admin.brochures.*')" wire:navigate>
-                        Rotafolios
-                    </flux:sidebar.item>
-                    <flux:sidebar.item icon="newspaper" :href="route('admin.news.index')" :current="request()->routeIs('admin.news.*')" wire:navigate>
-                        Noticias
-                    </flux:sidebar.item>
-                    <flux:sidebar.item icon="briefcase" :href="route('admin.job-openings.index')" :current="request()->routeIs('admin.job-openings.*')" wire:navigate>
-                        Ofertas Laborales
-                    </flux:sidebar.item>
+                    @can('view.products')
+                        <flux:sidebar.item icon="shopping-cart" :href="route('admin.products.index')" :current="request()->routeIs('admin.products.*')" wire:navigate>
+                            Productos
+                        </flux:sidebar.item>
+                    @endcan
+                    @can('view.brands')
+                        <flux:sidebar.item icon="building-storefront" :href="route('admin.brands.index')" :current="request()->routeIs('admin.brands.*')" wire:navigate>
+                            Marcas
+                        </flux:sidebar.item>
+                    @endcan
+                    @can('view.categories')
+                        <flux:sidebar.item icon="folder" :href="route('admin.categories.index')" :current="request()->routeIs('admin.categories.*')" wire:navigate>
+                            Categorías
+                        </flux:sidebar.item>
+                    @endcan
+                    @can('view.branches')
+                        <flux:sidebar.item icon="map-pin" :href="route('admin.branches.index')" :current="request()->routeIs('admin.branches.*')" wire:navigate>
+                            Sucursales
+                        </flux:sidebar.item>
+                    @endcan
+                    @can('view.hero')
+                        <flux:sidebar.item icon="photo" :href="route('admin.hero.index')" :current="request()->routeIs('admin.hero.*')" wire:navigate>
+                            Hero Slides
+                        </flux:sidebar.item>
+                    @endcan
+                    @can('view.brochures')
+                        <flux:sidebar.item icon="document-text" :href="route('admin.brochures.index')" :current="request()->routeIs('admin.brochures.*')" wire:navigate>
+                            Rotafolios
+                        </flux:sidebar.item>
+                    @endcan
+                    @can('view.news')
+                        <flux:sidebar.item icon="newspaper" :href="route('admin.news.index')" :current="request()->routeIs('admin.news.*')" wire:navigate>
+                            Noticias
+                        </flux:sidebar.item>
+                    @endcan
+                    @can('view.job-openings')
+                        <flux:sidebar.item icon="briefcase" :href="route('admin.job-openings.index')" :current="request()->routeIs('admin.job-openings.*')" wire:navigate>
+                            Ofertas Laborales
+                        </flux:sidebar.item>
+                    @endcan
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Administración')" class="grid">
-                    @can('manage users')
+                    @can('view.users')
                         <flux:sidebar.item icon="users" :href="route('admin.users.index')" :current="request()->routeIs('admin.users.*')" wire:navigate>
                             Usuarios
                         </flux:sidebar.item>
                     @endcan
-                    @can('manage settings')
+                    @can('view.settings')
                         <flux:sidebar.item icon="cog" :href="route('admin.settings.index')" :current="request()->routeIs('admin.settings.*')" wire:navigate>
                             Configuración
                         </flux:sidebar.item>

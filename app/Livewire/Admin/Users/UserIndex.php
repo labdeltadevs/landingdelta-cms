@@ -16,8 +16,13 @@ class UserIndex extends Component
     use WithPagination;
 
     public string $search = '';
+
     protected $queryString = ['search'];
-    public function updatingSearch(): void { $this->resetPage(); }
+
+    public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
 
     public function delete(int $id): void
     {

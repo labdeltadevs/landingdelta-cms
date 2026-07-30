@@ -16,7 +16,7 @@ class SettingsForm extends Component
 
     public function mount(): void
     {
-        $this->authorize('manage settings', SiteSetting::class);
+        $this->authorize('view', SiteSetting::class);
 
         $keys = [
             'company_name', 'company_slogan', 'legal_notice',
@@ -38,7 +38,7 @@ class SettingsForm extends Component
 
     public function save(): void
     {
-        $this->authorize('manage settings', SiteSetting::class);
+        $this->authorize('update', SiteSetting::class);
 
         $isSimple = [
             'company_name', 'company_slogan', 'legal_notice',
