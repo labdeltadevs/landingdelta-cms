@@ -1,4 +1,5 @@
-<x-layouts::public>
+<x-layouts::public metaTitle="Inicio"
+    metaDescription="Laboratorios Delta S.A. — Líder en la industria farmacéutica boliviana. Productos de alta calidad, marcas exclusivas y presencia nacional en los 9 departamentos.">
     @php
         $slides = \App\Models\HeroSlide::query()->active()->ordered()->get();
         $categories = \App\Models\Category::query()->active()->ordered()->get();
@@ -69,7 +70,8 @@
         ];
     @endphp
 
-    <section id="inicio" class="relative isolate flex min-h-[90vh] items-center overflow-hidden bg-zinc-100">
+    <section id="inicio"
+        class="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-zinc-100 lg:min-h-[90vh]">
 
         <style>
             [x-cloak] {
@@ -78,7 +80,7 @@
         </style>
 
         {{-- ================================================= --}}
-        {{-- BACKGROUND SLIDESHOW                               --}}
+        {{-- BACKGROUND SLIDESHOW                              --}}
         {{-- ================================================= --}}
         <div class="absolute inset-0" aria-hidden="true" x-data='{ slides: {!! json_encode($backgroundSlides, $jsonFlags) !!}, current: 0 }'
             x-init="setInterval(() => {
@@ -96,31 +98,31 @@
             </template>
 
             {{-- Destellos decorativos --}}
-            <div class="absolute -left-32 top-1/4 h-80 w-80 rounded-full bg-[#ff671f]/20 blur-3xl">
+            <div class="absolute -left-40 top-1/4 h-64 w-64 rounded-full bg-[#ff671f]/20 blur-3xl sm:h-80 sm:w-80">
             </div>
 
-            <div class="absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-[#ff671f]/10 blur-3xl">
+            <div class="absolute -right-40 bottom-0 h-72 w-72 rounded-full bg-[#ff671f]/10 blur-3xl sm:h-96 sm:w-96">
             </div>
 
-            {{-- Overlay claro para mejorar la legibilidad --}}
+            {{-- Overlay claro --}}
             <div class="pointer-events-none absolute inset-0"
                 style="background:
                 linear-gradient(
                     90deg,
-                    rgba(200,200,200,0.68) 0%,
-                    rgba(200,200,200,0.54) 52%,
-                    rgba(200,200,200,0.60) 100%
+                    rgba(190,190,190,0.74) 0%,
+                    rgba(190,190,190,0.56) 52%,
+                    rgba(190,190,190,0.64) 100%
                 ),
                 linear-gradient(
                     180deg,
-                    rgba(200,200,200,0.28) 0%,
-                    rgba(200,200,200,0.20) 45%,
-                    rgba(200,200,200,0.68) 100%
+                    rgba(190,190,190,0.32) 0%,
+                    rgba(190,190,190,0.18) 45%,
+                    rgba(190,190,190,0.70) 100%
                 );">
             </div>
 
             {{-- Patrón sutil --}}
-            <div class="pointer-events-none absolute inset-0 opacity-40"
+            <div class="pointer-events-none absolute inset-0 opacity-30 sm:opacity-40"
                 style="
                 background-image: radial-gradient(
                     circle,
@@ -155,24 +157,24 @@
         {{-- ================================================= --}}
         {{-- CONTENIDO PRINCIPAL                               --}}
         {{-- ================================================= --}}
-        <div class="relative z-10 mx-auto w-full max-w-7xl px-4 py-4 sm:px-4 sm:py-8 lg:px-4 lg:py-8">
+        <div class="relative z-10 mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
 
             {{-- Panel principal glassmorphism --}}
             <div
-                class="relative overflow-hidden rounded-[2rem] border border-white/[0.72] bg-white/[0.48] shadow-2xl shadow-zinc-900/10 backdrop-blur-2xl">
+                class="relative overflow-hidden rounded-[1.5rem] border border-white/[0.72] bg-white/[0.48] shadow-2xl shadow-zinc-900/10 backdrop-blur-2xl sm:rounded-[2rem]">
 
                 {{-- Decoración interna --}}
                 <div
-                    class="pointer-events-none absolute -right-32 -top-32 h-80 w-80 rounded-full bg-[#ff671f]/10 blur-3xl">
+                    class="pointer-events-none absolute -right-32 -top-32 h-64 w-64 rounded-full bg-[#ff671f]/10 blur-3xl sm:h-80 sm:w-80">
                 </div>
 
                 <div
-                    class="pointer-events-none absolute -bottom-40 -left-32 h-80 w-80 rounded-full bg-white/50 blur-3xl">
+                    class="pointer-events-none absolute -bottom-40 -left-32 h-64 w-64 rounded-full bg-white/50 blur-3xl sm:h-80 sm:w-80">
                 </div>
 
-                <div class="relative z-10 p-5 sm:p-4 lg:p-6">
+                <div class="relative z-10 p-5 sm:p-7 lg:p-8 xl:p-10">
 
-                    <div class="flex flex-col gap-10 lg:flex-row lg:items-stretch lg:gap-16">
+                    <div class="flex flex-col gap-8 lg:flex-row lg:items-stretch lg:gap-10 xl:gap-14">
 
                         {{-- ================================================= --}}
                         {{-- ZONA IZQUIERDA                                    --}}
@@ -180,31 +182,24 @@
                         <div class="min-w-0 flex-1">
 
                             {{-- Logo --}}
-                            <div class="mb-7 flex items-center justify-center" data-aos="fade-up">
+                            <div class="mb-6 flex items-center justify-center sm:mb-8"
+                                data-aos="fade-up">
+
                                 <img src="{{ Storage::disk('public')->url('logo_delta.png') }}"
                                     alt="Laboratorios Delta S.A."
-                                    class="h-36 w-auto max-w-[440px] object-contain drop-shadow-md sm:h-20 lg:h-36">
+                                    class="h-20 w-auto max-w-[440px] object-contain drop-shadow-md sm:h-24 sm:max-w-[600px] lg:h-28 lg:max-w-[440px] xl:h-32">
                             </div>
-
-                            {{-- Badge
-                            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-[#ff671f]/20 bg-[#ff671f]/10 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#d95417]"
-                                data-aos="fade-up" data-aos-delay="80">
-
-                                <span
-                                    class="h-2 w-2 rounded-full bg-[#ff671f] shadow-[0_0_0_4px_rgba(255,103,31,0.12)]"></span>
-                                <span>Salud que transforma</span>
-                            </div> --}}
 
                             {{-- Slides de contenido --}}
                             @if (count($heroSlides) > 0)
                                 <div x-data="{ current: 0, total: {{ count($heroSlides) }} }" x-init="setInterval(() => {
                                     current = (current + 1) % total
-                                }, 7500)" class="mb-2" aria-live="polite">
+                                }, 7500)" class="mb-3" aria-live="polite">
 
-                                    <div class="relative min-h-[270px] sm:min-h-[245px] lg:min-h-[270px]">
+                                    <div
+                                        class="relative min-h-[335px] sm:min-h-[300px] md:min-h-[280px] lg:min-h-[315px] xl:min-h-[300px]">
 
                                         <template x-for='(slide, i) in {!! json_encode($heroSlides, $jsonFlags) !!}' :key="i">
-
                                             <div x-cloak x-show="current === i"
                                                 x-transition:enter="transition duration-700 ease-out"
                                                 x-transition:enter-start="translate-y-3 opacity-0"
@@ -215,17 +210,17 @@
                                                 class="absolute inset-x-0 top-0">
 
                                                 <h1
-                                                    class="max-w-4xl text-4xl font-bold leading-[1.05] tracking-[-0.035em] text-zinc-900 sm:text-5xl lg:text-6xl">
+                                                    class="max-w-4xl text-3xl font-bold leading-[1.08] tracking-[-0.035em] text-zinc-900 sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl">
                                                     <span x-text="slide.title"></span>
                                                 </h1>
 
                                                 <p
-                                                    class="mt-5 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
+                                                    class="mt-4 max-w-2xl text-sm leading-relaxed text-zinc-600 sm:mt-5 sm:text-base lg:text-lg">
                                                     <span x-text="slide.subtitle"></span>
                                                 </p>
 
                                                 <a x-show="slide.cta_label" :href="slide.cta_url || '#'"
-                                                    class="group mt-6 inline-flex items-center gap-2 rounded-full bg-[#ff671f] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:-translate-y-1 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2">
+                                                    class="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#ff671f] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:-translate-y-1 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
 
                                                     <span x-text="slide.cta_label"></span>
 
@@ -241,7 +236,7 @@
                                     </div>
 
                                     {{-- Indicadores --}}
-                                    <div class="flex items-center gap-2 pt-3">
+                                    <div class="flex items-center justify-center gap-2 pt-3 sm:justify-start">
                                         <template x-for="(_, i) in total" :key="i">
                                             <button type="button" @click="current = i"
                                                 :aria-label="'Mostrar diapositiva ' + (i + 1)"
@@ -255,14 +250,15 @@
                                     </div>
                                 </div>
                             @else
-                                {{-- Contenido alternativo si no existen slides --}}
-                                <div class="mb-2 min-h-[200px] sm:min-h-[245px] lg:min-h-[200px]">
+                                {{-- Contenido alternativo --}}
+                                <div class="mb-3 min-h-[240px] sm:min-h-[220px] lg:min-h-[260px]">
                                     <h1
-                                        class="max-w-4xl text-3xl leading-[1.05] tracking-[-0.035em] text-zinc-900 sm:text-5xl lg:text-6xl">
+                                        class="max-w-4xl text-3xl font-bold leading-[1.08] tracking-[-0.035em] text-zinc-900 sm:text-4xl md:text-5xl lg:text-6xl">
                                         Cuidando la salud de nuestra gente
                                     </h1>
 
-                                    <p class="mt-5 max-w-2xl text-base leading-relaxed text-zinc-600 sm:text-lg">
+                                    <p
+                                        class="mt-5 max-w-2xl text-sm leading-relaxed text-zinc-600 sm:text-base lg:text-lg">
                                         Comprometidos con la salud y el bienestar de los bolivianos,
                                         ofreciendo productos farmacéuticos de la más alta calidad.
                                     </p>
@@ -270,19 +266,21 @@
                             @endif
 
                             {{-- Mensaje institucional --}}
-                            <div class="mb-8 max-w-2xl border-l-2 border-[#ff671f] pl-4" data-aos="fade-up"
+                            <div class="mb-6 max-w-2xl border-l-2 border-[#ff671f] pl-4 sm:mb-8" data-aos="fade-up"
                                 data-aos-delay="150">
 
-                                <p class="text-sm font-semibold uppercase tracking-[0.2em] text-[#d95417]">
+                                <p
+                                    class="text-xs font-semibold uppercase leading-relaxed tracking-[0.15em] text-[#d95417] sm:text-sm sm:tracking-[0.2em]">
                                     Líder en la industria farmacéutica boliviana
                                 </p>
                             </div>
 
                             {{-- Botones principales --}}
-                            <div class="flex flex-wrap items-center gap-3" data-aos="fade-up" data-aos-delay="250">
+                            <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center" data-aos="fade-up"
+                                data-aos-delay="250">
 
                                 <a href="{{ route('public.products.index') }}"
-                                    class="group inline-flex items-center gap-2.5 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:-translate-y-1 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2">
+                                    class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:-translate-y-1 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
 
                                     <span>Explorar productos</span>
 
@@ -295,7 +293,7 @@
                                 </a>
 
                                 <a href="{{ route('public.about') }}"
-                                    class="group inline-flex items-center gap-2.5 rounded-full border border-zinc-900/10 bg-white/[0.42] px-7 py-3.5 text-sm font-semibold text-zinc-800 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[#ff671f]/30 hover:bg-white/[0.72] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2">
+                                    class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-zinc-900/10 bg-white/[0.42] px-7 py-3.5 text-sm font-semibold text-zinc-800 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[#ff671f]/30 hover:bg-white/[0.72] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
 
                                     <span>Nuestra historia</span>
 
@@ -312,19 +310,22 @@
                         {{-- ================================================= --}}
                         {{-- ZONA DERECHA                                      --}}
                         {{-- ================================================= --}}
-                        <div class="w-full lg:w-[36%] lg:max-w-md" data-aos="fade-left" data-aos-delay="300">
+                        <div class="w-full lg:w-[34%] lg:min-w-[290px] lg:max-w-md" data-aos="fade-left"
+                            data-aos-delay="300">
 
                             <div
-                                class="h-full rounded-[1.5rem] border border-white/[0.75] bg-white/[0.56] p-5 shadow-lg shadow-zinc-900/[0.06] backdrop-blur-xl sm:p-6">
+                                class="h-full rounded-[1.25rem] border border-white/[0.75] bg-white/[0.56] p-5 shadow-lg shadow-zinc-900/[0.06] backdrop-blur-xl sm:rounded-[1.5rem] sm:p-6">
 
                                 {{-- Encabezado --}}
-                                <div class="flex items-start justify-between gap-4">
+                                <div class="flex items-start justify-between gap-3">
                                     <div>
-                                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#d95417]">
+                                        <p
+                                            class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#d95417] sm:text-xs sm:tracking-[0.2em]">
                                             Nuestra trayectoria
                                         </p>
 
-                                        <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
+                                        <h2
+                                            class="mt-2 text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl xl:text-3xl">
                                             Hechos que nos mueven
                                         </h2>
 
@@ -334,22 +335,22 @@
                                     </div>
 
                                     <div
-                                        class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#ff671f]/10 text-[#ff671f]">
-                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5"
-                                            viewBox="0 0 24 24" aria-hidden="true">
+                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#ff671f]/10 text-[#ff671f] sm:h-12 sm:w-12 sm:rounded-2xl">
+                                        <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor"
+                                            stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m9-9H3" />
                                         </svg>
                                     </div>
                                 </div>
 
                                 {{-- Logros --}}
-                                <div class="mt-6 space-y-3">
+                                <div class="mt-5 space-y-3 sm:mt-6">
                                     @foreach ($galardones as $g)
                                         <div
                                             class="group flex items-center gap-3 rounded-2xl border border-white/[0.80] bg-white/[0.46] p-3.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#ff671f]/30 hover:bg-white/[0.75] hover:shadow-md">
 
                                             <div
-                                                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#ff671f]/20 bg-[#ff671f]/10 text-[#ff671f] transition-transform duration-300 group-hover:scale-110">
+                                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#ff671f]/20 bg-[#ff671f]/10 text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:h-11 sm:w-11">
                                                 {!! $g['icon'] !!}
                                             </div>
 
@@ -379,78 +380,78 @@
                     {{-- ================================================= --}}
                     {{-- ESTADÍSTICAS                                      --}}
                     {{-- ================================================= --}}
-                    <div class="mt-10 border-t border-zinc-900/10 pt-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="mt-8 border-t border-zinc-900/10 pt-5 sm:mt-10 sm:pt-6" data-aos="fade-up"
+                        data-aos-delay="400">
 
-                        <div class="grid grid-cols-3 divide-x divide-zinc-900/10">
+                        <div
+                            class="grid grid-cols-1 divide-y divide-zinc-900/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
 
-                            <div class="group px-2 text-center">
+                            <div class="group py-4 text-center sm:px-2 sm:py-0">
                                 <p
                                     class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500 sm:text-xs">
                                     Portafolio
                                 </p>
 
                                 <p
-                                    class="mt-1 text-2xl font-bold text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:text-3xl lg:text-4xl">
+                                    class="mt-1 text-3xl font-bold text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:text-3xl lg:text-4xl">
                                     +{{ $productsCount }}
                                 </p>
 
-                                <p class="mt-1 text-[11px] text-zinc-500 sm:text-xs">
+                                <p class="mt-1 text-xs text-zinc-500">
                                     productos
                                 </p>
                             </div>
 
-                            <div class="group px-2 text-center">
+                            <div class="group py-4 text-center sm:px-2 sm:py-0">
                                 <p
                                     class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500 sm:text-xs">
                                     Alcance
                                 </p>
 
                                 <p
-                                    class="mt-1 text-2xl font-bold text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:text-3xl lg:text-4xl">
+                                    class="mt-1 text-3xl font-bold text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:text-3xl lg:text-4xl">
                                     +{{ $brands->count() }}
                                 </p>
 
-                                <p class="mt-1 text-[11px] text-zinc-500 sm:text-xs">
+                                <p class="mt-1 text-xs text-zinc-500">
                                     marcas
                                 </p>
                             </div>
 
-                            <div class="group px-2 text-center">
+                            <div class="group py-4 text-center sm:px-2 sm:py-0">
                                 <p
                                     class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500 sm:text-xs">
                                     Presencia
                                 </p>
 
                                 <p
-                                    class="mt-1 text-2xl font-bold text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:text-3xl lg:text-4xl">
+                                    class="mt-1 text-3xl font-bold text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:text-3xl lg:text-4xl">
                                     9
                                 </p>
 
-                                <p class="mt-1 text-[11px] text-zinc-500 sm:text-xs">
+                                <p class="mt-1 text-xs text-zinc-500">
                                     departamentos
                                 </p>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
 
             {{-- Indicador de scroll --}}
-            <div class="mt-6 flex justify-center" data-aos="fade-up" data-aos-delay="500">
+            <div class="mt-5 flex justify-center sm:mt-6" data-aos="fade-up" data-aos-delay="500">
 
                 <a href="#travesia"
                     class="group inline-flex flex-col items-center gap-2 rounded-full px-4 py-2 text-zinc-600 transition-colors hover:text-[#d95417] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2">
 
-                    <span class="text-[10px] font-semibold uppercase tracking-[0.25em]">
+                    <span class="text-[10px] font-semibold uppercase tracking-[0.2em] sm:tracking-[0.25em]">
                         Descubre más
                     </span>
 
                     <span
                         class="flex h-9 w-6 items-start justify-center rounded-full border border-zinc-900/20 bg-white/[0.38] backdrop-blur-sm transition-colors group-hover:border-[#ff671f]/50">
 
-                        <span class="mt-1.5 h-2 w-1 rounded-full bg-[#ff671f] animate-bounce">
-                        </span>
+                        <span class="mt-1.5 h-2 w-1 rounded-full bg-[#ff671f] animate-bounce"></span>
                     </span>
                 </a>
             </div>
@@ -537,14 +538,14 @@
                 </div>
 
                 {{-- Navigation Buttons --}}
-                <button @click="prev()"
+                <button @click="prev()" aria-label="Anterior"
                     class="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-xl border border-zinc-100 text-zinc-700 transition-all hover:bg-[#ff671f] hover:text-white hover:scale-110">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5"
                         viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                     </svg>
                 </button>
-                <button @click="next()"
+                <button @click="next()" aria-label="Siguiente"
                     class="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-white shadow-xl border border-zinc-100 text-zinc-700 transition-all hover:bg-[#ff671f] hover:text-white hover:scale-110">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5"
                         viewBox="0 0 24 24">
@@ -577,6 +578,7 @@
                                             @if ($brand->logo_path)
                                                 {{-- Full Image --}}
                                                 <img src="{{ $brand->logo_url }}" alt="{{ $brand->name }}"
+                                                    loading="lazy"
                                                     class="w-full h-full object-contain drop-shadow-md" />
                                             @else
                                                 {{-- Fallback --}}
@@ -628,7 +630,7 @@
             {{-- Progress Bar Indicator --}}
             <div class="flex justify-center items-center gap-3 mt-8">
                 @foreach ($brands as $i => $brand)
-                    <button @click="goTo({{ $i + 1 }})"
+                    <button @click="goTo({{ $i + 1 }})" aria-label="Ir a {{ $brand->name }}"
                         class="h-2 rounded-full transition-all duration-500 ease-out"
                         :class="current === {{ $i + 1 }} ? 'w-10 bg-[#ff671f]' : 'w-2 bg-zinc-200 hover:bg-zinc-300'">
                     </button>
@@ -664,6 +666,7 @@
                             <div class="relative aspect-[4/3] overflow-hidden bg-zinc-100">
                                 @if ($product->main_image_path)
                                     <img src="{{ $product->main_image_url }}" alt="{{ $product->name }}"
+                                        loading="lazy"
                                         class="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
                                 @else
                                     <div class="flex h-full items-center justify-center text-zinc-300 text-sm">Sin
@@ -802,7 +805,7 @@
                             <div class="mt-4 pt-4 border-t border-zinc-700/30 space-y-1">
                                 @if ($branch->phone)
                                     <a href="tel:{{ $branch->phone }}"
-                                        class="flex items-center gap-2 text-sm text-zinc-400 hover:text-[#ff671f] transition-colors">
+                                        class="flex items-center gap-2 text-sm text-green-400 hover:text-[#ff671f] transition-colors">
                                         <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor"
                                             stroke-width="1.5" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -814,7 +817,7 @@
                                 <hr class="border-zinc-600 my-4" />
                                 @if ($branch->email)
                                     <a href="mailto:{{ $branch->email }}"
-                                        class="flex items-center gap-2 text-sm text-zinc-400 hover:text-[#ff671f] transition-colors">
+                                        class="flex items-center gap-2 text-sm text-cyan-400 hover:text-[#ff671f] transition-colors">
                                         <svg class="h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor"
                                             stroke-width="1.5" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round"

@@ -1,3 +1,11 @@
+@props([
+    'metaTitle' => null,
+    'metaDescription' => null,
+    'ogImage' => null,
+    'canonical' => null,
+    'jsonLd' => null,
+])
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -39,9 +47,9 @@
                 {{-- Standalone pills: Productos, Marcas, Catálogos --}}
                 <a href="{{ route('public.products.index') }}"
                     class="group relative inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-medium transition-all duration-300
-                           {{ request()->routeIs('public.products.*') ? 'bg-gradient-to-r from-[#ff671f] to-[#e85c1a] text-white shadow-lg shadow-[#ff671f]/25 scale-105 ring-1 ring-white/20' : 'bg-white/20 backdrop-blur-lg border border-white/30 text-zinc-600 shadow-sm hover:bg-white/40 hover:border-white/50 hover:text-zinc-900 hover:shadow-md' }}">
+                           {{ request()->routeIs('public.products.*') ? 'bg-gradient-to-r from-[#ff671f] to-[#e85c1a] text-white shadow-lg shadow-[#ff671f]/10 scale-105 ring-1 ring-white/20' : 'bg-white/20 backdrop-blur-lg border border-white/30 text-zinc-600 shadow-sm hover:bg-white/40 hover:border-white/50 hover:text-zinc-900 hover:shadow-md' }}">
                     <svg class="h-4 w-4 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
-                        fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        fill="none" stroke="#ff671f" stroke-width="1.8" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
@@ -52,7 +60,7 @@
                     class="group relative inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-medium transition-all duration-300
                            {{ request()->routeIs('public.brands.*') ? 'bg-gradient-to-r from-[#ff671f] to-[#e85c1a] text-white shadow-lg shadow-[#ff671f]/25 scale-105 ring-1 ring-white/20' : 'bg-white/20 backdrop-blur-lg border border-white/30 text-zinc-600 shadow-sm hover:bg-white/40 hover:border-white/50 hover:text-zinc-900 hover:shadow-md' }}">
                     <svg class="h-4 w-4 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
-                        fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        fill="none" stroke="#ff671f" stroke-width="1.8" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72L4.318 3.44A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72m-13.5 8.65h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .415.336.75.75.75Z" />
                     </svg>
@@ -62,7 +70,7 @@
                     class="group relative inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-medium transition-all duration-300
                            {{ request()->routeIs('public.brochures.*') ? 'bg-gradient-to-r from-[#ff671f] to-[#e85c1a] text-white shadow-lg shadow-[#ff671f]/25 scale-105 ring-1 ring-white/20' : 'bg-white/20 backdrop-blur-lg border border-white/30 text-zinc-600 shadow-sm hover:bg-white/40 hover:border-white/50 hover:text-zinc-900 hover:shadow-md' }}">
                     <svg class="h-4 w-4 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"
-                        fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        fill="none" stroke="#ff671f" stroke-width="1.8" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                     </svg>
@@ -75,7 +83,7 @@
                         class="group relative inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-medium transition-all duration-300
                                    {{ request()->routeIs('public.about') || request()->routeIs('public.work-with-us') || request()->routeIs('public.news.*') || request()->routeIs('public.contact') ? 'bg-gradient-to-r from-[#ff671f] to-[#e85c1a] text-white shadow-lg shadow-[#ff671f]/25 scale-105 ring-1 ring-white/20' : 'bg-white/20 backdrop-blur-lg border border-white/30 text-zinc-600 shadow-sm hover:bg-white/40 hover:border-white/50 hover:text-zinc-900 hover:shadow-md' }}">
                         <svg class="h-4 w-4 transition-transform duration-300 group-hover:scale-110" fill="none"
-                            stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            stroke="#ff671f" stroke-width="1.8" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
                         </svg>
@@ -106,7 +114,7 @@
                             class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200
                                   {{ request()->routeIs('public.about') ? 'bg-gradient-to-r from-[#ff671f]/15 to-transparent text-[#ff671f] font-semibold ring-1 ring-[#ff671f]/20' : 'text-zinc-600 hover:bg-white/50 hover:text-zinc-900 hover:pl-5 hover:backdrop-blur-sm' }}">
                             <svg class="h-4 w-4 flex-shrink-0 transition-transform duration-200 group-hover:scale-110"
-                                fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                fill="none" stroke="#ff671f" stroke-width="1.8" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
                             </svg>
@@ -117,7 +125,7 @@
                         <a href="{{ route('public.work-with-us') }}" @click="open = false"
                             class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200
                                   {{ request()->routeIs('public.work-with-us') ? 'bg-gradient-to-r from-[#ff671f]/15 to-transparent text-[#ff671f] font-semibold ring-1 ring-[#ff671f]/20' : 'text-zinc-600 hover:bg-white/50 hover:text-zinc-900 hover:pl-5 hover:backdrop-blur-sm' }}">
-                            <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.8"
+                            <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="#ff671f" stroke-width="1.8"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z" />
@@ -129,7 +137,7 @@
                         <a href="{{ route('public.news.index') }}" @click="open = false"
                             class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200
                                   {{ request()->routeIs('public.news.*') ? 'bg-gradient-to-r from-[#ff671f]/15 to-transparent text-[#ff671f] font-semibold ring-1 ring-[#ff671f]/20' : 'text-zinc-600 hover:bg-white/50 hover:text-zinc-900 hover:pl-5 hover:backdrop-blur-sm' }}">
-                            <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.8"
+                            <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="#ff671f" stroke-width="1.8"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
@@ -141,7 +149,7 @@
                         <a href="{{ route('public.contact') }}" @click="open = false"
                             class="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200
                                   {{ request()->routeIs('public.contact') ? 'bg-gradient-to-r from-[#ff671f]/15 to-transparent text-[#ff671f] font-semibold ring-1 ring-[#ff671f]/20' : 'text-zinc-600 hover:bg-white/50 hover:text-zinc-900 hover:pl-5 hover:backdrop-blur-sm' }}">
-                            <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor"
+                            <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="#ff671f"
                                 stroke-width="1.8" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
@@ -157,7 +165,7 @@
                 <livewire:public.search.product-search />
 
                 {{-- Mobile Hamburger --}}
-                <button @click="mobileOpen = !mobileOpen"
+                <button @click="mobileOpen = !mobileOpen" aria-label="Menú de navegación"
                     class="md:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-500 transition-all hover:border-[#ff671f]/30 hover:text-[#ff671f]">
                     <svg x-show="!mobileOpen" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"
                         viewBox="0 0 24 24">
@@ -325,7 +333,7 @@
                             @endphp
                             @if ($socialUrl)
                                 @php $socialActive = true; @endphp
-                                <a href="{{ $socialUrl }}" target="_blank" rel="noopener noreferrer"
+                                <a href="{{ $socialUrl }}" target="_blank" rel="noopener noreferrer" aria-label="{{ ucfirst($key) }}"
                                     class="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-200 text-zinc-600 transition-all duration-200 hover:scale-110 hover:text-white
                                               {{ $key === 'linkedin' ? 'hover:bg-[#0A66C2]' : '' }}
                                               {{ $key === 'facebook' ? 'hover:bg-[#1877F2]' : '' }}

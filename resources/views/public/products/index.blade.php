@@ -1,4 +1,6 @@
-<x-layouts::public>
+<x-layouts::public
+    metaTitle="Productos"
+    metaDescription="Explorá el catálogo completo de productos farmacéuticos de Laboratorios Delta S.A. Medicamentos, suplementos y más con presencia en todo Bolivia.">
     @php
         $totalProducts = \App\Models\Product::query()->active()->count();
     @endphp
@@ -146,7 +148,7 @@
                             {{-- Image Container --}}
                             <div class="relative aspect-square overflow-hidden bg-zinc-50">
                                 @if ($product->main_image_path)
-                                    <img src="{{ $product->main_image_url }}" alt="{{ $product->name }}"
+                                    <img src="{{ $product->main_image_url }}" alt="{{ $product->name }}" loading="lazy"
                                         class="h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105" />
 
                                     {{-- Overlay sutil en hover --}}

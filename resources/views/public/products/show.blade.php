@@ -1,4 +1,28 @@
-<x-layouts::public>
+<x-layouts::public
+    metaTitle="{{ $product->name }}"
+    metaDescription="{{ Str::of(strip_tags($product->description ?? ''))->limit(160)->trim() }}"
+    ogImage="{{ $product->main_image_url }}"
+    jsonLd='{
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "{{ $product->name }}",
+        "description": "{{ Str::of(strip_tags($product->description ?? ''))->limit(300)->trim() }}",
+        "image": "{{ $product->main_image_url }}",
+        "brand": {
+            "@type": "Brand",
+            "name": "{{ $product->brand?->name ?? 'Laboratorios Delta' }}"
+        },
+        "category": "{{ $product->category?->name ?? '' }}",
+        "activeIngredient": "{{ $product->active_ingredient ?? '' }}",
+        "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "seller": {
+                "@type": "Organization",
+                "name": "Laboratorios Delta S.A."
+            }
+        }
+    }'>
     @php
         $related = \App\Models\Product::query()
             ->active()
@@ -44,7 +68,7 @@
                 <div data-aos="fade-right" data-aos-delay="100">
                     <div class="relative aspect-square overflow-hidden rounded-2xl bg-zinc-50 border border-zinc-100 shadow-lg">
                         @if ($product->main_image_path)
-                            <img src="{{ $product->main_image_url }}" alt="{{ $product->name }}"
+                            <img src="{{ $product->main_image_url }}" alt="{{ $product->name }}" loading="lazy"
                                  class="h-full w-full object-cover transition duration-700 hover:scale-105" />
                         @else
                             <div class="flex h-full w-full items-center justify-center">
@@ -174,7 +198,7 @@
                            data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">
                             <div class="relative aspect-square overflow-hidden bg-zinc-50">
                                 @if ($rel->main_image_path)
-                                    <img src="{{ $rel->main_image_url }}" alt="{{ $rel->name }}"
+                                    <img src="{{ $rel->main_image_url }}" alt="{{ $rel->name }}" loading="lazy"
                                          class="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
                                 @else
                                     <div class="flex h-full items-center justify-center">

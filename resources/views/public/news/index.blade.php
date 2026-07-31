@@ -1,4 +1,6 @@
-<x-layouts::public>
+<x-layouts::public
+    metaTitle="Noticias"
+    metaDescription="Últimas noticias, comunicados y novedades de Laboratorios Delta S.A. — Mantenete informado sobre la industria farmacéutica boliviana.">
     <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold text-zinc-900">Noticias</h1>
         <p class="mt-2 text-sm text-zinc-500">Últimas noticias y comunicados de Laboratorios Delta S.A.</p>
@@ -8,7 +10,7 @@
                 <a href="{{ route('public.news.show', $item) }}" class="group rounded-xl border border-zinc-200 overflow-hidden transition hover:shadow-md">
                     @if ($item->cover_image_path)
                         <div class="aspect-video overflow-hidden bg-zinc-100">
-                            <img src="{{ $item->cover_image_url }}" alt="{{ $item->title }}" class="h-full w-full object-cover transition group-hover:scale-105" />
+                            <img src="{{ $item->cover_image_url }}" alt="{{ $item->title }}" loading="lazy" class="h-full w-full object-cover transition group-hover:scale-105" />
                         </div>
                     @endif
                     <div class="p-5">

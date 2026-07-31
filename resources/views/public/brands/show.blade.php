@@ -1,4 +1,15 @@
-<x-layouts::public>
+<x-layouts::public
+    metaTitle="{{ $brand->name }}"
+    metaDescription="Conocé todos los productos de la marca {{ $brand->name }} distribuida por Laboratorios Delta S.A. en Bolivia."
+    ogImage="{{ $brand->logo_url }}"
+    jsonLd='{
+        "@context": "https://schema.org",
+        "@type": "Brand",
+        "name": "{{ $brand->name }}",
+        "description": "Marca distribuida por Laboratorios Delta S.A. en Bolivia.",
+        "url": "{{ url()->current() }}",
+        "logo": "{{ $brand->logo_url }}"
+    }'>
     <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <nav class="mb-8 text-sm text-zinc-500">
             <a href="{{ route('public.home') }}" class="hover:text-zinc-900">Inicio</a>
@@ -10,7 +21,7 @@
 
         <div class="flex items-center gap-6 mb-12">
             @if ($brand->logo_path)
-                <img src="{{ $brand->logo_url }}" alt="{{ $brand->name }}" class="h-20 object-contain" />
+                <img src="{{ $brand->logo_url }}" alt="{{ $brand->name }}" loading="lazy" class="h-20 object-contain" />
             @endif
             <div>
                 <h1 class="text-3xl font-bold text-zinc-900">{{ $brand->name }}</h1>
@@ -26,7 +37,7 @@
                     <a href="{{ route('public.products.show', $product) }}" class="group rounded-xl border border-zinc-200 bg-white p-4 transition hover:shadow-md">
                         <div class="aspect-square overflow-hidden rounded-lg bg-zinc-100">
                             @if ($product->main_image_path)
-                                <img src="{{ $product->main_image_url }}" alt="{{ $product->name }}" class="h-full w-full object-cover transition group-hover:scale-105" />
+                                <img src="{{ $product->main_image_url }}" alt="{{ $product->name }}" loading="lazy" class="h-full w-full object-cover transition group-hover:scale-105" />
                             @else
                                 <div class="flex h-full items-center justify-center text-zinc-300 text-sm">Sin imagen</div>
                             @endif

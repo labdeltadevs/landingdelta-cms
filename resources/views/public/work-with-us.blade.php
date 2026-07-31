@@ -1,4 +1,6 @@
-<x-layouts::public>
+<x-layouts::public
+    metaTitle="Trabajá con Nosotros"
+    metaDescription="Unite al equipo de Laboratorios Delta S.A. — Vemos las convocatorias laborales vigentes y formá parte de la empresa farmacéutica líder en Bolivia.">
     @php
         $rawTitle = \App\Models\SiteSetting::get('work_with_us_title');
         $title = is_array($rawTitle) ? $rawTitle['body'] ?? '' : $rawTitle;
@@ -93,7 +95,7 @@
                                 {{-- Imagen lateral (desktop) / superior (mobile) --}}
                                 @if ($job->image_url)
                                     <div class="sm:w-56 sm:flex-shrink-0 relative overflow-hidden">
-                                        <img src="{{ $job->image_url }}" alt="{{ $job->title }}"
+                                        <img src="{{ $job->image_url }}" alt="{{ $job->title }}" loading="lazy"
                                             class="h-48 sm:h-full w-full sm:w-56 object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
                                         <div
                                             class="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500">

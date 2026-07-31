@@ -1,4 +1,6 @@
-<x-layouts::public>
+<x-layouts::public
+    metaTitle="Contacto"
+    metaDescription="Encontrá las oficinas, sucursales y datos de contacto de Laboratorios Delta S.A. en La Paz, Santa Cruz, Cochabamba y Chuquisaca.">
     @php $branches = \App\Models\Branch::query()->active()->ordered()->get(); @endphp
     <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold text-zinc-900">Contacto</h1>

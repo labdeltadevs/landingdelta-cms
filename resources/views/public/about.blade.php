@@ -1,4 +1,6 @@
-<x-layouts::public>
+<x-layouts::public
+    metaTitle="Nosotros"
+    metaDescription="Conocé la historia, misión, visión y valores de Laboratorios Delta S.A. — Más de 30 años liderando la industria farmacéutica boliviana.">
     @php
         $historyBody = is_array($history) ? $history['body'] ?? '' : $history ?? '';
         $missionBody = is_array($mission) ? $mission['body'] ?? '' : $mission ?? '';

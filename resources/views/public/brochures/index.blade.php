@@ -1,4 +1,6 @@
-<x-layouts::public>
+<x-layouts::public
+    metaTitle="Rotafolios"
+    metaDescription="Descargá los rotafolios y catálogos PDF de Laboratorios Delta S.A. Material de referencia para profesionales de la salud en Bolivia.">
     <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold text-zinc-900">Rotafolios</h1>
         <p class="mt-2 text-sm text-zinc-500">Descarga los rotafolios de las diferentes líneas de productos.</p>

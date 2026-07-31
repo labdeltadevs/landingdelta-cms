@@ -30,6 +30,73 @@ use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 
+// === SEO: Robots & Sitemap ===
+
+Route::get('/robots.txt', function () {
+    $content = 'User-agent: *'.PHP_EOL;
+    $content .= 'Allow: /'.PHP_EOL;
+    $content .= PHP_EOL;
+    $content .= 'Sitemap: '.config('app.url').'/sitemap.xml'.PHP_EOL;
+
+    return response($content, 200, ['Content-Type' => 'text/plain']);
+});
+
+Route::get('/sitemap.xml', function () {
+    $staticPages = [
+        ['loc' => route('public.home'), 'priority' => '1.0', 'changefreq' => 'weekly'],
+        ['loc' => route('public.products.index'), 'priority' => '0.9', 'changefreq' => 'weekly'],
+        ['loc' => route('public.brands.index'), 'priority' => '0.8', 'changefreq' => 'weekly'],
+        ['loc' => route('public.brochures.index'), 'priority' => '0.7', 'changefreq' => 'monthly'],
+        ['loc' => route('public.about'), 'priority' => '0.8', 'changefreq' => 'monthly'],
+        ['loc' => route('public.contact'), 'priority' => '0.6', 'changefreq' => 'yearly'],
+        ['loc' => route('public.work-with-us'), 'priority' => '0.6', 'changefreq' => 'weekly'],
+        ['loc' => route('public.news.index'), 'priority' => '0.7', 'changefreq' => 'weekly'],
+    ];
+
+    $products = Product::query()->active()->get()->map(fn ($p) => [
+        'loc' => route('public.products.show', $p),
+        'priority' => '0.7',
+        'changefreq' => 'monthly',
+        'lastmod' => $p->updated_at->toIso8601String(),
+    ]);
+
+    $brands = Brand::query()->active()->get()->map(fn ($b) => [
+        'loc' => route('public.brands.show', $b),
+        'priority' => '0.6',
+        'changefreq' => 'monthly',
+    ]);
+
+    $news = News::query()->published()->get()->map(fn ($n) => [
+        'loc' => route('public.news.show', $n),
+        'priority' => '0.6',
+        'changefreq' => 'monthly',
+        'lastmod' => $n->updated_at->toIso8601String(),
+    ]);
+
+    $urls = collect($staticPages)
+        ->concat($products)
+        ->concat($brands)
+        ->concat($news);
+
+    $content = '<?xml version="1.0" encoding="UTF-8"?>';
+    $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+    foreach ($urls as $url) {
+        $content .= '<url>';
+        $content .= '<loc>'.e($url['loc']).'</loc>';
+        $content .= '<priority>'.$url['priority'].'</priority>';
+        $content .= '<changefreq>'.$url['changefreq'].'</changefreq>';
+        if (isset($url['lastmod'])) {
+            $content .= '<lastmod>'.$url['lastmod'].'</lastmod>';
+        }
+        $content .= '</url>';
+    }
+
+    $content .= '</urlset>';
+
+    return response($content, 200, ['Content-Type' => 'application/xml']);
+});
+
 // === Public Routes ===
 
 Route::view('/', 'public.home')->name('public.home');
