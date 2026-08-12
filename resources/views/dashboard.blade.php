@@ -1,15 +1,26 @@
 <x-layouts::app :title="__('Dashboard')">
     @php
-        $stats = [
-            ['label' => 'Productos', 'count' => \App\Models\Product::count(), 'icon' => 'shopping-cart'],
-            ['label' => 'Marcas', 'count' => \App\Models\Brand::count(), 'icon' => 'building-storefront'],
-            ['label' => 'Categorías', 'count' => \App\Models\Category::count(), 'icon' => 'folder'],
-            ['label' => 'Sucursales', 'count' => \App\Models\Branch::count(), 'icon' => 'map-pin'],
-            ['label' => 'Noticias', 'count' => \App\Models\News::count(), 'icon' => 'newspaper'],
-            ['label' => 'Rotafolios', 'count' => \App\Models\Brochure::count(), 'icon' => 'document-text'],
-            ['label' => 'Usuarios', 'count' => \App\Models\User::count(), 'icon' => 'users'],
-            ['label' => 'Hero Slides', 'count' => \App\Models\HeroSlide::count(), 'icon' => 'photo'],
+        $sections = [
+            ['label' => 'Productos', 'model' => \App\Models\Product::class, 'perm' => 'view.products', 'icon' => 'shopping-cart'],
+            ['label' => 'Marcas', 'model' => \App\Models\Brand::class, 'perm' => 'view.brands', 'icon' => 'building-storefront'],
+            ['label' => 'Categorías', 'model' => \App\Models\Category::class, 'perm' => 'view.categories', 'icon' => 'folder'],
+            ['label' => 'Sucursales', 'model' => \App\Models\Branch::class, 'perm' => 'view.branches', 'icon' => 'map-pin'],
+            ['label' => 'Noticias', 'model' => \App\Models\News::class, 'perm' => 'view.news', 'icon' => 'newspaper'],
+            ['label' => 'Rotafolios', 'model' => \App\Models\Brochure::class, 'perm' => 'view.brochures', 'icon' => 'document-text'],
+            ['label' => 'Usuarios', 'model' => \App\Models\User::class, 'perm' => 'view.users', 'icon' => 'users'],
+            ['label' => 'Hero Slides', 'model' => \App\Models\HeroSlide::class, 'perm' => 'view.hero', 'icon' => 'photo'],
         ];
+
+        $stats = [];
+        foreach ($sections as $section) {
+            if (auth()->user()->can($section['perm'])) {
+                $stats[] = [
+                    'label' => $section['label'],
+                    'count' => $section['model']::count(),
+                    'icon' => $section['icon'],
+                ];
+            }
+        }
     @endphp
 
     <flux:heading>Dashboard</flux:heading>

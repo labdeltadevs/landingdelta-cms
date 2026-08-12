@@ -20,21 +20,37 @@
                 @if ($slide->subtitle)
                     <p class="text-xs text-zinc-500 mt-1">{{ $slide->subtitle }}</p>
                 @endif
+                @if ($slide->valid_from || $slide->valid_until)
+                    <p class="text-xs text-zinc-400 mt-1">
+                        {{ $slide->valid_from?->format('d/m/Y') }} → {{ $slide->valid_until?->format('d/m/Y') }}
+                    </p>
+                @endif
                 <div class="mt-3 flex items-center justify-between">
                     <span class="inline-flex items-center gap-1 rounded-full bg-{{ $slide->is_active ? 'green' : 'zinc' }}-100 px-2 py-0.5 text-xs font-medium text-{{ $slide->is_active ? 'green' : 'zinc' }}-700">
                         {{ $slide->is_active ? 'Activo' : 'Inactivo' }}
                     </span>
-                    <flux:dropdown align="end">
-                        <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
-                        <flux:menu>
-                            @can('update', $slide)
-                                <flux:menu.item :href="route('admin.hero.edit', $slide)" wire:navigate icon="pencil">Editar</flux:menu.item>
-                            @endcan
-                            @can('delete', $slide)
-                                <flux:menu.item wire:click="delete({{ $slide->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
-                            @endcan
-                        </flux:menu>
-                    </flux:dropdown>
+                    @if ($slide->valid_from || $slide->valid_until)
+                        <span @class([
+                            'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
+                            'bg-emerald-100 text-emerald-700' => $slide->isValid(),
+                            'bg-amber-100 text-amber-700' => ! $slide->isValid(),
+                        ])>
+                            {{ $slide->isValid() ? 'Vigente' : 'Fuera de vigencia' }}
+                        </span>
+                    @endif
+                    @canany(['update', 'delete'], $slide)
+                        <flux:dropdown align="end">
+                            <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
+                            <flux:menu>
+                                @can('update', $slide)
+                                    <flux:menu.item :href="route('admin.hero.edit', $slide)" wire:navigate icon="pencil">Editar</flux:menu.item>
+                                @endcan
+                                @can('delete', $slide)
+                                    <flux:menu.item wire:click="delete({{ $slide->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                                @endcan
+                            </flux:menu>
+                        </flux:dropdown>
+                    @endcanany
                 </div>
             </div>
         </div>

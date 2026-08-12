@@ -10,7 +10,7 @@
 
     $previewName = $name ?: ($product?->name ?? 'Nombre del producto');
     $previewIngredient = $active_ingredient ?: ($product?->active_ingredient ?? '');
-    $previewDesc = $description ?: ($product?->description ?? '');
+    $previewDesc = \App\Support\VademecumHtml::build($vademecumRows) ?? '';
     $previewBrand = $brand_id ? $brands->firstWhere('id', $brand_id)?->name : null;
     $previewCategory = $category_id ? $categories->firstWhere('id', $category_id)?->name : null;
     $previewActive = $is_active;
@@ -65,11 +65,31 @@
                     </flux:field>
                 </div>
 
-                <flux:field>
-                    <flux:label>Descripción</flux:label>
-                    <flux:textarea wire:model="description" rows="4" placeholder="Descripción del producto..." />
-                    <flux:error name="description" />
-                </flux:field>
+                <div class="rounded-xl border border-zinc-200 bg-white p-4">
+                    <div class="mb-3 flex items-start justify-between gap-4">
+                        <div>
+                            <p class="text-sm font-semibold text-zinc-900">Vademécum</p>
+                            <p class="mt-0.5 text-xs text-zinc-500">
+                                Secciones descriptivas del producto (Presentación, Composición, Posología...). Cada fila se guarda como un <code>&lt;tr&gt;</code> de la tabla HTML en la descripción.
+                            </p>
+                        </div>
+                        <flux:button size="sm" variant="primary" wire:click="addVademecumRow" icon="plus" class="shrink-0">Agregar fila</flux:button>
+                    </div>
+
+                    <div class="space-y-3">
+                        @forelse ($vademecumRows as $index => $row)
+                            <div wire:key="vademecum-row-{{ $row['id'] }}" class="grid gap-2 rounded-lg border border-zinc-200 bg-zinc-50/50 p-3 sm:grid-cols-[200px_1fr_auto] sm:items-start">
+                                <flux:input wire:model.live="vademecumRows.{{ $index }}.label" placeholder="Título (ej: Presentación)" />
+                                <flux:textarea wire:model.live="vademecumRows.{{ $index }}.text" rows="3" placeholder="Contenido de la sección..." />
+                                <flux:button size="sm" variant="danger" wire:click="removeVademecumRow({{ $index }})" icon="trash" title="Eliminar fila" class="justify-self-start sm:justify-self-auto" />
+                            </div>
+                        @empty
+                            <p class="rounded-lg border border-dashed border-zinc-200 px-4 py-6 text-center text-sm text-zinc-400">
+                                Sin secciones todavía. Usa «Agregar fila» para crear la primera.
+                            </p>
+                        @endforelse
+                    </div>
+                </div>
 
                 <flux:field>
                     <flux:label>Imagen principal</flux:label>
@@ -161,9 +181,9 @@
                         @endif
 
                         @if ($previewDesc)
-                            <p class="mt-3 text-sm leading-relaxed text-zinc-500 line-clamp-3">
-                                {{ $previewDesc }}
-                            </p>
+                            <div class="mt-3 text-sm leading-relaxed text-zinc-500">
+                                {!! $previewDesc !!}
+                            </div>
                         @endif
 
                         <div class="mt-5">

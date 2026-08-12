@@ -29,11 +29,13 @@ class UserForm extends Component
     public function mount(?User $user = null): void
     {
         $this->user = $user;
-        if ($user->exists) {
+        if ($this->user?->exists) {
             $this->name = $user->name;
             $this->email = $user->email;
             $this->role_id = $user->roles()->first()?->id;
-            $this->permissions = $user->getPermissionNames()->toArray();
+            // getPermissionNames() solo devuelve permisos directos; usamos
+            // getAllPermissions() para reflejar también los del rol.
+            $this->permissions = $user->getAllPermissions()->pluck('name')->toArray();
         }
     }
 
@@ -64,7 +66,10 @@ class UserForm extends Component
         $role = Role::findById($this->role_id, 'web');
         $this->user->syncRoles([$role->name]);
 
-        $this->user->syncPermissions($this->permissions);
+        // Solo se guardan como directos los permisos que el rol no otorga ya,
+        // para no duplicarlos ni dejarlos huérfanos si el rol cambia.
+        $rolePermissions = $role->permissions->pluck('name')->toArray();
+        $this->user->syncPermissions(array_values(array_diff($this->permissions, $rolePermissions)));
 
         $this->dispatch('notify', message: 'Usuario guardado correctamente.');
         $this->redirect(route('admin.users.index'), navigate: true);

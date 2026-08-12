@@ -26,17 +26,19 @@
                     <td class="px-4 py-3 text-sm text-zinc-500">{{ $branch->city }}</td>
                     <td class="px-4 py-3 text-sm text-zinc-500">{{ $branch->phone }}</td>
                     <td class="px-4 py-3 text-right">
-                        <flux:dropdown align="end">
-                            <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
-                            <flux:menu>
-                                @can('update', $branch)
-                                    <flux:menu.item :href="route('admin.branches.edit', $branch)" wire:navigate icon="pencil">Editar</flux:menu.item>
-                                @endcan
-                                @can('delete', $branch)
-                                    <flux:menu.item wire:click="delete({{ $branch->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
-                                @endcan
-                            </flux:menu>
-                        </flux:dropdown>
+                        @canany(['update', 'delete'], $branch)
+                            <flux:dropdown align="end">
+                                <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
+                                <flux:menu>
+                                    @can('update', $branch)
+                                        <flux:menu.item :href="route('admin.branches.edit', $branch)" wire:navigate icon="pencil">Editar</flux:menu.item>
+                                    @endcan
+                                    @can('delete', $branch)
+                                        <flux:menu.item wire:click="delete({{ $branch->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                                    @endcan
+                                </flux:menu>
+                            </flux:dropdown>
+                        @endcanany
                     </td>
                 </tr>
             @empty

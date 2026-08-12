@@ -34,7 +34,7 @@ class NewsForm extends Component
     public function mount(?News $news = null): void
     {
         $this->news = $news;
-        if ($news->exists) {
+        if ($this->news?->exists) {
             $this->title = $news->title;
             $this->excerpt = $news->excerpt ?? '';
             $this->body = $news->body ?? '';

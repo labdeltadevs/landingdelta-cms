@@ -29,7 +29,7 @@ class BranchForm extends Component
     public function mount(?Branch $branch = null): void
     {
         $this->branch = $branch;
-        if ($branch->exists) {
+        if ($this->branch?->exists) {
             $this->name = $branch->name;
             $this->city = $branch->city;
             $this->address = $branch->address;

@@ -22,7 +22,7 @@ class CategoryForm extends Component
     public function mount(?Category $category = null): void
     {
         $this->category = $category;
-        if ($category->exists) {
+        if ($this->category?->exists) {
             $this->name = $category->name;
             $this->description = $category->description ?? '';
         }

@@ -30,4 +30,47 @@ final class VademecumHtml
 
         return $cells === '' ? null : '<table class="table-vademecum">'.$cells.'</table>';
     }
+
+    /**
+     * Extrae las filas (etiqueta | contenido) de una tabla vademecum existente
+     * para poder reeditarlas en el formulario. Devuelve un arreglo vacio si el
+     * HTML no contiene una tabla con la clase table-vademecum.
+     *
+     * @return array<int, array{label: string, text: string}>
+     */
+    public static function parse(?string $html): array
+    {
+        if ($html === null || trim($html) === '') {
+            return [];
+        }
+
+        if (! preg_match('/<table\s+class=["\']table-vademecum["\'][^>]*>(.*?)<\/table>/is', $html, $table)) {
+            return [];
+        }
+
+        $rows = [];
+
+        preg_match_all('/<tr[^>]*>(.*?)<\/tr>/is', $table[1], $trs);
+
+        foreach ($trs[1] as $tr) {
+            if (! preg_match_all('/<td[^>]*>(.*?)<\/td>/is', $tr, $tds) || count($tds[1]) < 2) {
+                continue;
+            }
+
+            $rows[] = [
+                'label' => self::cleanCell($tds[1][0]),
+                'text' => self::cleanCell($tds[1][1]),
+            ];
+        }
+
+        return $rows;
+    }
+
+    private static function cleanCell(string $cell): string
+    {
+        $cell = preg_replace('/<br\s*\/?>/i', "\n", $cell) ?? $cell;
+        $cell = trim(strip_tags($cell));
+
+        return html_entity_decode($cell, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
 }

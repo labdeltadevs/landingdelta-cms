@@ -27,6 +27,8 @@ class HeroSlideForm extends Component
 
     public string $subtitle = '';
 
+    public string $tag = '';
+
     public string $cta_label = '';
 
     public string $cta_url = '';
@@ -34,6 +36,10 @@ class HeroSlideForm extends Component
     public ?int $slideable_id = null;
 
     public string $slideable_type = '';
+
+    public ?string $valid_from = null;
+
+    public ?string $valid_until = null;
 
     public bool $is_active = true;
 
@@ -46,10 +52,13 @@ class HeroSlideForm extends Component
         if ($this->heroSlide?->exists) {
             $this->title = $this->heroSlide->title;
             $this->subtitle = $this->heroSlide->subtitle ?? '';
+            $this->tag = $this->heroSlide->tag ?? '';
             $this->cta_label = $this->heroSlide->cta_label ?? '';
             $this->cta_url = $this->heroSlide->cta_url ?? '';
             $this->slideable_id = $this->heroSlide->slideable_id;
             $this->slideable_type = $this->heroSlide->slideable_type ?? '';
+            $this->valid_from = $this->heroSlide->valid_from?->format('Y-m-d');
+            $this->valid_until = $this->heroSlide->valid_until?->format('Y-m-d');
             $this->is_active = $this->heroSlide->is_active;
         }
     }
@@ -61,12 +70,23 @@ class HeroSlideForm extends Component
         $data = $this->validate([
             'title' => 'required|string|max:255',
             'subtitle' => 'nullable|string|max:255',
+            'tag' => 'nullable|string|max:60',
             'cta_label' => 'nullable|string|max:255',
             'cta_url' => 'nullable|string|max:255',
+            'slideable_type' => 'nullable|string|in:'.Product::class.','.Brand::class,
             'slideable_id' => 'nullable|integer',
-            'slideable_type' => 'nullable|string|max:255',
+            'valid_from' => 'nullable|date',
+            'valid_until' => 'nullable|date|after_or_equal:valid_from',
             'is_active' => 'boolean',
         ]);
+
+        $data['valid_from'] = filled($data['valid_from']) ? $data['valid_from'] : null;
+        $data['valid_until'] = filled($data['valid_until']) ? $data['valid_until'] : null;
+
+        if (blank($data['slideable_type'])) {
+            $data['slideable_type'] = null;
+            $data['slideable_id'] = null;
+        }
 
         if ($this->image && is_string($this->image)) {
             $data['image_path'] = $this->image;

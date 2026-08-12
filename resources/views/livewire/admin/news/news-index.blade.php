@@ -28,17 +28,19 @@
                         <span class="inline-flex items-center gap-1 rounded-full bg-{{ $item->is_active ? 'green' : 'zinc' }}-100 px-2 py-0.5 text-xs font-medium text-{{ $item->is_active ? 'green' : 'zinc' }}-700">{{ $item->is_active ? 'Sí' : 'No' }}</span>
                     </td>
                     <td class="px-4 py-3 text-right">
-                        <flux:dropdown align="end">
-                            <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
-                            <flux:menu>
-                                @can('update', $item)
-                                    <flux:menu.item :href="route('admin.news.edit', $item)" wire:navigate icon="pencil">Editar</flux:menu.item>
-                                @endcan
-                                @can('delete', $item)
-                                    <flux:menu.item wire:click="delete({{ $item->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
-                                @endcan
-                            </flux:menu>
-                        </flux:dropdown>
+                        @canany(['update', 'delete'], $item)
+                            <flux:dropdown align="end">
+                                <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
+                                <flux:menu>
+                                    @can('update', $item)
+                                        <flux:menu.item :href="route('admin.news.edit', $item)" wire:navigate icon="pencil">Editar</flux:menu.item>
+                                    @endcan
+                                    @can('delete', $item)
+                                        <flux:menu.item wire:click="delete({{ $item->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                                    @endcan
+                                </flux:menu>
+                            </flux:dropdown>
+                        @endcanany
                     </td>
                 </tr>
             @empty

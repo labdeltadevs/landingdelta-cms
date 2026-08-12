@@ -31,22 +31,23 @@ class PermissionSeeder extends Seeder
         }
 
         $admin = Role::findOrCreate('admin', 'web');
-        $admin->givePermissionTo(Permission::all());
+        $admin->syncPermissions(Permission::all());
 
         $editor = Role::findOrCreate('editor', 'web');
-        $editor->givePermissionTo([
+        $editor->syncPermissions([
+            // Solo productos es editable; el resto del contenido es solo lectura.
             'view.products', 'edit.products',
-            'view.brands', 'edit.brands',
-            'view.categories', 'edit.categories',
-            'view.branches', 'edit.branches',
-            'view.hero', 'edit.hero',
-            'view.brochures', 'edit.brochures',
-            'view.news', 'edit.news',
-            'view.job-openings', 'edit.job-openings',
+            'view.brands',
+            'view.categories',
+            'view.branches',
+            'view.hero',
+            'view.brochures',
+            'view.news',
+            'view.job-openings',
         ]);
 
         $visor = Role::findOrCreate('visor', 'web');
-        $visor->givePermissionTo([
+        $visor->syncPermissions([
             'view.products',
             'view.brands',
             'view.categories',

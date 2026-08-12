@@ -54,3 +54,27 @@ test('a slide without an image can be saved and rendered in the modal', function
     $response->assertSee('data-hero-slides-modal');
     $response->assertSee('Aviso sin imagen');
 });
+
+test('slides outside the validity range are not rendered in the modal', function () {
+    HeroSlide::factory()->expired()->create(['title' => 'Aviso vencido']);
+    HeroSlide::factory()->upcoming()->create(['title' => 'Aviso futuro']);
+
+    $response = $this->get(route('public.home'));
+
+    $response->assertOk();
+    $response->assertDontSee('data-hero-slides-modal');
+    $response->assertDontSee('Aviso vencido');
+    $response->assertDontSee('Aviso futuro');
+});
+
+test('only slides inside the validity range are rendered in the modal', function () {
+    HeroSlide::factory()->current()->create(['title' => 'Aviso vigente']);
+    HeroSlide::factory()->expired()->create(['title' => 'Aviso vencido']);
+
+    $response = $this->get(route('public.home'));
+
+    $response->assertOk();
+    $response->assertSee('data-hero-slides-modal');
+    $response->assertSee('Aviso vigente');
+    $response->assertDontSee('Aviso vencido');
+});

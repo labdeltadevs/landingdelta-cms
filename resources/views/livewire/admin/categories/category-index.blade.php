@@ -24,17 +24,19 @@
                     <td class="px-4 py-3 text-sm font-medium">{{ $category->name }}</td>
                     <td class="px-4 py-3 text-sm text-zinc-500">{{ $category->products_count }}</td>
                     <td class="px-4 py-3 text-right">
-                        <flux:dropdown align="end">
-                            <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
-                            <flux:menu>
-                                @can('update', $category)
-                                    <flux:menu.item :href="route('admin.categories.edit', $category)" wire:navigate icon="pencil">Editar</flux:menu.item>
-                                @endcan
-                                @can('delete', $category)
-                                    <flux:menu.item wire:click="delete({{ $category->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
-                                @endcan
-                            </flux:menu>
-                        </flux:dropdown>
+                        @canany(['update', 'delete'], $category)
+                            <flux:dropdown align="end">
+                                <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
+                                <flux:menu>
+                                    @can('update', $category)
+                                        <flux:menu.item :href="route('admin.categories.edit', $category)" wire:navigate icon="pencil">Editar</flux:menu.item>
+                                    @endcan
+                                    @can('delete', $category)
+                                        <flux:menu.item wire:click="delete({{ $category->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                                    @endcan
+                                </flux:menu>
+                            </flux:dropdown>
+                        @endcanany
                     </td>
                 </tr>
             @empty

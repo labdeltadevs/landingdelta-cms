@@ -53,7 +53,7 @@
             <div class="mt-10 flex items-center justify-center gap-8 sm:gap-12" data-aos="fade-up" data-aos-delay="150">
                 <div class="w-px h-8 bg-black/10"></div>
                 <div class="text-center">
-                    <p class="text-2xl sm:text-3xl font-black text-black">30+</p>
+                    <p class="text-2xl sm:text-3xl font-black text-black">35+</p>
                     <p class="text-xs text-black/40 mt-1">Años de trayectoria</p>
                 </div>
                 <div class="w-px h-8 bg-black/10"></div>

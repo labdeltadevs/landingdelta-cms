@@ -31,17 +31,19 @@
                             <flux:badge :color="$job->is_active ? 'green' : 'zinc'" size="sm">{{ $job->is_active ? 'Sí' : 'No' }}</flux:badge>
                         </flux:table.cell>
                         <flux:table.cell align="end">
-                            <flux:dropdown align="end">
-                                <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
-                                <flux:menu>
-                                    @can('update', $job)
-                                        <flux:menu.item :href="route('admin.job-openings.edit', $job)" wire:navigate icon="pencil">Editar</flux:menu.item>
-                                    @endcan
-                                    @can('delete', $job)
-                                        <flux:menu.item wire:click="delete({{ $job->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
-                                    @endcan
-                                </flux:menu>
-                            </flux:dropdown>
+                            @canany(['update', 'delete'], $job)
+                                <flux:dropdown align="end">
+                                    <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
+                                    <flux:menu>
+                                        @can('update', $job)
+                                            <flux:menu.item :href="route('admin.job-openings.edit', $job)" wire:navigate icon="pencil">Editar</flux:menu.item>
+                                        @endcan
+                                        @can('delete', $job)
+                                            <flux:menu.item wire:click="delete({{ $job->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                                        @endcan
+                                    </flux:menu>
+                                </flux:dropdown>
+                            @endcanany
                         </flux:table.cell>
                     </flux:table.row>
                 @endforeach

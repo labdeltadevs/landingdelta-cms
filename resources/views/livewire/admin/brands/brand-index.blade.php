@@ -28,17 +28,19 @@
                         <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">{{ $brand->is_active ? 'Sí' : 'No' }}</span>
                     </td>
                     <td class="px-4 py-3 text-right">
-                        <flux:dropdown align="end">
-                            <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
-                            <flux:menu>
-                                @can('update', $brand)
-                                    <flux:menu.item :href="route('admin.brands.edit', $brand)" wire:navigate icon="pencil">Editar</flux:menu.item>
-                                @endcan
-                                @can('delete', $brand)
-                                    <flux:menu.item wire:click="delete({{ $brand->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
-                                @endcan
-                            </flux:menu>
-                        </flux:dropdown>
+                        @canany(['update', 'delete'], $brand)
+                            <flux:dropdown align="end">
+                                <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
+                                <flux:menu>
+                                    @can('update', $brand)
+                                        <flux:menu.item :href="route('admin.brands.edit', $brand)" wire:navigate icon="pencil">Editar</flux:menu.item>
+                                    @endcan
+                                    @can('delete', $brand)
+                                        <flux:menu.item wire:click="delete({{ $brand->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                                    @endcan
+                                </flux:menu>
+                            </flux:dropdown>
+                        @endcanany
                     </td>
                 </tr>
             @empty

@@ -17,17 +17,19 @@
             @endif
             <div class="mt-3 flex items-center justify-between">
                 <a href="{{ $brochure->file_url }}" target="_blank" class="text-sm text-orange-600 hover:underline">Ver PDF</a>
-                <flux:dropdown align="end">
-                    <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
-                    <flux:menu>
-                        @can('update', $brochure)
-                            <flux:menu.item :href="route('admin.brochures.edit', $brochure)" wire:navigate icon="pencil">Editar</flux:menu.item>
-                        @endcan
-                        @can('delete', $brochure)
-                            <flux:menu.item wire:click="delete({{ $brochure->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
-                        @endcan
-                    </flux:menu>
-                </flux:dropdown>
+                @canany(['update', 'delete'], $brochure)
+                    <flux:dropdown align="end">
+                        <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
+                        <flux:menu>
+                            @can('update', $brochure)
+                                <flux:menu.item :href="route('admin.brochures.edit', $brochure)" wire:navigate icon="pencil">Editar</flux:menu.item>
+                            @endcan
+                            @can('delete', $brochure)
+                                <flux:menu.item wire:click="delete({{ $brochure->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                            @endcan
+                        </flux:menu>
+                    </flux:dropdown>
+                @endcanany
             </div>
         </div>
     @empty

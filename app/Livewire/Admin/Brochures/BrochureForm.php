@@ -31,7 +31,7 @@ class BrochureForm extends Component
     public function mount(?Brochure $brochure = null): void
     {
         $this->brochure = $brochure;
-        if ($brochure->exists) {
+        if ($this->brochure?->exists) {
             $this->title = $brochure->title;
             $this->description = $brochure->description ?? '';
             $this->line = $brochure->line ?? '';

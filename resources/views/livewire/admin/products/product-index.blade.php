@@ -28,23 +28,33 @@
                     <td class="px-4 py-3 text-sm text-zinc-500">{{ $product->brand?->name ?? '—' }}</td>
                     <td class="px-4 py-3 text-sm text-zinc-500">{{ $product->category?->name ?? '—' }}</td>
                     <td class="px-4 py-3 text-center">
-                        <flux:switch wire:click="toggleFeatured({{ $product->id }})" :checked="$product->is_featured" />
+                        @can('update', $product)
+                            <flux:switch wire:click="toggleFeatured({{ $product->id }})" :checked="$product->is_featured" />
+                        @else
+                            <span class="text-xs text-zinc-400">{{ $product->is_featured ? 'Sí' : 'No' }}</span>
+                        @endcan
                     </td>
                     <td class="px-4 py-3 text-center">
-                        <flux:switch wire:click="toggleActive({{ $product->id }})" :checked="$product->is_active" />
+                        @can('update', $product)
+                            <flux:switch wire:click="toggleActive({{ $product->id }})" :checked="$product->is_active" />
+                        @else
+                            <span class="text-xs text-zinc-400">{{ $product->is_active ? 'Sí' : 'No' }}</span>
+                        @endcan
                     </td>
                     <td class="px-4 py-3 text-right">
-                        <flux:dropdown align="end">
-                            <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
-                            <flux:menu>
-                                @can('update', $product)
-                                    <flux:menu.item :href="route('admin.products.edit', $product)" wire:navigate icon="pencil">Editar</flux:menu.item>
-                                @endcan
-                                @can('delete', $product)
-                                    <flux:menu.item wire:click="delete({{ $product->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
-                                @endcan
-                            </flux:menu>
-                        </flux:dropdown>
+                        @canany(['update', 'delete'], $product)
+                            <flux:dropdown align="end">
+                                <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
+                                <flux:menu>
+                                    @can('update', $product)
+                                        <flux:menu.item :href="route('admin.products.edit', $product)" wire:navigate icon="pencil">Editar</flux:menu.item>
+                                    @endcan
+                                    @can('delete', $product)
+                                        <flux:menu.item wire:click="delete({{ $product->id }})" icon="trash" variant="danger">Eliminar</flux:menu.item>
+                                    @endcan
+                                </flux:menu>
+                            </flux:dropdown>
+                        @endcanany
                     </td>
                 </tr>
             @empty
