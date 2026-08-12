@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
  * @property int $id
  * @property string $title
  * @property string|null $subtitle
- * @property string $image_path
+ * @property string|null $image_path
  * @property string|null $cta_label
  * @property string|null $cta_url
  * @property string|null $slideable_type

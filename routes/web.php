@@ -102,7 +102,7 @@ Route::get('/sitemap.xml', function () {
 Route::view('/', 'public.home')->name('public.home');
 
 Route::get('/productos', function () {
-    $query = Product::query()->active()->with('brand', 'category');
+    $query = Product::query()->active()->with('brand', 'category')->orderBy('name');
 
     $selectedCategory = null;
     $categorySlug = request('category');

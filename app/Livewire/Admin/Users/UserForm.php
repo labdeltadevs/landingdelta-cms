@@ -39,7 +39,7 @@ class UserForm extends Component
 
     public function save(): void
     {
-        $this->authorize($this->user?->exists ? 'update' : 'create', User::class);
+        $this->authorize($this->user?->exists ? 'update' : 'create', $this->user ?? User::class);
 
         $rules = [
             'name' => 'required|string|max:255',

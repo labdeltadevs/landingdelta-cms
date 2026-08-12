@@ -45,7 +45,7 @@ class NewsForm extends Component
 
     public function save(FileUploader $uploader): void
     {
-        $this->authorize($this->news?->exists ? 'update' : 'create', News::class);
+        $this->authorize($this->news?->exists ? 'update' : 'create', $this->news ?? News::class);
 
         $data = $this->validate([
             'title' => 'required|string|max:255',

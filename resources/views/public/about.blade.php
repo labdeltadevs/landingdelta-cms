@@ -217,11 +217,9 @@
 
                                 {{-- Card (alternates left/right) --}}
                                 <div class="w-full sm:w-1/2 {{ $isLeft ? 'sm:pr-8 sm:text-right' : 'sm:pl-8 sm:order-2' }}">
-                                    <div class="relative bg-white/70 backdrop-blur-xl border border-white/20 shadow-xl shadow-black/5 rounded-2xl transition-all duration-500 hover:shadow-2xl hover:shadow-[#ff671f]/5 hover:border-white/30 hover:-translate-y-1 group">
+                                    <div class="relative bg-white/70 backdrop-blur-xl border border-[#ff671f]/50 shadow-xl shadow-black/5 rounded-2xl transition-all duration-500 hover:shadow-2xl hover:shadow-[#ff671f]/5 hover:border-[#ff671f]/80 hover:-translate-y-1 group">
                                         {{-- Glass highlight edge --}}
                                         <div class="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none"></div>
-                                        {{-- Gradient accent bar --}}
-                                        <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#ff671f] via-[#ff671f]/60 to-transparent rounded-l-2xl pointer-events-none"></div>
 
                                         <div class="relative p-5 sm:p-6">
                                             {{-- Header: icon + year + title --}}

@@ -1,6 +1,6 @@
 <div>
     <flux:heading>{{ $heroSlide?->exists ? 'Editar slide' : 'Nuevo slide' }}</flux:heading>
-    <flux:subheading>Configuración del slide del carrusel principal.</flux:subheading>
+    <flux:subheading>Configuración del aviso que se muestra al entrar al sitio.</flux:subheading>
 
     <form wire:submit.prevent="save" class="mt-6 space-y-6 max-w-2xl">
         <flux:field>
@@ -16,7 +16,7 @@
         </flux:field>
 
         <flux:field>
-            <flux:label>Imagen de fondo</flux:label>
+            <flux:label>Imagen del aviso</flux:label>
             <flux:input type="file" wire:model="image" accept="image/*" />
             <flux:error name="image" />
             @if ($image && $image instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile)

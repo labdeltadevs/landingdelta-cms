@@ -1,6 +1,6 @@
 <div>
 <flux:heading>Slides del Hero</flux:heading>
-<flux:subheading>Gestión de los slides del carrusel principal.</flux:subheading>
+<flux:subheading>Gestión de los avisos que se muestran a los visitantes.</flux:subheading>
 
 <div class="mt-6 flex items-center justify-between gap-4">
     @can('create', App\Models\HeroSlide::class)

@@ -30,7 +30,7 @@ class CategoryForm extends Component
 
     public function save(): void
     {
-        $this->authorize($this->category?->exists ? 'update' : 'create', Category::class);
+        $this->authorize($this->category?->exists ? 'update' : 'create', $this->category ?? Category::class);
 
         $data = $this->validate([
             'name' => 'required|string|max:255',

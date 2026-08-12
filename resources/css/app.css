@@ -65,3 +65,56 @@ select:focus[data-flux-control] {
     @apply size-4;
 } */
 
+/* Estilos generales para la tabla */
+  .table-vademecum {
+    width: 100%;
+    max-width: 650px;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333333;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Filas de la tabla */
+  .table-vademecum tr {
+    transition: background-color 0.2s ease;
+  }
+
+  /* Efecto al pasar el mouse por encima */
+  .table-vademecum tr:hover {
+    background-color: #f8fafc;
+  }
+
+  /* Bordes entre filas */
+  .table-vademecum tr:not(:last-child) td {
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  /* Columna izquierda (Títulos / Etiquetas) */
+  .table-vademecum td:first-child {
+    width: 25%;
+    font-weight: 600;
+    color: #1e293b;
+    background-color: #f1f5f9;
+    padding: 14px 18px;
+    vertical-align: top;
+    border-right: 2px solid #e2e8f0;
+  }
+
+  /* Columna derecha (Contenido / Información) */
+  .table-vademecum td:last-child {
+    padding: 14px 18px;
+    vertical-align: top;
+  }
+
+  /* Ajuste de listas / saltos de línea con espacio extra */
+  .table-vademecum td {
+    word-wrap: break-word;
+  }

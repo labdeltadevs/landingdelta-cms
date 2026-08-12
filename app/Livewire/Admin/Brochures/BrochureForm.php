@@ -41,7 +41,7 @@ class BrochureForm extends Component
 
     public function save(FileUploader $uploader): void
     {
-        $this->authorize($this->brochure?->exists ? 'update' : 'create', Brochure::class);
+        $this->authorize($this->brochure?->exists ? 'update' : 'create', $this->brochure ?? Brochure::class);
 
         $data = $this->validate([
             'title' => 'required|string|max:255',

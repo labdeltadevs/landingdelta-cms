@@ -21,6 +21,7 @@ class ProductFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name).'-'.Str::lower(Str::random(4)),
+            'internal_code' => 'PROD-'.fake()->unique()->numberBetween(1000, 9999),
             'active_ingredient' => fake()->word(),
             'description' => fake()->paragraph(),
             'approx_price' => fake()->randomFloat(2, 5, 200),

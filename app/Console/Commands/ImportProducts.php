@@ -11,108 +11,70 @@ use Illuminate\Support\Str;
 
 class ImportProducts extends Command
 {
-    protected $signature = 'products:import';
+    protected $signature = 'products:import {--path= : Ruta del CSV de WooCommerce (por defecto usa el export en storage)}';
 
-    protected $description = 'Import products from productos_vigentes.csv and wc-product-export CSV';
+    protected $description = 'Import products from the WooCommerce CSV export';
 
-    private const XLSX_PATH = 'app/public/products/productos_vigentes.csv';
-
-    private const WP_PATH = 'app/public/products/wc-product-export-29-7-2026-1785333046194.csv';
+    private const DEFAULT_PATH = 'app/public/products/wc-product-export-31-7-2026-1785512522302.csv';
 
     public function handle(): int
     {
+        $path = $this->option('path') ?: storage_path(self::DEFAULT_PATH);
+
         $this->info('=== Importación de productos ===');
 
-        $xlsxPath = storage_path(self::XLSX_PATH);
-        $wpPath = storage_path(self::WP_PATH);
+        if (! is_file($path)) {
+            $this->error("No se encontró el archivo: {$path}");
 
-        // ── 1. Read WP export ─────────────────────────────────
-        $this->line('Leyendo export de WordPress...');
-        $wpRows = $this->readWpCsv($wpPath);
-
-        // ── 2. Read xlsx export ────────────────────────────────
-        $this->line('Leyendo productos vigentes...');
-        $xlsxRows = $this->readXlsxCsv($xlsxPath);
-
-        // ── 3. Build normalized index from xlsx ────────────────
-        $this->line('Construyendo índice de matching...');
-        $xlsxIndex = [];
-        foreach ($xlsxRows as $xlsx) {
-            $norm = $this->normalizeName($xlsx['full_name']);
-            $xlsxIndex[$norm] = $xlsx;
+            return self::FAILURE;
         }
 
-        // ── 4. Track matched xlsx products ─────────────────────
-        $matchedXlsx = [];
-        $created = 0;
-        $updated = 0;
-        $withImage = 0;
-        $noMatchWp = 0;
-        $matchedCount = 0;
+        $rows = $this->readWcCsv($path);
 
-        // ── 5. Process each WP product ─────────────────────────
-        $this->line('Procesando productos...');
-        $bar = $this->output->createProgressBar(count($wpRows));
+        if ($rows === []) {
+            $this->error('No se pudieron leer filas del CSV.');
+
+            return self::FAILURE;
+        }
+
+        $this->line('Vaciando la tabla products...');
+        Product::query()->truncate();
+
+        $created = 0;
+        $withImage = 0;
+
+        $this->line('Procesando '.count($rows).' productos...');
+        $bar = $this->output->createProgressBar(count($rows));
         $bar->start();
 
-        foreach ($wpRows as $wp) {
-            $normWp = $this->normalizeName($wp['nombre']);
-            $match = $xlsxIndex[$normWp] ?? null;
+        foreach ($rows as $row) {
+            $slug = $this->ensureUniqueSlug(Str::slug($row['name']));
 
-            if ($match !== null) {
-                $matchedCount++;
-                $matchedXlsx[$match['internal_code']] = true;
-            }
+            $description = $this->buildDescription($row['short_description'], $row['description']);
 
-            // Parse brand and category
-            [$brandId, $categoryId] = $this->resolveBrandAndCategory($wp['categorias'] ?? '');
+            $activeIngredient = $description !== null
+                ? $this->extractActiveIngredient($description, $row['name'])
+                : null;
 
-            // Build slug
-            $slug = $match['slug'] ?? Str::slug($wp['nombre']);
+            [$brandId, $categoryId] = $this->resolveBrandAndCategory($row['categories']);
 
-            // Ensure unique slug
-            $slug = $this->ensureUniqueSlug($slug);
+            $product = Product::create([
+                'internal_code' => 'PPROD_'.$row['id'],
+                'name' => $row['name'],
+                'slug' => $slug,
+                'active_ingredient' => $activeIngredient,
+                'description' => $description,
+                'brand_id' => $brandId,
+                'category_id' => $categoryId,
+                'is_active' => true,
+                'is_featured' => false,
+                'sort' => (int) $row['id'],
+            ]);
 
-            // Build internal_code
-            $internalCode = $match['internal_code'] ?? 'WP-'.Str::random(10);
+            $created++;
 
-            // Extract active ingredient
-            $activeIngredient = $this->extractActiveIngredient(
-                ($wp['descripcion'] ?? '')."\n".($wp['descripcion_corta'] ?? ''),
-                $wp['nombre']
-            );
-
-            // Description: short + long
-            $description = trim(
-                ($wp['descripcion_corta'] ?? '')
-                ."\n\n"
-                .($wp['descripcion'] ?? '')
-            );
-
-            // Create or update product
-            $product = Product::updateOrCreate(
-                ['internal_code' => $internalCode],
-                [
-                    'name' => $wp['nombre'],
-                    'slug' => $slug,
-                    'active_ingredient' => $activeIngredient,
-                    'description' => $description ?: null,
-                    'brand_id' => $brandId,
-                    'category_id' => $categoryId,
-                    'is_active' => $match ? (strtolower($match['is_active'] ?? 'si') === 'si') : true,
-                    'sort' => $match ? (int) ($match['id'] ?? 0) : 0,
-                ]
-            );
-
-            if ($product->wasRecentlyCreated) {
-                $created++;
-            } else {
-                $updated++;
-            }
-
-            // Download image
-            if (! empty($wp['imagenes'])) {
-                $imagePath = $this->downloadImage($wp['imagenes'], $product);
+            if (! empty($row['images'])) {
+                $imagePath = $this->downloadImage($row['images'], $product);
                 if ($imagePath !== null) {
                     $product->updateQuietly(['main_image_path' => $imagePath]);
                     $withImage++;
@@ -125,99 +87,64 @@ class ImportProducts extends Command
         $bar->finish();
         $this->newline();
 
-        // ── 6. Process xlsx products without WP match ──────────
-        $xlsxWithoutMatch = 0;
-        foreach ($xlsxRows as $xlsx) {
-            if (isset($matchedXlsx[$xlsx['internal_code']])) {
-                continue;
-            }
-
-            $slug = $this->ensureUniqueSlug($xlsx['slug']);
-
-            Product::updateOrCreate(
-                ['internal_code' => $xlsx['internal_code']],
-                [
-                    'name' => $xlsx['full_name'],
-                    'slug' => $slug,
-                    'active_ingredient' => null,
-                    'description' => null,
-                    'is_active' => strtolower($xlsx['is_active'] ?? 'si') === 'si',
-                    'sort' => (int) ($xlsx['id'] ?? 0),
-                ]
-            );
-
-            $xlsxWithoutMatch++;
-            $created++;
-        }
-
-        // ── 7. Report ──────────────────────────────────────────
-        $this->newline();
         $this->info('=== Importación completada ===');
         $this->table(
             ['Métrica', 'Valor'],
             [
                 ['Productos creados', $created],
-                ['Productos actualizados', $updated],
-                ['Con imagen asignada', $withImage],
-                ['Match WP→XLSX exitoso', $matchedCount],
-                ['XLSX sin match en WP', $xlsxWithoutMatch],
-                ['Total procesados', $created + $updated],
+                ['Con imagen descargada', $withImage],
             ]
         );
 
         return self::SUCCESS;
     }
 
-    private function readWpCsv(string $path): array
+    /**
+     * @return array<int, array<string, string>>
+     */
+    private function readWcCsv(string $path): array
     {
         $handle = fopen($path, 'r');
         if ($handle === false) {
-            $this->fail("No se pudo abrir: {$path}");
+            $this->error("No se pudo abrir: {$path}");
+
+            return [];
         }
 
-        $headers = fgetcsv($handle, 0, ',', '"', '');
+        $headers = fgetcsv($handle);
         if ($headers === false) {
             fclose($handle);
-            $this->fail('CSV de WP sin cabeceras');
+            $this->error('CSV sin cabeceras');
+
+            return [];
+        }
+
+        $headers = array_map(
+            fn (string $header): string => str_replace("\xEF\xBB\xBF", '', trim($header)),
+            $headers
+        );
+
+        $columns = array_flip($headers);
+
+        $required = ['ID', 'Nombre', 'Categorías', 'Imágenes'];
+        $missing = array_diff($required, $headers);
+
+        if ($missing !== []) {
+            fclose($handle);
+            $this->error('Faltan columnas: '.implode(', ', $missing));
+
+            return [];
         }
 
         $rows = [];
-        while (($row = fgetcsv($handle, 0, ',', '"', '')) !== false) {
-            $entry = [
-                'nombre' => $row[1] ?? '',
-                'descripcion_corta' => $row[2] ?? '',
-                'descripcion' => $row[3] ?? '',
-                'categorias' => $row[4] ?? '',
-                'etiquetas' => $row[5] ?? '',
-                'imagenes' => $row[6] ?? '',
-                'marcas' => $row[7] ?? '',
-            ];
-            $rows[] = $entry;
-        }
-
-        fclose($handle);
-
-        return $rows;
-    }
-
-    private function readXlsxCsv(string $path): array
-    {
-        $handle = fopen($path, 'r');
-        if ($handle === false) {
-            $this->fail("No se pudo abrir: {$path}");
-        }
-
-        $rows = [];
-        while (($row = fgetcsv($handle, 0, ',', '"', '')) !== false) {
-            if (count($row) < 5) {
-                continue;
-            }
+        while (($data = fgetcsv($handle)) !== false) {
             $rows[] = [
-                'id' => trim($row[0]),
-                'internal_code' => trim($row[1]),
-                'full_name' => trim($row[2]),
-                'is_active' => trim($row[3]),
-                'slug' => trim($row[4]),
+                'id' => trim($data[$columns['ID']] ?? ''),
+                'name' => trim($data[$columns['Nombre']] ?? ''),
+                'short_description' => $this->cell($data, $columns, 'Descripción corta'),
+                'description' => $this->cell($data, $columns, 'Descripción'),
+                'categories' => trim($this->cell($data, $columns, 'Categorías')),
+                'images' => trim($this->cell($data, $columns, 'Imágenes')),
             ];
         }
 
@@ -226,19 +153,36 @@ class ImportProducts extends Command
         return $rows;
     }
 
-    private function normalizeName(string $name): string
+    /**
+     * @param  array<int, mixed>  $data
+     * @param  array<string, int>  $columns
+     */
+    private function cell(array $data, array $columns, string $name): string
     {
-        $name = preg_replace('/\s*\.\s*x\s+\d+\s+\w+.*$/u', '', $name);
-        $name = mb_strtolower($name, 'UTF-8');
+        if (! isset($columns[$name])) {
+            return '';
+        }
 
-        // Transliterate accents
-        $name = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $name) ?: $name;
+        return (string) ($data[$columns[$name]] ?? '');
+    }
 
-        $name = preg_replace('/[^a-z0-9\s%\/]/u', '', $name);
-        $name = preg_replace('/(\d)([a-z])/i', '$1 $2', $name);
-        $name = preg_replace('/\s+/', ' ', $name);
+    private function buildDescription(string $short, string $long): ?string
+    {
+        $short = $this->normalizeHtml($short);
+        $long = $this->normalizeHtml($long);
 
-        return trim($name);
+        $description = trim($short."\n\n".$long);
+
+        return $description !== '' ? $description : null;
+    }
+
+    private function normalizeHtml(string $html): string
+    {
+        return str_replace(
+            ['\r\n', '\n', '\r', '\t'],
+            ["\r\n", "\n", "\r", "\t"],
+            $html
+        );
     }
 
     private function resolveBrandAndCategory(string $categoryStr): array
@@ -247,12 +191,24 @@ class ImportProducts extends Command
             return [null, null];
         }
 
-        // Unescape commas
+        // Unescape commas escaped with a backslash by the WooCommerce export
         $categoryStr = str_replace('\\,', ',', $categoryStr);
 
         $parts = explode(' > ', $categoryStr);
         $brandName = trim($parts[0] ?? '');
         $categoryName = trim($parts[1] ?? '');
+
+        // Brand: first token before a comma (handles "Delta, Delta > ...")
+        if (str_contains($brandName, ',')) {
+            $brandName = trim(explode(',', $brandName)[0]);
+        }
+
+        // Strip trailing brand labels from the category segment (", Delta", ", Synthera")
+        foreach (['Delta', 'Synthera'] as $label) {
+            $categoryName = trim(
+                preg_replace('/,\s*'.preg_quote($label, '/').'\s*$/u', '', $categoryName) ?? $categoryName
+            );
+        }
 
         $brandId = null;
         if ($brandName !== '') {

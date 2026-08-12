@@ -41,7 +41,7 @@ class BranchForm extends Component
 
     public function save(): void
     {
-        $this->authorize($this->branch?->exists ? 'update' : 'create', Branch::class);
+        $this->authorize($this->branch?->exists ? 'update' : 'create', $this->branch ?? Branch::class);
 
         $data = $this->validate([
             'name' => 'required|string|max:255',

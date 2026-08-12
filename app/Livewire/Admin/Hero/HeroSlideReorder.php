@@ -21,7 +21,7 @@ class HeroSlideReorder extends Component
 
     public function updateOrder(array $newOrder): void
     {
-        $this->authorize('update', HeroSlide::class);
+        $this->authorize('update', new HeroSlide);
 
         foreach ($newOrder as $index => $id) {
             HeroSlide::query()->where('id', $id)->update(['sort' => $index]);

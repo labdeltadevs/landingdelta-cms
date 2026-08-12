@@ -33,7 +33,7 @@
         </div>
     @elseif (auth()->user()->hasAnyPermission(['view.products', 'view.news', 'view.brands', 'view.categories', 'view.branches', 'view.hero', 'view.brochures', 'view.job-openings', 'view.users', 'view.settings']))
         <div class="mt-8">
-            <flux:text class="text-zinc-500">Tenés acceso de solo lectura a las secciones del panel.</flux:text>
+            <flux:text class="text-zinc-500">Tienes acceso de solo lectura a las secciones del panel.</flux:text>
         </div>
     @endcan
 </x-layouts::app>

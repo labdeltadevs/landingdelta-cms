@@ -29,18 +29,6 @@
             Storage::disk('public')->url('fondo-f.jpeg'),
         ];
 
-        $heroSlides = $slides
-            ->map(
-                fn($slide) => [
-                    'title' => $slide->title,
-                    'subtitle' => $slide->subtitle,
-                    'cta_label' => $slide->cta_label,
-                    'cta_url' => $slide->cta_url,
-                ],
-            )
-            ->values()
-            ->all();
-
         $jsonFlags = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE;
 
         $galardones = [
@@ -157,7 +145,7 @@
         {{-- ================================================= --}}
         {{-- CONTENIDO PRINCIPAL                               --}}
         {{-- ================================================= --}}
-        <div class="relative z-10 mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+        <div class="relative z-10 mx-auto w-full max-w-[75vw] px-4 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
 
             {{-- Panel principal glassmorphism --}}
             <div
@@ -190,80 +178,18 @@
                                     class="h-20 w-auto max-w-[440px] object-contain drop-shadow-md sm:h-24 sm:max-w-[600px] lg:h-28 lg:max-w-[440px] xl:h-32">
                             </div>
 
-                            {{-- Slides de contenido --}}
-                            @if (count($heroSlides) > 0)
-                                <div x-data="{ current: 0, total: {{ count($heroSlides) }} }" x-init="setInterval(() => {
-                                    current = (current + 1) % total
-                                }, 7500)" class="mb-3" aria-live="polite">
+                            {{-- Contenido principal --}}
+                            <div class="mb-3 min-h-[240px] sm:min-h-[220px] lg:min-h-[260px]">
+                                <h1
+                                    class="max-w-4xl text-3xl font-bold leading-[1.08] tracking-[-0.035em] text-zinc-900 sm:text-4xl md:text-5xl lg:text-6xl">
+                                    Cuidando la salud de nuestra gente
+                                </h1>
 
-                                    <div
-                                        class="relative min-h-[335px] sm:min-h-[300px] md:min-h-[280px] lg:min-h-[315px] xl:min-h-[300px]">
-
-                                        <template x-for='(slide, i) in {!! json_encode($heroSlides, $jsonFlags) !!}' :key="i">
-                                            <div x-cloak x-show="current === i"
-                                                x-transition:enter="transition duration-700 ease-out"
-                                                x-transition:enter-start="translate-y-3 opacity-0"
-                                                x-transition:enter-end="translate-y-0 opacity-100"
-                                                x-transition:leave="transition duration-500 ease-in"
-                                                x-transition:leave-start="translate-y-0 opacity-100"
-                                                x-transition:leave-end="-translate-y-3 opacity-0"
-                                                class="absolute inset-x-0 top-0">
-
-                                                <h1
-                                                    class="max-w-4xl text-3xl font-bold leading-[1.08] tracking-[-0.035em] text-zinc-900 sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl">
-                                                    <span x-text="slide.title"></span>
-                                                </h1>
-
-                                                <p
-                                                    class="mt-4 max-w-2xl text-sm leading-relaxed text-zinc-600 sm:mt-5 sm:text-base lg:text-lg">
-                                                    <span x-text="slide.subtitle"></span>
-                                                </p>
-
-                                                <a x-show="slide.cta_label" :href="slide.cta_url || '#'"
-                                                    class="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#ff671f] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:-translate-y-1 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
-
-                                                    <span x-text="slide.cta_label"></span>
-
-                                                    <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                                                        fill="none" stroke="currentColor" stroke-width="2"
-                                                        viewBox="0 0 24 24" aria-hidden="true">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                                                    </svg>
-                                                </a>
-                                            </div>
-                                        </template>
-                                    </div>
-
-                                    {{-- Indicadores --}}
-                                    <div class="flex items-center justify-center gap-2 pt-3 sm:justify-start">
-                                        <template x-for="(_, i) in total" :key="i">
-                                            <button type="button" @click="current = i"
-                                                :aria-label="'Mostrar diapositiva ' + (i + 1)"
-                                                :aria-current="current === i ? 'true' : 'false'"
-                                                class="h-2 rounded-full transition-all duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2"
-                                                :class="current === i ?
-                                                    'w-9 bg-[#ff671f] shadow-[0_0_12px_rgba(255,103,31,0.45)]' :
-                                                    'w-2 bg-zinc-900/20 hover:bg-zinc-900/40'">
-                                            </button>
-                                        </template>
-                                    </div>
-                                </div>
-                            @else
-                                {{-- Contenido alternativo --}}
-                                <div class="mb-3 min-h-[240px] sm:min-h-[220px] lg:min-h-[260px]">
-                                    <h1
-                                        class="max-w-4xl text-3xl font-bold leading-[1.08] tracking-[-0.035em] text-zinc-900 sm:text-4xl md:text-5xl lg:text-6xl">
-                                        Cuidando la salud de nuestra gente
-                                    </h1>
-
-                                    <p
-                                        class="mt-5 max-w-2xl text-sm leading-relaxed text-zinc-600 sm:text-base lg:text-lg">
-                                        Comprometidos con la salud y el bienestar de los bolivianos,
-                                        ofreciendo productos farmacéuticos de la más alta calidad.
-                                    </p>
-                                </div>
-                            @endif
+                                <p class="mt-5 max-w-2xl text-sm leading-relaxed text-zinc-600 sm:text-base lg:text-lg">
+                                    Comprometidos con la salud y el bienestar de los bolivianos,
+                                    ofreciendo productos farmacéuticos de la más alta calidad.
+                                </p>
+                            </div>
 
                             {{-- Mensaje institucional --}}
                             <div class="mb-6 max-w-2xl border-l-2 border-[#ff671f] pl-4 sm:mb-8" data-aos="fade-up"
@@ -773,7 +699,7 @@
             </div>
             <div class="absolute top-0 left-1/4 w-96 h-96 bg-[#ff671f]/5 rounded-full blur-3xl"></div>
 
-            <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12" data-aos="fade-up">
                     <span
                         class="inline-block text-[11px] font-semibold uppercase tracking-[0.2em] text-[#ff671f] mb-3">Presencia
@@ -833,5 +759,7 @@
             </div>
         </section>
     @endif
+
+    <x-public.hero-slides-modal :slides="$slides" />
 
 </x-layouts::public>
