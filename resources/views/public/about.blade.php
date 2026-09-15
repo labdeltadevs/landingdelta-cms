@@ -14,7 +14,7 @@
         $hasValues = !blank($valuesBody);
         $hasQuality = !blank($qualityBody);
         $hasBranches = $branches->count() > 0;
-        $hasMilestones = count($milestones) > 0;
+        $hasMilestones = count($milestones ?? []) > 0;
         $firstYearGlobal = $hasMilestones ? (int) ($milestones[0]['year'] ?? 1987) : 1987;
 
         $historyParagraphs = $hasHistory ? array_filter(array_map('trim', explode("\n\n", $historyBody))) : [];

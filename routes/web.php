@@ -156,7 +156,8 @@ Route::get('/nosotros', function () {
     $values = SiteSetting::get('about_values');
     $quality = SiteSetting::get('about_quality_policy');
     $milestonesRaw = SiteSetting::get('about_milestones', '[]');
-    $milestones = is_string($milestonesRaw) ? json_decode($milestonesRaw, true) : (is_array($milestonesRaw) ? $milestonesRaw : []);
+    $milestonesDecoded = is_string($milestonesRaw) ? json_decode($milestonesRaw, true) : $milestonesRaw;
+    $milestones = is_array($milestonesDecoded) ? $milestonesDecoded : [];
 
     $yearsActive = now()->year - 1987;
 
