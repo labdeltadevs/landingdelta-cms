@@ -14,7 +14,7 @@ use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 #[Layout('layouts.app')]
-#[Title('Marca')]
+#[Title('División')]
 class BrandForm extends Component
 {
     use WithFileUploads;
@@ -68,7 +68,7 @@ class BrandForm extends Component
             $this->brand = Brand::query()->create($data);
         }
 
-        $this->dispatch('notify', message: 'Marca guardada correctamente.');
+        $this->dispatch('notify', message: 'División guardada correctamente.');
         $this->redirect(route('admin.brands.index'), navigate: true);
     }
 

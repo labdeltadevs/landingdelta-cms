@@ -40,7 +40,7 @@
             <flux:radio.group wire:model.live="slideable_type">
                 <flux:radio value="" label="Sin vínculo" />
                 <flux:radio value="{{ \App\Models\Product::class }}" label="Producto" />
-                <flux:radio value="{{ \App\Models\Brand::class }}" label="Marca" />
+                <flux:radio value="{{ \App\Models\Brand::class }}" label="División" />
             </flux:radio.group>
             <flux:error name="slideable_type" />
             <flux:description>Elegí a qué página llevará el botón del aviso, sin necesidad de copiar URLs.</flux:description>
@@ -48,7 +48,7 @@
 
         @if ($slideable_type === \App\Models\Product::class || $slideable_type === \App\Models\Brand::class)
             <flux:field>
-                <flux:label>{{ $slideable_type === \App\Models\Product::class ? 'Producto' : 'Marca' }}</flux:label>
+                <flux:label>{{ $slideable_type === \App\Models\Product::class ? 'Producto' : 'División' }}</flux:label>
 
                 @if ($selectedDestination)
                     <div class="flex items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5">
@@ -87,7 +87,7 @@
                         @endif
                     </div>
                     <flux:description>
-                        {{ $slideable_type === \App\Models\Product::class ? 'Mostrando hasta 8 productos. Escribí al menos 2 letras para filtrar.' : 'Elegí la marca de la lista o escribí para filtrar.' }}
+                        {{ $slideable_type === \App\Models\Product::class ? 'Mostrando hasta 8 productos. Escribí al menos 2 letras para filtrar.' : 'Elegí la división de la lista o escribí para filtrar.' }}
                     </flux:description>
                 @endif
                 <flux:error name="slideable_id" />

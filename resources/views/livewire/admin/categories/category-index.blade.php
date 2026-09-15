@@ -1,11 +1,11 @@
 <div>
-<flux:heading>Categorías</flux:heading>
-<flux:subheading>Gestión de categorías de productos.</flux:subheading>
+<flux:heading>Especialidades</flux:heading>
+<flux:subheading>Gestión de especialidades de productos.</flux:subheading>
 
 <div class="mt-6 flex items-center justify-between gap-4">
-    <flux:input wire:model.live.debounce.300ms="search" placeholder="Buscar categorías..." class="max-w-sm" />
+    <flux:input wire:model.live.debounce.300ms="search" placeholder="Buscar especialidades..." class="max-w-sm" />
     @can('create', App\Models\Category::class)
-        <flux:button :href="route('admin.categories.create')" wire:navigate icon="plus">Nueva categoría</flux:button>
+        <flux:button :href="route('admin.categories.create')" wire:navigate icon="plus">Nueva especialidad</flux:button>
     @endcan
 </div>
 
@@ -41,7 +41,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="3" class="px-4 py-12 text-center text-sm text-zinc-400">No hay categorías registradas.</td>
+                    <td colspan="3" class="px-4 py-12 text-center text-sm text-zinc-400">No hay especialidades registradas.</td>
                 </tr>
             @endforelse
         </tbody>

@@ -110,7 +110,7 @@
                     @else
                         <span
                             class="inline-flex items-center gap-1.5 rounded-full border border-zinc-100 bg-zinc-50 px-4 py-2 text-xs font-medium text-zinc-300 opacity-50 cursor-not-allowed"
-                            title="No hay productos en esta categoría">
+                            title="No hay productos en esta especialidad">
                             {{ $category->name }}
                             <span
                                 class="inline-flex items-center justify-center rounded-full px-1.5 py-0.5 text-[9px] font-bold tabular-nums bg-zinc-100 text-zinc-300">
@@ -251,7 +251,7 @@
                     </h3>
                     <p class="mt-2 text-sm text-zinc-400 max-w-sm">
                         @if ($selectedCategory)
-                            No encontramos productos en la categoría "<strong>{{ $selectedCategory->name }}</strong>"
+                            No encontramos productos en la especialidad "<strong>{{ $selectedCategory->name }}</strong>"
                             que coincidan con tu búsqueda.
                         @else
                             No encontramos productos que coincidan con tu búsqueda. Intenta con otros términos.

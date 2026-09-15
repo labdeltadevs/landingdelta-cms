@@ -1,12 +1,12 @@
 <x-layouts::public
     metaTitle="{{ $brand->name }}"
-    metaDescription="Conocé todos los productos de la marca {{ $brand->name }} distribuida por Laboratorios Delta S.A. en Bolivia."
+    metaDescription="Conocé todos los productos de la división {{ $brand->name }} distribuida por Laboratorios Delta S.A. en Bolivia."
     ogImage="{{ $brand->logo_url }}"
     jsonLd='{
         "@context": "https://schema.org",
         "@type": "Brand",
         "name": "{{ $brand->name }}",
-        "description": "Marca distribuida por Laboratorios Delta S.A. en Bolivia.",
+        "description": "División distribuida por Laboratorios Delta S.A. en Bolivia.",
         "url": "{{ url()->current() }}",
         "logo": "{{ $brand->logo_url }}"
     }'>
@@ -14,7 +14,7 @@
         <nav class="mb-8 text-sm text-zinc-500">
             <a href="{{ route('public.home') }}" class="hover:text-zinc-900">Inicio</a>
             <span class="mx-2">/</span>
-            <a href="{{ route('public.brands.index') }}" class="hover:text-zinc-900">Marcas</a>
+            <a href="{{ route('public.brands.index') }}" class="hover:text-zinc-900">Divisiones</a>
             <span class="mx-2">/</span>
             <span class="text-zinc-900">{{ $brand->name }}</span>
         </nav>
@@ -53,7 +53,7 @@
                 @endforeach
             </div>
         @else
-            <p class="py-20 text-center text-zinc-400">No hay productos de esta marca.</p>
+            <p class="py-20 text-center text-zinc-400">No hay productos de esta división.</p>
         @endif
     </div>
 </x-layouts::public>

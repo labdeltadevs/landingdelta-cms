@@ -57,7 +57,7 @@ Route::get('/sitemap.xml', function () {
         'loc' => route('public.products.show', $p),
         'priority' => '0.7',
         'changefreq' => 'monthly',
-        'lastmod' => $p->updated_at->toIso8601String(),
+        'lastmod' => $p->updated_at?->toIso8601String(),
     ]);
 
     $brands = Brand::query()->active()->get()->map(fn ($b) => [
@@ -70,7 +70,7 @@ Route::get('/sitemap.xml', function () {
         'loc' => route('public.news.show', $n),
         'priority' => '0.6',
         'changefreq' => 'monthly',
-        'lastmod' => $n->updated_at->toIso8601String(),
+        'lastmod' => $n->updated_at?->toIso8601String(),
     ]);
 
     $urls = collect($staticPages)

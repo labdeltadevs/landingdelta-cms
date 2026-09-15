@@ -1,5 +1,5 @@
-<x-layouts::public metaTitle="Marcas"
-    metaDescription="Conocé las marcas exclusivas que Laboratorios Delta S.A. representa y distribuye en Bolivia: Delta, Hidrófilo, Maver, Rossetti, Synthera y más.">
+<x-layouts::public metaTitle="Divisiones"
+    metaDescription="Conocé las divisiones exclusivas que Laboratorios Delta S.A. representa y distribuye en Bolivia: Delta, Hidrófilo, Maver, Rossetti, Synthera y más.">
     {{-- ============================================================ --}}
     {{-- BRANDS INDEX (LIGHT)                                         --}}
     {{-- ============================================================ --}}
@@ -37,17 +37,17 @@
                     <span class="h-px w-8 bg-[#ff671f]/50"></span>
                 </span>
                 <h1 class="text-3xl sm:text-4xl font-bold text-zinc-900">
-                    Nuestras <span class="text-[#ff671f]">marcas</span>
+                    Nuestras <span class="text-[#ff671f]">divisiones</span>
                 </h1>
                 <p class="mt-3 text-sm text-zinc-500 max-w-lg mx-auto">
-                    Trabajamos con marcas de alta calidad para llevar los mejores productos a todo el país.
+                    Trabajamos con divisiones de alta calidad para llevar los mejores productos a todo el país.
                 </p>
 
                 @if ($brands->isNotEmpty())
                     <div
                         class="mt-5 inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-4 py-1.5 text-xs font-medium text-zinc-500 shadow-sm">
                         <span class="h-1.5 w-1.5 rounded-full bg-[#ff671f] animate-pulse"></span>
-                        {{ $brands->count() }} {{ $brands->count() === 1 ? 'marca aliada' : 'marcas aliadas' }}
+                        {{ $brands->count() }} {{ $brands->count() === 1 ? 'división aliada' : 'divisiones aliadas' }}
                     </div>
                 @endif
             </header>
@@ -62,7 +62,7 @@
                                 d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                         </svg>
                     </div>
-                    <input type="search" x-model="search" @input="filter()" placeholder="Buscar marca…"
+                    <input type="search" x-model="search" @input="filter()" placeholder="Buscar división…"
                         class="w-full rounded-full border border-zinc-200 bg-white py-3 pl-11 pr-11 text-sm text-zinc-800 placeholder-zinc-400 shadow-sm transition-all focus:border-[#ff671f]/50 focus:outline-none focus:ring-4 focus:ring-[#ff671f]/10" />
                     <button type="button" x-show="search.length" x-cloak @click="search = ''; filter()"
                         aria-label="Limpiar búsqueda"
@@ -147,7 +147,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
                             </svg>
                         </div>
-                        <h3 class="mt-4 text-base font-semibold text-zinc-700">Sin marcas registradas</h3>
+                        <h3 class="mt-4 text-base font-semibold text-zinc-700">Sin divisiones registradas</h3>
                         <p class="mt-1 text-sm text-zinc-400">Pronto anunciaremos nuevas alianzas comerciales.</p>
                     </div>
                 @endforelse
@@ -162,7 +162,7 @@
                         d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
                 <p class="mt-3 text-sm font-medium text-zinc-600">
-                    No encontramos marcas para «<span class="font-semibold text-[#ff671f]" x-text="search"></span>»
+                    No encontramos divisiones para «<span class="font-semibold text-[#ff671f]" x-text="search"></span>»
                 </p>
                 <button type="button" @click="search = ''; filter()"
                     class="mt-4 inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-600 transition-all hover:border-[#ff671f]/40 hover:text-[#ff671f]">

@@ -88,9 +88,10 @@ test('the home hero renders the entrance cascade, ken burns and parallax hooks',
     $response->assertSee('hero-reveal-scale');
     $response->assertSee('hero-reveal-right');
     $response->assertSee('hero-reveal-fade');
-    // Ken Burns + parallax + orquestacion Alpine
+    // Ken Burns + rotación Alpine (sin parallax ni hovers con movimiento)
     $response->assertSee('hero-bg-layer');
-    $response->assertSee('onHeroMouse');
+    $response->assertDontSee('onHeroMouse');
+    $response->assertDontSee('parallaxOn');
     $response->assertSee('initHero');
     // Performance: preload del primer fondo y prioridad del logo
     $response->assertSee('fondo-a.jpeg');

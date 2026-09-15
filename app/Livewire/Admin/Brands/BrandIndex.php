@@ -13,7 +13,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout('layouts.app')]
-#[Title('Marcas')]
+#[Title('Divisiones')]
 class BrandIndex extends Component
 {
     use GeneratesQrCodes;
@@ -47,7 +47,7 @@ class BrandIndex extends Component
 
     protected function qrFilename(Model $target): string
     {
-        return 'codigo-marca-'.($target->slug ?? $target->getRouteKey()).'.jpg';
+        return 'codigo-division-'.($target->slug ?? $target->getRouteKey()).'.jpg';
     }
 
     protected function barcodeValue(Product|Brand $target): string

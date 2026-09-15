@@ -1,19 +1,19 @@
 <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
     {{-- LEFT: Form --}}
     <div class="lg:col-span-3">
-        <flux:heading>{{ $brand?->exists ? 'Editar marca' : 'Nueva marca' }}</flux:heading>
-        <flux:subheading>Completa los campos para {{ $brand?->exists ? 'actualizar' : 'crear' }} la marca.</flux:subheading>
+        <flux:heading>{{ $brand?->exists ? 'Editar división' : 'Nueva división' }}</flux:heading>
+        <flux:subheading>Completa los campos para {{ $brand?->exists ? 'actualizar' : 'crear' }} la división.</flux:subheading>
 
         <form wire:submit.prevent="save" class="mt-6 space-y-6">
             <flux:field>
-                <flux:label>Nombre de la marca</flux:label>
+                <flux:label>Nombre de la división</flux:label>
                 <flux:input wire:model="name" placeholder="Ej: Delta Care" />
                 <flux:error name="name" />
             </flux:field>
 
             <flux:field>
                 <flux:label>Descripción</flux:label>
-                <flux:textarea wire:model="description" rows="3" placeholder="Descripción de la marca..." />
+                <flux:textarea wire:model="description" rows="3" placeholder="Descripción de la división..." />
                 <flux:error name="description" />
             </flux:field>
 
@@ -51,8 +51,8 @@
                 $previewLogoUrl = $brand->logo_url;
             }
 
-            $previewName = $name ?: ($brand?->name ?? 'Nombre de la marca');
-            $previewDesc = $description ?: ($brand?->description ?? 'Descripción de la marca...');
+            $previewName = $name ?: ($brand?->name ?? 'Nombre de la división');
+            $previewDesc = $description ?: ($brand?->description ?? 'Descripción de la división...');
             $previewInitial = substr($previewName, 0, 1);
         @endphp
 
@@ -112,8 +112,8 @@
 
             {{-- Hint --}}
             <p class="mt-4 text-center text-[11px] text-zinc-400 leading-relaxed">
-                Así se verá la marca en la sección
-                <br />«Nuestras Marcas» del sitio web.
+                Así se verá la división en la sección
+                <br />«Nuestras Divisiones» del sitio web.
             </p>
         </div>
     </div>

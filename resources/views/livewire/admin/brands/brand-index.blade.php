@@ -1,11 +1,11 @@
 <div>
-<flux:heading>Marcas</flux:heading>
-<flux:subheading>Gestión de marcas del laboratorio.</flux:subheading>
+<flux:heading>Divisiones</flux:heading>
+<flux:subheading>Gestión de divisiones del laboratorio.</flux:subheading>
 
 <div class="mt-6 flex items-center justify-between gap-4">
-    <flux:input wire:model.live.debounce.300ms="search" placeholder="Buscar marcas..." class="max-w-sm" />
+    <flux:input wire:model.live.debounce.300ms="search" placeholder="Buscar divisiones..." class="max-w-sm" />
     @can('create', App\Models\Brand::class)
-        <flux:button :href="route('admin.brands.create')" wire:navigate icon="plus">Nueva marca</flux:button>
+        <flux:button :href="route('admin.brands.create')" wire:navigate icon="plus">Nueva división</flux:button>
     @endcan
 </div>
 
@@ -67,7 +67,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" class="px-4 py-12 text-center text-sm text-zinc-400">No hay marcas registradas.</td>
+                    <td colspan="4" class="px-4 py-12 text-center text-sm text-zinc-400">No hay divisiones registradas.</td>
                 </tr>
             @endforelse
         </tbody>

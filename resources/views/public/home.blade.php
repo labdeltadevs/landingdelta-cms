@@ -1,5 +1,5 @@
 <x-layouts::public metaTitle="Inicio"
-    metaDescription="Laboratorios Delta S.A. — Líder en la industria farmacéutica boliviana. Productos de alta calidad, marcas exclusivas y presencia nacional en los 9 departamentos.">
+    metaDescription="Laboratorios Delta S.A. — Líder en la industria farmacéutica boliviana. Productos de alta calidad, divisiones exclusivas y presencia nacional en los 9 departamentos.">
     @php
         $slides = \App\Models\HeroSlide::query()->active()->valid()->ordered()->with('slideable')->get();
         $categories = \App\Models\Category::query()->active()->ordered()->get();
@@ -64,54 +64,13 @@
             slideCount: {{ count($backgroundSlides) }},
             current: 0,
             cycle: 0,
-            tpx: 0, tpy: 0, px: 0, py: 0,
-            parallaxOn: false,
-            _ptick: false,
             initHero() {
                 setInterval(() => {
                     this.current = (this.current + 1) % this.slideCount;
                     this.cycle++;
                 }, 7500);
-                this.parallaxOn = window.matchMedia('(pointer: fine)').matches &&
-                    window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
-            },
-            onHeroMouse(e, el) {
-                if (!this.parallaxOn) return;
-                const r = el.getBoundingClientRect();
-                this.tpx = (e.clientX - r.left) / r.width - 0.5;
-                this.tpy = (e.clientY - r.top) / r.height - 0.5;
-                this.kickParallax();
-            },
-            resetHeroMouse() {
-                this.tpx = 0;
-                this.tpy = 0;
-                this.kickParallax();
-            },
-            kickParallax() {
-                if (!this.parallaxOn || this._ptick) return;
-                this._ptick = true;
-                const step = () => {
-                    this.px += (this.tpx - this.px) * 0.09;
-                    this.py += (this.tpy - this.py) * 0.09;
-                    if (Math.abs(this.tpx - this.px) < 0.0004 && Math.abs(this.tpy - this.py) < 0.0004) {
-                        this.px = this.tpx;
-                        this.py = this.tpy;
-                        this._ptick = false;
-                        return;
-                    }
-                    requestAnimationFrame(step);
-                };
-                requestAnimationFrame(step);
-            },
-            shift(dist, scale) {
-                const x = (this.px * dist).toFixed(2);
-                const y = (this.py * dist).toFixed(2);
-                return { transform: 'translate3d(' + x + 'px,' + y + 'px,0)' + (scale ? ' scale(' + scale + ')' : '') };
             }
-        }"
-        x-init="initHero()"
-        @mousemove="onHeroMouse($event, $el)"
-        @mouseleave="resetHeroMouse()">
+        }" x-init="initHero()">
 
         <style>
             [x-cloak] {
@@ -122,8 +81,7 @@
         {{-- ================================================= --}}
         {{-- BACKGROUND SLIDESHOW                              --}}
         {{-- ================================================= --}}
-        <div class="absolute inset-0" aria-hidden="true" :style="shift(-18, 1.06)"
-            x-data='{ slides: {!! json_encode($backgroundSlides, $jsonFlags) !!} }'>
+        <div class="absolute inset-0" aria-hidden="true" x-data='{ slides: {!! json_encode($backgroundSlides, $jsonFlags) !!} }'>
 
             {{-- Imágenes --}}
             <template x-for="(src, i) in slides" :key="i">
@@ -196,8 +154,7 @@
         {{-- ================================================= --}}
         {{-- CONTENIDO PRINCIPAL                               --}}
         {{-- ================================================= --}}
-        <div class="relative z-10 mx-auto w-full max-w-[75vw] px-4 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10"
-            :style="shift(10)">
+        <div class="relative z-10 mx-auto w-full max-w-[75vw] px-4 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
 
             {{-- Panel principal glassmorphism --}}
             <div
@@ -226,8 +183,7 @@
                                 style="animation-delay:150ms">
 
                                 <img src="{{ Storage::disk('public')->url('logo_delta.png') }}"
-                                    alt="Laboratorios Delta S.A."
-                                    fetchpriority="high"
+                                    alt="Laboratorios Delta S.A." fetchpriority="high"
                                     class="h-20 w-auto max-w-[440px] object-contain drop-shadow-md sm:h-24 sm:max-w-[600px] lg:h-28 lg:max-w-[440px] xl:h-32">
                             </div>
 
@@ -260,24 +216,23 @@
                                 style="animation-delay:450ms">
 
                                 <a href="{{ route('public.products.index') }}"
-                                    class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:-translate-y-1 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
+                                    class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
 
                                     <span>Explorar productos</span>
 
-                                    <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-                                        fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                                        aria-hidden="true">
+                                    <svg class="h-4 w-4 transition-transform duration-300" fill="none"
+                                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round"
                                             d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                                     </svg>
                                 </a>
 
                                 <a href="{{ route('public.about') }}"
-                                    class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-zinc-900/10 bg-white/[0.42] px-7 py-3.5 text-sm font-semibold text-zinc-800 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-[#ff671f]/30 hover:bg-white/[0.72] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
+                                    class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-zinc-900/10 bg-white/[0.42] px-7 py-3.5 text-sm font-semibold text-zinc-800 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-[#ff671f]/30 hover:bg-white/[0.72] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
 
                                     <span>Nuestra historia</span>
 
-                                    <svg class="h-4 w-4 text-zinc-500 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-[#ff671f]"
+                                    <svg class="h-4 w-4 text-zinc-500 transition-transform duration-300 group-hover:text-[#ff671f]"
                                         fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
                                         aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -324,33 +279,44 @@
                                 </div>
 
                                 {{-- Logros --}}
-                                <div class="mt-5 space-y-3 sm:mt-6">
+                                <div class="mt-5 space-y-2.5 sm:mt-6">
                                     @foreach ($galardones as $g)
-                                        <div
-                                            style="animation-delay:{{ 700 + $loop->index * 90 }}ms"
-                                            class="hero-reveal group flex items-center gap-3 rounded-2xl border border-white/[0.80] bg-white/[0.46] p-3.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#ff671f]/30 hover:bg-white/[0.75] hover:shadow-md">
-
+                                        <div style="animation-delay: {{ 700 + $loop->index * 90 }}ms"
+                                            class="hero-reveal group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-white/70 bg-white/50 p-3.5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-[#ff671f]/25 hover:bg-white/80 hover:shadow-lg hover:shadow-[#ff671f]/5 hover:-translate-y-px">
+                                            {{-- Glow de fondo al hover --}}
                                             <div
-                                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#ff671f]/20 bg-[#ff671f]/10 text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:h-11 sm:w-11">
-                                                {!! $g['icon'] !!}
+                                                class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                                                <div
+                                                    class="absolute -left-4 -top-4 size-20 rounded-full bg-[#ff671f]/8 blur-2xl">
+                                                </div>
                                             </div>
 
-                                            <div class="min-w-0">
-                                                <span class="block text-sm font-bold leading-tight text-zinc-800">
+                                            {{-- Icono --}}
+                                            <div
+                                                class="relative flex size-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff671f]/15 to-[#ff671f]/5 text-[#ff671f] ring-1 ring-[#ff671f]/20 transition-all duration-300 group-hover:scale-105 group-hover:ring-[#ff671f]/35 sm:size-12">
+                                                {{-- Número de posición como indicador sutil --}}
+                                                @if ($loop->first)
+                                                    <span
+                                                        class="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-[#ff671f] text-[9px] font-bold text-white ring-2 ring-white">
+                                                        ★
+                                                    </span>
+                                                @endif
+                                                <span class="size-5 sm:size-5.5">
+                                                    {!! $g['icon'] !!}
+                                                </span>
+                                            </div>
+
+                                            {{-- Contenido --}}
+                                            <div class="relative min-w-0 flex-1">
+                                                <span
+                                                    class="block truncate text-sm font-bold leading-tight text-zinc-800">
                                                     {{ $g['label'] }}
                                                 </span>
-
-                                                <span class="mt-0.5 block text-xs text-zinc-500">
+                                                <span
+                                                    class="mt-0.5 block truncate text-[11px] leading-snug text-zinc-500">
                                                     {{ $g['sub'] }}
                                                 </span>
                                             </div>
-
-                                            <svg class="ml-auto h-4 w-4 shrink-0 text-[#ff671f]/40 transition-all duration-300 group-hover:translate-x-1 group-hover:text-[#ff671f]"
-                                                fill="none" stroke="currentColor" stroke-width="1.8"
-                                                viewBox="0 0 24 24" aria-hidden="true">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M9 5.25 15.75 12 9 18.75" />
-                                            </svg>
                                         </div>
                                     @endforeach
                                 </div>
@@ -374,7 +340,7 @@
                                 </p>
 
                                 <p
-                                    class="mt-1 text-3xl font-bold text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:text-3xl lg:text-4xl">
+                                    class="mt-1 text-3xl font-bold text-[#ff671f] transition-transform duration-300 sm:text-3xl lg:text-4xl">
                                     +{{ $productsCount }}
                                 </p>
 
@@ -390,12 +356,12 @@
                                 </p>
 
                                 <p
-                                    class="mt-1 text-3xl font-bold text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:text-3xl lg:text-4xl">
+                                    class="mt-1 text-3xl font-bold text-[#ff671f] transition-transform duration-300 sm:text-3xl lg:text-4xl">
                                     +{{ $brands->count() }}
                                 </p>
 
                                 <p class="mt-1 text-xs text-zinc-500">
-                                    marcas
+                                    divisiones
                                 </p>
                             </div>
 
@@ -406,7 +372,7 @@
                                 </p>
 
                                 <p
-                                    class="mt-1 text-3xl font-bold text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:text-3xl lg:text-4xl">
+                                    class="mt-1 text-3xl font-bold text-[#ff671f] transition-transform duration-300 sm:text-3xl lg:text-4xl">
                                     9
                                 </p>
 
@@ -472,12 +438,18 @@
             },
             startAutoplay() { this.autoplay = setInterval(() => this.next(), 6000); },
             stopAutoplay() { clearInterval(this.autoplay); },
-            next() { this.current = this.current >= this.total ? 1 : this.current + 1;
-                this.scrollToCard(); },
-            prev() { this.current = this.current <= 1 ? this.total : this.current - 1;
-                this.scrollToCard(); },
-            goTo(i) { this.current = i;
-                this.scrollToCard(); },
+            next() {
+                this.current = this.current >= this.total ? 1 : this.current + 1;
+                this.scrollToCard();
+            },
+            prev() {
+                this.current = this.current <= 1 ? this.total : this.current - 1;
+                this.scrollToCard();
+            },
+            goTo(i) {
+                this.current = i;
+                this.scrollToCard();
+            },
             scrollToCard() {
                 const scrollAmount = (this.current - 1) * this.scroller.offsetWidth;
                 this.scroller.scrollTo({ left: scrollAmount, behavior: 'smooth' });
@@ -504,10 +476,10 @@
                     <span class="h-px w-8 bg-[#ff671f]/50"></span>
                 </span>
                 <h2 class="text-3xl sm:text-5xl font-bold tracking-tight text-zinc-900">
-                    Nuestras <span class="text-[#ff671f]">Marcas</span>
+                    Nuestras <span class="text-[#ff671f]">Divisiones</span>
                 </h2>
                 <p class="mt-4 text-base text-zinc-500 leading-relaxed">
-                    Conoce las marcas de alta calidad que representamos y distribuimos en todo el país.
+                    Conoce las divisiones de alta calidad que representamos y distribuimos en todo el país.
                 </p>
             </div>
 
@@ -798,13 +770,13 @@
                                 d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
                         </svg>
-                        Categorías
+                        Especialidades
                     </span>
 
                     <h2 class="mt-5 text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl lg:text-[2.75rem]">
                         Explora por
                         <span class="relative inline-block text-[#ff671f]">
-                            categoría
+                            especialidad
                             <svg class="absolute -bottom-1 left-0 w-full text-[#ff671f]/30" height="8"
                                 viewBox="0 0 100 8" preserveAspectRatio="none" fill="none">
                                 <path d="M1 5.5C20 2 40 1.5 60 3.5C75 5 88 6 99 4" stroke="currentColor"

@@ -22,8 +22,8 @@
         <thead class="bg-zinc-50 dark:bg-zinc-800">
             <tr>
                 <th class="px-4 py-3 text-left text-sm font-medium text-zinc-500">Nombre</th>
-                <th class="px-4 py-3 text-left text-sm font-medium text-zinc-500">Marca</th>
-                <th class="px-4 py-3 text-left text-sm font-medium text-zinc-500">Categoría</th>
+                <th class="px-4 py-3 text-left text-sm font-medium text-zinc-500">División</th>
+                <th class="px-4 py-3 text-left text-sm font-medium text-zinc-500">Especialidad</th>
                 <th class="px-4 py-3 text-center text-sm font-medium text-zinc-500">Destacado</th>
                 <th class="px-4 py-3 text-center text-sm font-medium text-zinc-500">Activo</th>
                 <th class="px-4 py-3"></th>

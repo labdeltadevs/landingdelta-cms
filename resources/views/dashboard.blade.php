@@ -2,8 +2,8 @@
     @php
         $sections = [
             ['label' => 'Productos', 'model' => \App\Models\Product::class, 'perm' => 'view.products', 'icon' => 'shopping-cart'],
-            ['label' => 'Marcas', 'model' => \App\Models\Brand::class, 'perm' => 'view.brands', 'icon' => 'building-storefront'],
-            ['label' => 'Categorías', 'model' => \App\Models\Category::class, 'perm' => 'view.categories', 'icon' => 'folder'],
+            ['label' => 'Divisiones', 'model' => \App\Models\Brand::class, 'perm' => 'view.brands', 'icon' => 'building-storefront'],
+            ['label' => 'Especialidades', 'model' => \App\Models\Category::class, 'perm' => 'view.categories', 'icon' => 'folder'],
             ['label' => 'Sucursales', 'model' => \App\Models\Branch::class, 'perm' => 'view.branches', 'icon' => 'map-pin'],
             ['label' => 'Noticias', 'model' => \App\Models\News::class, 'perm' => 'view.news', 'icon' => 'newspaper'],
             ['label' => 'Rotafolios', 'model' => \App\Models\Brochure::class, 'perm' => 'view.brochures', 'icon' => 'document-text'],

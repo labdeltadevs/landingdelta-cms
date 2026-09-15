@@ -1,10 +1,10 @@
 <div>
-    <flux:heading>{{ $category?->exists ? 'Editar categoría' : 'Nueva categoría' }}</flux:heading>
-    <flux:subheading>Completa los campos para {{ $category?->exists ? 'actualizar' : 'crear' }} la categoría.</flux:subheading>
+    <flux:heading>{{ $category?->exists ? 'Editar especialidad' : 'Nueva especialidad' }}</flux:heading>
+    <flux:subheading>Completa los campos para {{ $category?->exists ? 'actualizar' : 'crear' }} la especialidad.</flux:subheading>
 
     <form wire:submit.prevent="save" class="mt-6 space-y-6 max-w-2xl">
         <flux:field>
-            <flux:label>Nombre de la categoría</flux:label>
+            <flux:label>Nombre de la especialidad</flux:label>
             <flux:input wire:model="name" placeholder="Ej: Comprimidos, Cápsulas, Sobres, Tabletas" />
             <flux:error name="name" />
         </flux:field>

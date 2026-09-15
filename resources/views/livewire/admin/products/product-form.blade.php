@@ -43,9 +43,9 @@
 
                 <div class="grid grid-cols-2 gap-4">
                     <flux:field>
-                        <flux:label>Marca</flux:label>
+                        <flux:label>División</flux:label>
                         <flux:select wire:model="brand_id">
-                            <option value="">Sin marca</option>
+                            <option value="">Sin división</option>
                             @foreach ($brands as $brand)
                                 <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                             @endforeach
@@ -54,9 +54,9 @@
                     </flux:field>
 
                     <flux:field>
-                        <flux:label>Categoría</flux:label>
+                        <flux:label>Especialidad</flux:label>
                         <flux:select wire:model="category_id">
-                            <option value="">Sin categoría</option>
+                            <option value="">Sin especialidad</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach

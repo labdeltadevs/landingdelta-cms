@@ -19,12 +19,12 @@
                     @endcan
                     @can('view.brands')
                         <flux:sidebar.item icon="building-storefront" :href="route('admin.brands.index')" :current="request()->routeIs('admin.brands.*')" wire:navigate>
-                            Marcas
+                            Divisiones
                         </flux:sidebar.item>
                     @endcan
                     @can('view.categories')
                         <flux:sidebar.item icon="folder" :href="route('admin.categories.index')" :current="request()->routeIs('admin.categories.*')" wire:navigate>
-                            Categorías
+                            Especialidades
                         </flux:sidebar.item>
                     @endcan
                     @can('view.branches')

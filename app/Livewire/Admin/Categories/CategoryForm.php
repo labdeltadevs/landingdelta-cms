@@ -10,7 +10,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('layouts.app')]
-#[Title('Categoría')]
+#[Title('Especialidad')]
 class CategoryForm extends Component
 {
     public ?Category $category = null;
@@ -45,7 +45,7 @@ class CategoryForm extends Component
             $this->category = Category::query()->create($data);
         }
 
-        $this->dispatch('notify', message: 'Categoría guardada correctamente.');
+        $this->dispatch('notify', message: 'Especialidad guardada correctamente.');
         $this->redirect(route('admin.categories.index'), navigate: true);
     }
 
