@@ -3,6 +3,7 @@
 use App\Livewire\Admin\Brands\BrandIndex;
 use App\Models\Brand;
 use App\Models\User;
+use App\Support\BarcodeGenerator;
 use App\Support\QrCodeGenerator;
 use Database\Seeders\PermissionSeeder;
 use Livewire\Livewire;
@@ -29,6 +30,12 @@ test('el generador produce un SVG valido para una URL', function () {
     expect($svg)->toContain('<svg')->toContain('</svg>');
 });
 
+test('el generador de barras produce un SVG valido para un codigo', function () {
+    $svg = app(BarcodeGenerator::class)->svg('PROD-000123');
+
+    expect($svg)->toContain('<svg')->toContain('</svg>');
+});
+
 test('genera el QR con la URL publica de la marca', function () {
     $this->seed(PermissionSeeder::class);
     $this->actingAs(User::factory()->withRole('admin')->create());
@@ -39,5 +46,6 @@ test('genera el QR con la URL publica de la marca', function () {
         ->call('showQr', $brand->id)
         ->assertSet('qrUrl', route('public.brands.show', $brand))
         ->assertSet('qrName', $brand->name)
+        ->assertSet('barcodeValue', $brand->slug)
         ->assertSee('<svg', false);
 });

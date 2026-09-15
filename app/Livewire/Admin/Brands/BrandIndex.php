@@ -47,7 +47,12 @@ class BrandIndex extends Component
 
     protected function qrFilename(Model $target): string
     {
-        return 'qr-marca-'.($target->slug ?? $target->getRouteKey()).'.jpg';
+        return 'codigo-marca-'.($target->slug ?? $target->getRouteKey()).'.jpg';
+    }
+
+    protected function barcodeValue(Product|Brand $target): string
+    {
+        return $target->slug;
     }
 
     public function render(): View

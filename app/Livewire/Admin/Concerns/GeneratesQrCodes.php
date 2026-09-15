@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Concerns;
 
 use App\Models\Brand;
 use App\Models\Product;
+use App\Support\BarcodeGenerator;
 use App\Support\QrCodeGenerator;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,11 +22,17 @@ trait GeneratesQrCodes
 
     public ?string $qrFilename = null;
 
+    public ?string $barcodeSvg = null;
+
+    public ?string $barcodeValue = null;
+
     abstract protected function qrTarget(int $id): Product|Brand;
 
     abstract protected function qrRoute(Product|Brand $target): string;
 
     abstract protected function qrFilename(Model $target): string;
+
+    abstract protected function barcodeValue(Product|Brand $target): string;
 
     public function showQr(int $id): void
     {
@@ -36,6 +43,8 @@ trait GeneratesQrCodes
         $this->qrName = $target->name;
         $this->qrFilename = $this->qrFilename($target);
         $this->qrSvg = app(QrCodeGenerator::class)->svg($this->qrUrl);
+        $this->barcodeValue = $this->barcodeValue($target);
+        $this->barcodeSvg = app(BarcodeGenerator::class)->svg($this->barcodeValue);
 
         $this->dispatch('qr-ready');
     }
@@ -46,5 +55,7 @@ trait GeneratesQrCodes
         $this->qrName = null;
         $this->qrUrl = null;
         $this->qrFilename = null;
+        $this->barcodeSvg = null;
+        $this->barcodeValue = null;
     }
 }
