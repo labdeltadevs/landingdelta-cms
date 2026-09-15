@@ -78,3 +78,21 @@ test('only slides inside the validity range are rendered in the modal', function
     $response->assertSee('Aviso vigente');
     $response->assertDontSee('Aviso vencido');
 });
+
+test('the home hero renders the entrance cascade, ken burns and parallax hooks', function () {
+    $response = $this->get(route('public.home'));
+
+    $response->assertOk();
+    // Cascada de entrada
+    $response->assertSee('hero-reveal');
+    $response->assertSee('hero-reveal-scale');
+    $response->assertSee('hero-reveal-right');
+    $response->assertSee('hero-reveal-fade');
+    // Ken Burns + parallax + orquestacion Alpine
+    $response->assertSee('hero-bg-layer');
+    $response->assertSee('onHeroMouse');
+    $response->assertSee('initHero');
+    // Performance: preload del primer fondo y prioridad del logo
+    $response->assertSee('fondo-a.jpeg');
+    $response->assertSee('fetchpriority="high"', false);
+});

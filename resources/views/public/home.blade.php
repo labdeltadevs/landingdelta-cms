@@ -59,7 +59,59 @@
     @endphp
 
     <section id="inicio"
-        class="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-zinc-100 lg:min-h-[90vh]">
+        class="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-zinc-100 lg:min-h-[90vh]"
+        x-data="{
+            slideCount: {{ count($backgroundSlides) }},
+            current: 0,
+            cycle: 0,
+            tpx: 0, tpy: 0, px: 0, py: 0,
+            parallaxOn: false,
+            _ptick: false,
+            initHero() {
+                setInterval(() => {
+                    this.current = (this.current + 1) % this.slideCount;
+                    this.cycle++;
+                }, 7500);
+                this.parallaxOn = window.matchMedia('(pointer: fine)').matches &&
+                    window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+            },
+            onHeroMouse(e, el) {
+                if (!this.parallaxOn) return;
+                const r = el.getBoundingClientRect();
+                this.tpx = (e.clientX - r.left) / r.width - 0.5;
+                this.tpy = (e.clientY - r.top) / r.height - 0.5;
+                this.kickParallax();
+            },
+            resetHeroMouse() {
+                this.tpx = 0;
+                this.tpy = 0;
+                this.kickParallax();
+            },
+            kickParallax() {
+                if (!this.parallaxOn || this._ptick) return;
+                this._ptick = true;
+                const step = () => {
+                    this.px += (this.tpx - this.px) * 0.09;
+                    this.py += (this.tpy - this.py) * 0.09;
+                    if (Math.abs(this.tpx - this.px) < 0.0004 && Math.abs(this.tpy - this.py) < 0.0004) {
+                        this.px = this.tpx;
+                        this.py = this.tpy;
+                        this._ptick = false;
+                        return;
+                    }
+                    requestAnimationFrame(step);
+                };
+                requestAnimationFrame(step);
+            },
+            shift(dist, scale) {
+                const x = (this.px * dist).toFixed(2);
+                const y = (this.py * dist).toFixed(2);
+                return { transform: 'translate3d(' + x + 'px,' + y + 'px,0)' + (scale ? ' scale(' + scale + ')' : '') };
+            }
+        }"
+        x-init="initHero()"
+        @mousemove="onHeroMouse($event, $el)"
+        @mouseleave="resetHeroMouse()">
 
         <style>
             [x-cloak] {
@@ -70,14 +122,13 @@
         {{-- ================================================= --}}
         {{-- BACKGROUND SLIDESHOW                              --}}
         {{-- ================================================= --}}
-        <div class="absolute inset-0" aria-hidden="true" x-data='{ slides: {!! json_encode($backgroundSlides, $jsonFlags) !!}, current: 0 }'
-            x-init="setInterval(() => {
-                current = (current + 1) % slides.length
-            }, 7500)">
+        <div class="absolute inset-0" aria-hidden="true" :style="shift(-18, 1.06)"
+            x-data='{ slides: {!! json_encode($backgroundSlides, $jsonFlags) !!} }'>
 
             {{-- Imágenes --}}
             <template x-for="(src, i) in slides" :key="i">
-                <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-[1500ms] ease-out"
+                <div class="hero-bg-layer absolute inset-0 bg-cover bg-center bg-no-repeat"
+                    :class="current === i ? (i === 0 && cycle === 0 ? 'hero-bg-first' : 'hero-bg-active') : ''"
                     :style="{
                         backgroundImage: 'url(' + src + ')',
                         opacity: current === i ? 1 : 0
@@ -145,11 +196,12 @@
         {{-- ================================================= --}}
         {{-- CONTENIDO PRINCIPAL                               --}}
         {{-- ================================================= --}}
-        <div class="relative z-10 mx-auto w-full max-w-[75vw] px-4 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+        <div class="relative z-10 mx-auto w-full max-w-[75vw] px-4 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10"
+            :style="shift(10)">
 
             {{-- Panel principal glassmorphism --}}
             <div
-                class="relative overflow-hidden rounded-[1.5rem] border border-white/[0.72] bg-white/[0.48] shadow-2xl shadow-zinc-900/10 backdrop-blur-2xl sm:rounded-[2rem]">
+                class="hero-reveal relative overflow-hidden rounded-[1.5rem] border border-white/[0.72] bg-white/[0.48] shadow-2xl shadow-zinc-900/10 backdrop-blur-2xl sm:rounded-[2rem]">
 
                 {{-- Decoración interna --}}
                 <div
@@ -170,15 +222,18 @@
                         <div class="min-w-0 flex-1">
 
                             {{-- Logo --}}
-                            <div class="mb-6 flex items-center justify-center sm:mb-8" data-aos="fade-up">
+                            <div class="hero-reveal-scale mb-6 flex items-center justify-center sm:mb-8"
+                                style="animation-delay:150ms">
 
                                 <img src="{{ Storage::disk('public')->url('logo_delta.png') }}"
                                     alt="Laboratorios Delta S.A."
+                                    fetchpriority="high"
                                     class="h-20 w-auto max-w-[440px] object-contain drop-shadow-md sm:h-24 sm:max-w-[600px] lg:h-28 lg:max-w-[440px] xl:h-32">
                             </div>
 
                             {{-- Contenido principal --}}
-                            <div class="mb-3 min-h-[240px] sm:min-h-[220px] lg:min-h-[260px]">
+                            <div class="hero-reveal mb-3 min-h-[240px] sm:min-h-[220px] lg:min-h-[260px]"
+                                style="animation-delay:250ms">
                                 <h1
                                     class="max-w-4xl text-3xl font-bold leading-[1.08] tracking-[-0.035em] text-zinc-900 sm:text-4xl md:text-5xl lg:text-6xl">
                                     Cuidando la salud de nuestra gente
@@ -191,8 +246,8 @@
                             </div>
 
                             {{-- Mensaje institucional --}}
-                            <div class="mb-6 max-w-2xl border-l-2 border-[#ff671f] pl-4 sm:mb-8" data-aos="fade-up"
-                                data-aos-delay="150">
+                            <div class="hero-reveal mb-6 max-w-2xl border-l-2 border-[#ff671f] pl-4 sm:mb-8"
+                                style="animation-delay:350ms">
 
                                 <p
                                     class="text-xs font-semibold uppercase leading-relaxed tracking-[0.15em] text-[#d95417] sm:text-sm sm:tracking-[0.2em]">
@@ -201,8 +256,8 @@
                             </div>
 
                             {{-- Botones principales --}}
-                            <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center" data-aos="fade-up"
-                                data-aos-delay="250">
+                            <div class="hero-reveal flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
+                                style="animation-delay:450ms">
 
                                 <a href="{{ route('public.products.index') }}"
                                     class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:-translate-y-1 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
@@ -235,8 +290,8 @@
                         {{-- ================================================= --}}
                         {{-- ZONA DERECHA                                      --}}
                         {{-- ================================================= --}}
-                        <div class="w-full lg:w-[34%] lg:min-w-[290px] lg:max-w-md" data-aos="fade-left"
-                            data-aos-delay="300">
+                        <div class="hero-reveal-right w-full lg:w-[34%] lg:min-w-[290px] lg:max-w-md"
+                            style="animation-delay:550ms">
 
                             <div
                                 class="h-full rounded-[1.25rem] border border-white/[0.75] bg-white/[0.56] p-5 shadow-lg shadow-zinc-900/[0.06] backdrop-blur-xl sm:rounded-[1.5rem] sm:p-6">
@@ -272,7 +327,8 @@
                                 <div class="mt-5 space-y-3 sm:mt-6">
                                     @foreach ($galardones as $g)
                                         <div
-                                            class="group flex items-center gap-3 rounded-2xl border border-white/[0.80] bg-white/[0.46] p-3.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#ff671f]/30 hover:bg-white/[0.75] hover:shadow-md">
+                                            style="animation-delay:{{ 700 + $loop->index * 90 }}ms"
+                                            class="hero-reveal group flex items-center gap-3 rounded-2xl border border-white/[0.80] bg-white/[0.46] p-3.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#ff671f]/30 hover:bg-white/[0.75] hover:shadow-md">
 
                                             <div
                                                 class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#ff671f]/20 bg-[#ff671f]/10 text-[#ff671f] transition-transform duration-300 group-hover:scale-110 sm:h-11 sm:w-11">
@@ -305,8 +361,8 @@
                     {{-- ================================================= --}}
                     {{-- ESTADÍSTICAS                                      --}}
                     {{-- ================================================= --}}
-                    <div class="mt-8 border-t border-zinc-900/10 pt-5 sm:mt-10 sm:pt-6" data-aos="fade-up"
-                        data-aos-delay="400">
+                    <div class="hero-reveal-fade mt-8 border-t border-zinc-900/10 pt-5 sm:mt-10 sm:pt-6"
+                        style="animation-delay:750ms">
 
                         <div
                             class="grid grid-cols-1 divide-y divide-zinc-900/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
@@ -364,7 +420,7 @@
             </div>
 
             {{-- Indicador de scroll --}}
-            <div class="mt-5 flex justify-center sm:mt-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="hero-reveal-fade mt-5 flex justify-center sm:mt-6" style="animation-delay:950ms">
 
                 <a href="#travesia"
                     class="group inline-flex flex-col items-center gap-2 rounded-full px-4 py-2 text-zinc-600 transition-colors hover:text-[#d95417] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2">

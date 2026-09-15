@@ -44,6 +44,15 @@ class Brand extends Model
         return $query->orderBy('sort')->orderBy('name');
     }
 
+    public function scopeSearch(Builder $query, ?string $term): Builder
+    {
+        if (blank($term)) {
+            return $query;
+        }
+
+        return $query->where('name', 'ilike', '%'.$term.'%');
+    }
+
     public function getLogoUrlAttribute(): string
     {
         return $this->logo_path

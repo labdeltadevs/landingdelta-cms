@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Admin\Products\ProductForm;
+use App\Livewire\Admin\Products\ProductIndex;
 use App\Models\Product;
 use App\Models\User;
 use App\Support\VademecumHtml;
@@ -112,4 +113,31 @@ test('carga una descripcion legada sin tabla como fila editable y la estandariza
     expect($product->description)
         ->toContain('<table class="table-vademecum">')
         ->toContain('Texto antiguo sin tabla');
+});
+
+test('el indice indica con un icono si el producto tiene imagen asignada', function () {
+    actingAsAdmin();
+
+    Product::factory()->create(['name' => 'Con Foto', 'main_image_path' => 'products/foto.jpg']);
+    Product::factory()->create(['name' => 'Sin Foto', 'main_image_path' => null]);
+
+    Livewire::test(ProductIndex::class)
+        ->assertSee('Con Foto', false)
+        ->assertSee('Sin Foto', false)
+        ->assertSee('Con imagen:', false)
+        ->assertSee('Sin imagen:', false)
+        ->assertSee('text-emerald-500', false)
+        ->assertSee('text-zinc-300', false);
+});
+
+test('genera el QR con la URL publica del producto', function () {
+    actingAsAdmin();
+
+    $product = Product::factory()->create();
+
+    Livewire::test(ProductIndex::class)
+        ->call('showQr', $product->id)
+        ->assertSet('qrUrl', route('public.products.show', $product))
+        ->assertSet('qrName', $product->name)
+        ->assertSee('<svg', false);
 });

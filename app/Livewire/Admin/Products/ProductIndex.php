@@ -2,8 +2,11 @@
 
 namespace App\Livewire\Admin\Products;
 
+use App\Livewire\Admin\Concerns\GeneratesQrCodes;
+use App\Models\Brand;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -13,6 +16,7 @@ use Livewire\WithPagination;
 #[Title('Productos')]
 class ProductIndex extends Component
 {
+    use GeneratesQrCodes;
     use WithPagination;
 
     public string $search = '';
@@ -43,6 +47,21 @@ class ProductIndex extends Component
         $product = Product::query()->findOrFail($id);
         $this->authorize('delete', $product);
         $product->delete();
+    }
+
+    protected function qrTarget(int $id): Product
+    {
+        return Product::query()->findOrFail($id);
+    }
+
+    protected function qrRoute(Product|Brand $target): string
+    {
+        return route('public.products.show', $target);
+    }
+
+    protected function qrFilename(Model $target): string
+    {
+        return 'qr-producto-'.($target->slug ?? $target->getRouteKey()).'.jpg';
     }
 
     public function render(): View

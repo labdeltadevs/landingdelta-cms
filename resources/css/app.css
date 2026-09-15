@@ -47,6 +47,115 @@
     }
 }
 
+/* ============================================================
+ * Hero · entrada suave + Ken Burns + parallax
+ *
+ * Solo se animan con `prefers-reduced-motion: no-preference`;
+ * por defecto el contenido queda siempre visible (sin JS o con
+ * reduced-motion no hay ocultamientos ni movimiento).
+ * Fill `backwards`: durante el delay se muestra el estado
+ * inicial; al terminar se libera y no interfiere con hovers.
+ * Solo se animan opacity / transform / filter (GPU).
+ * ============================================================ */
+@keyframes hero-rise {
+    from {
+        opacity: 0;
+        transform: translateY(26px);
+        filter: blur(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes hero-rise-right {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+        filter: blur(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes hero-fade-scale {
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes hero-fade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes hero-ken-burns-in {
+    from {
+        transform: scale(1.09);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .hero-reveal {
+        animation: hero-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    }
+
+    .hero-reveal-right {
+        animation: hero-rise-right 0.9s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    }
+
+    .hero-reveal-scale {
+        animation: hero-fade-scale 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    }
+
+    .hero-reveal-fade {
+        animation: hero-fade 1s ease-out backwards;
+    }
+
+    /* Zoom continuo del fondo: la capa activa crece 1 -> 1.09
+       durante sus 7.5s visibles (transicion, no keyframes, para
+       que al salir no haya salto brusco de escala). */
+    .hero-bg-layer {
+        transition: opacity 1.5s ease-out, transform 8s ease-out;
+    }
+
+    .hero-bg-layer.hero-bg-active {
+        transform: scale(1.09);
+    }
+
+    /* Primera capa al cargar: aterrizaje suave 1.09 -> 1. */
+    .hero-bg-first {
+        animation: hero-ken-burns-in 2.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    }
+
+    .hero-bg-active,
+    .hero-bg-first {
+        will-change: transform;
+    }
+}
+
 [data-flux-field]:not(ui-radio, ui-checkbox) {
     @apply grid gap-2;
 }

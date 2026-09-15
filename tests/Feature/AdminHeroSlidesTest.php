@@ -2,7 +2,9 @@
 
 use App\Livewire\Admin\Hero\HeroSlideForm;
 use App\Livewire\Admin\Hero\HeroSlideIndex;
+use App\Models\Brand;
 use App\Models\HeroSlide;
+use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
 use Database\Seeders\PermissionSeeder;
@@ -114,4 +116,93 @@ test('el indice muestra el rango y el estado de vigencia de cada slide', functio
         ->assertSee('Ya vencido')
         ->assertSee('Vigente')
         ->assertSee('Fuera de vigencia');
+});
+
+test('vincular un producto guarda el destino y resuelve su URL', function () {
+    $this->seed(PermissionSeeder::class);
+    $this->actingAs(User::factory()->withRole('admin')->create());
+
+    $product = Product::factory()->create(['name' => 'Aspirina Delta']);
+
+    Livewire::test(HeroSlideForm::class)
+        ->set('title', 'Promo aspirina')
+        ->set('cta_label', 'Ver producto')
+        ->set('slideable_type', Product::class)
+        ->call('selectDestination', $product->id)
+        ->call('save')
+        ->assertRedirect(route('admin.hero.index'));
+
+    $slide = HeroSlide::where('title', 'Promo aspirina')->firstOrFail();
+
+    expect($slide->slideable_type)->toBe(Product::class)
+        ->and($slide->slideable_id)->toBe($product->id)
+        ->and($slide->ctaLink())->toBe(route('public.products.show', $product));
+});
+
+test('vincular una marca guarda el destino y resuelve su URL', function () {
+    $this->seed(PermissionSeeder::class);
+    $this->actingAs(User::factory()->withRole('admin')->create());
+
+    $brand = Brand::factory()->create(['name' => 'Delta Marca']);
+
+    Livewire::test(HeroSlideForm::class)
+        ->set('title', 'Promo marca')
+        ->set('cta_label', 'Ver marca')
+        ->set('slideable_type', Brand::class)
+        ->call('selectDestination', $brand->id)
+        ->call('save')
+        ->assertRedirect(route('admin.hero.index'));
+
+    $slide = HeroSlide::where('title', 'Promo marca')->firstOrFail();
+
+    expect($slide->slideable_type)->toBe(Brand::class)
+        ->and($slide->ctaLink())->toBe(route('public.brands.show', $brand));
+});
+
+test('cambiar el tipo de destino limpia el vinculo anterior', function () {
+    $this->seed(PermissionSeeder::class);
+    $this->actingAs(User::factory()->withRole('admin')->create());
+
+    $product = Product::factory()->create();
+
+    Livewire::test(HeroSlideForm::class)
+        ->set('slideable_type', Product::class)
+        ->call('selectDestination', $product->id)
+        ->assertSet('slideable_id', $product->id)
+        ->set('slideable_type', Brand::class)
+        ->assertSet('slideable_id', null)
+        ->assertSet('destinationSearch', '');
+});
+
+test('la URL manual tiene prioridad sobre el destino vinculado', function () {
+    $this->seed(PermissionSeeder::class);
+    $this->actingAs(User::factory()->withRole('admin')->create());
+
+    $product = Product::factory()->create();
+
+    Livewire::test(HeroSlideForm::class)
+        ->set('title', 'Promo externa')
+        ->set('cta_label', 'WhatsApp')
+        ->set('slideable_type', Product::class)
+        ->call('selectDestination', $product->id)
+        ->set('cta_url', 'https://wa.me/59171234567')
+        ->call('save')
+        ->assertRedirect(route('admin.hero.index'));
+
+    $slide = HeroSlide::where('title', 'Promo externa')->firstOrFail();
+
+    expect($slide->ctaLink())->toBe('https://wa.me/59171234567');
+});
+
+test('el buscador de destino limita los resultados a 8', function () {
+    $this->seed(PermissionSeeder::class);
+    $this->actingAs(User::factory()->withRole('admin')->create());
+
+    Product::factory()->count(10)->create();
+
+    $results = Livewire::test(HeroSlideForm::class)
+        ->set('slideable_type', Product::class)
+        ->viewData('destinationResults');
+
+    expect($results)->toHaveCount(8);
 });

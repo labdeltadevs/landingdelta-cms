@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\HeroSlide;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
@@ -37,6 +38,8 @@ class HeroSlideForm extends Component
 
     public string $slideable_type = '';
 
+    public string $destinationSearch = '';
+
     public ?string $valid_from = null;
 
     public ?string $valid_until = null;
@@ -57,10 +60,87 @@ class HeroSlideForm extends Component
             $this->cta_url = $this->heroSlide->cta_url ?? '';
             $this->slideable_id = $this->heroSlide->slideable_id;
             $this->slideable_type = $this->heroSlide->slideable_type ?? '';
+            $this->destinationSearch = $this->heroSlide->slideable?->name ?? '';
             $this->valid_from = $this->heroSlide->valid_from?->format('Y-m-d');
             $this->valid_until = $this->heroSlide->valid_until?->format('Y-m-d');
             $this->is_active = $this->heroSlide->is_active;
         }
+    }
+
+    public function updatedSlideableType(): void
+    {
+        $this->slideable_id = null;
+        $this->destinationSearch = '';
+    }
+
+    public function selectDestination(int $id): void
+    {
+        $this->slideable_id = $id;
+        $this->destinationSearch = $this->selectedDestination()?->name ?? '';
+    }
+
+    public function clearDestination(): void
+    {
+        $this->slideable_id = null;
+        $this->destinationSearch = '';
+    }
+
+    /**
+     * @return Collection<int, Product|Brand>
+     */
+    protected function destinationResults()
+    {
+        if ($this->slideable_type === Product::class) {
+            $query = Product::query()->active()->with('brand');
+
+            if (strlen(trim($this->destinationSearch)) >= 2) {
+                $query->search($this->destinationSearch);
+            } else {
+                $query->orderBy('name');
+            }
+
+            return $query->limit(8)->get();
+        }
+
+        if ($this->slideable_type === Brand::class) {
+            $query = Brand::query()->active();
+
+            if (strlen(trim($this->destinationSearch)) >= 2) {
+                $query->search($this->destinationSearch);
+            } else {
+                $query->ordered();
+            }
+
+            return $query->limit(8)->get();
+        }
+
+        return collect();
+    }
+
+    protected function selectedDestination(): Product|Brand|null
+    {
+        if (blank($this->slideable_type) || blank($this->slideable_id)) {
+            return null;
+        }
+
+        return match ($this->slideable_type) {
+            Product::class => Product::query()->with('brand')->find($this->slideable_id),
+            Brand::class => Brand::query()->find($this->slideable_id),
+            default => null,
+        };
+    }
+
+    protected function resolvedCtaUrl(Product|Brand|null $destination): ?string
+    {
+        if (filled(trim($this->cta_url))) {
+            return trim($this->cta_url);
+        }
+
+        return match (true) {
+            $destination instanceof Product => route('public.products.show', $destination),
+            $destination instanceof Brand => route('public.brands.show', $destination),
+            default => null,
+        };
     }
 
     public function save(): void
@@ -74,7 +154,15 @@ class HeroSlideForm extends Component
             'cta_label' => 'nullable|string|max:255',
             'cta_url' => 'nullable|string|max:255',
             'slideable_type' => 'nullable|string|in:'.Product::class.','.Brand::class,
-            'slideable_id' => 'nullable|integer',
+            'slideable_id' => [
+                'nullable',
+                'integer',
+                match ($this->slideable_type) {
+                    Product::class => 'exists:products,id',
+                    Brand::class => 'exists:brands,id',
+                    default => 'prohibited',
+                },
+            ],
             'valid_from' => 'nullable|date',
             'valid_until' => 'nullable|date|after_or_equal:valid_from',
             'is_active' => 'boolean',
@@ -149,9 +237,12 @@ class HeroSlideForm extends Component
 
     public function render(): View
     {
+        $selectedDestination = $this->selectedDestination();
+
         return view('livewire.admin.hero.hero-slide-form', [
-            'products' => Product::query()->active()->orderBy('name')->get(),
-            'brands' => Brand::query()->active()->ordered()->get(),
+            'destinationResults' => $selectedDestination ? collect() : $this->destinationResults(),
+            'selectedDestination' => $selectedDestination,
+            'resolvedCtaUrl' => $this->resolvedCtaUrl($selectedDestination),
         ]);
     }
 }
