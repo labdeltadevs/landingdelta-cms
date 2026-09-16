@@ -1,28 +1,44 @@
+@php
+    $schemaProps = [];
+    if ($product->active_ingredient) {
+        $schemaProps[] = ['@type' => 'PropertyValue', 'name' => 'Principio activo', 'value' => $product->active_ingredient];
+    }
+    if ($product->category) {
+        $schemaProps[] = ['@type' => 'PropertyValue', 'name' => 'Categoría', 'value' => $product->category->name];
+    }
+    $productSchema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        'name' => $product->name,
+        'description' => (string) Str::of(strip_tags($product->description ?? ''))->limit(300)->trim(),
+    ];
+    if ($product->main_image_path) {
+        $productSchema['image'] = $product->main_image_url;
+    }
+    $productSchema['brand'] = [
+        '@type' => 'Brand',
+        'name' => $product->brand?->name ?? 'Laboratorios Delta',
+        'url' => $product->brand ? route('public.brands.show', $product->brand) : config('app.url'),
+    ];
+    $productSchema['additionalProperty'] = $schemaProps;
+    $productSchema['offers'] = [
+        '@type' => 'Offer',
+        'availability' => 'https://schema.org/InStock',
+        'price' => (string) ($product->approx_price ?? 0),
+        'priceCurrency' => 'BOB',
+        'seller' => [
+            '@type' => 'Organization',
+            'name' => 'Laboratorios Delta S.A.',
+            'url' => config('app.url'),
+        ],
+    ];
+    $productJsonLd = json_encode($productSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+@endphp
 <x-layouts::public
     metaTitle="{{ $product->name }}"
     metaDescription="{{ Str::of(strip_tags($product->description ?? ''))->limit(160)->trim() }}"
     ogImage="{{ $product->main_image_url }}"
-    jsonLd='{
-        "@context": "https://schema.org",
-        "@type": "Product",
-        "name": "{{ $product->name }}",
-        "description": "{{ Str::of(strip_tags($product->description ?? ''))->limit(300)->trim() }}",
-        "image": "{{ $product->main_image_url }}",
-        "brand": {
-            "@type": "Brand",
-            "name": "{{ $product->brand?->name ?? 'Laboratorios Delta' }}"
-        },
-        "category": "{{ $product->category?->name ?? '' }}",
-        "activeIngredient": "{{ $product->active_ingredient ?? '' }}",
-        "offers": {
-            "@type": "Offer",
-            "availability": "https://schema.org/InStock",
-            "seller": {
-                "@type": "Organization",
-                "name": "Laboratorios Delta S.A."
-            }
-        }
-    }'>
+    :jsonLd="$productJsonLd">
     @php
         $related = \App\Models\Product::query()
             ->active()
