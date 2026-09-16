@@ -20,13 +20,15 @@
     {{-- SECTION 1: HERO · EDITORIAL PREMIUM                          --}}
     {{-- ============================================================ --}}
     @php
+        // WebP optimizados a 1920px (~60-125KB vs 1MB+ originales).
+        // fondo-c/d se mantienen en JPEG (ya optimizados, WebP no mejora).
         $backgroundSlides = [
-            Storage::disk('public')->url('fondo-a.jpeg'),
-            Storage::disk('public')->url('fondo-b.jpeg'),
+            Storage::disk('public')->url('fondo-a-1920.webp'),
+            Storage::disk('public')->url('fondo-b-1920.webp'),
             Storage::disk('public')->url('fondo-c.jpeg'),
             Storage::disk('public')->url('fondo-d.jpeg'),
-            Storage::disk('public')->url('fondo-e.jpeg'),
-            Storage::disk('public')->url('fondo-f.jpeg'),
+            Storage::disk('public')->url('fondo-e-1920.webp'),
+            Storage::disk('public')->url('fondo-f-1920.webp'),
         ];
 
         $jsonFlags = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE;
@@ -83,15 +85,17 @@
         {{-- ================================================= --}}
         <div class="absolute inset-0" aria-hidden="true" x-data='{ slides: {!! json_encode($backgroundSlides, $jsonFlags) !!} }'>
 
-            {{-- Imágenes --}}
+            {{-- Imágenes: <img> en lugar de CSS background para LCP optimizable.
+                 Primera con fetchpriority alta + eager; resto eager (slideshow activo). --}}
             <template x-for="(src, i) in slides" :key="i">
-                <div class="hero-bg-layer absolute inset-0 bg-cover bg-center bg-no-repeat"
+                <img :src="src" alt="" aria-hidden="true" draggable="false"
+                    :fetchpriority="i === 0 ? 'high' : 'auto'"
+                    :loading="i === 0 ? 'eager' : 'eager'"
+                    :decoding="i === 0 ? 'sync' : 'async'"
+                    width="1920" height="1080"
+                    class="hero-bg-layer absolute inset-0 h-full w-full object-cover"
                     :class="current === i ? (i === 0 && cycle === 0 ? 'hero-bg-first' : 'hero-bg-active') : ''"
-                    :style="{
-                        backgroundImage: 'url(' + src + ')',
-                        opacity: current === i ? 1 : 0
-                    }">
-                </div>
+                    :style="{ opacity: current === i ? 1 : 0 }">
             </template>
 
             {{-- Destellos decorativos --}}
@@ -183,7 +187,8 @@
                                 style="animation-delay:150ms">
 
                                 <img src="{{ Storage::disk('public')->url('logo_delta.png') }}"
-                                    alt="Laboratorios Delta S.A." fetchpriority="high"
+                                    alt="Laboratorios Delta S.A." fetchpriority="high" decoding="sync"
+                                    width="728" height="174"
                                     class="h-20 w-auto max-w-[440px] object-contain drop-shadow-md sm:h-24 sm:max-w-[600px] lg:h-28 lg:max-w-[440px] xl:h-32">
                             </div>
 

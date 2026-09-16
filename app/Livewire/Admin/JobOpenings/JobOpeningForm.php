@@ -3,9 +3,9 @@
 namespace App\Livewire\Admin\JobOpenings;
 
 use App\Models\JobOpening;
+use App\Services\ImageOptimizer;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -107,13 +107,23 @@ class JobOpeningForm extends Component
         }
 
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
-        $newFilename = Str::uuid().'.'.$extension;
-        $newPath = 'job-openings/'.$newFilename;
 
-        Storage::disk('public')->put($newPath, Storage::disk($disk)->get($storagePath));
+        if (! app(ImageOptimizer::class)->allowsExtension($extension)
+            || Storage::disk($disk)->size($storagePath) > 5 * 1024 * 1024) {
+            Storage::disk($disk)->delete($storagePath);
+            Storage::disk($disk)->delete($storagePath.'.json');
+            $this->dispatch('upload:errored', name: $name)->self();
 
-        Storage::disk($disk)->delete($storagePath);
-        Storage::disk($disk)->delete($storagePath.'.json');
+            return;
+        }
+
+        try {
+            $newPath = app(ImageOptimizer::class)->optimizeLivewireTempFile($disk, $storagePath, 'job');
+        } catch (\Throwable) {
+            $this->dispatch('upload:errored', name: $name)->self();
+
+            return;
+        }
 
         $this->image = $newPath;
 

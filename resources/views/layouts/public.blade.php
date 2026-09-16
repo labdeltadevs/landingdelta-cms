@@ -11,7 +11,9 @@
 
 <head>
     @include('partials.head')
-    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    {{-- AOS local, non-blocking: solo para animaciones below-fold --}}
+    <link rel="preload" href="{{ asset('aos.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="{{ asset('aos.css') }}"></noscript>
 </head>
 
 <body class="bg-white text-zinc-900 font-sans antialiased">
@@ -484,7 +486,7 @@
         </div>
     </footer>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{{ asset('aos.js') }}" defer></script>
     @livewireScripts
     <script>
         document.addEventListener('DOMContentLoaded', function() {

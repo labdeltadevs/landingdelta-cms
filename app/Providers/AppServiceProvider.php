@@ -22,6 +22,7 @@ use App\Policies\NewsPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\SiteSettingPolicy;
 use App\Policies\UserPolicy;
+use App\Services\ImageOptimizer;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +37,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(ImageOptimizer::class, fn (): ImageOptimizer => new ImageOptimizer(
+            maxWidth: (int) config('image-optimizer.defaults.max_width', 1920),
+            quality: (int) config('image-optimizer.defaults.quality', 80),
+            format: (string) config('image-optimizer.defaults.format', 'webp'),
+        ));
     }
 
     /**

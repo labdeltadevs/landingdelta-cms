@@ -61,7 +61,7 @@ class NewsForm extends Component
             : Str::slug($this->title).'-'.Str::lower(Str::random(5));
 
         if ($this->cover) {
-            $data['cover_image_path'] = $uploader->upload($this->cover, 'news/covers');
+            $data['cover_image_path'] = $uploader->upload($this->cover, 'news/covers', 'public', 'news');
             if ($this->news?->exists) {
                 $uploader->delete($this->news->cover_image_path);
             }

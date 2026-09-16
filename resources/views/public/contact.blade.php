@@ -2,7 +2,7 @@
     metaDescription="Encuentra las oficinas, sucursales y datos de contacto de Laboratorios Delta S.A. en La Paz, Santa Cruz, Cochabamba y Chuquisaca.">
     @php
         $companyName = App\Models\SiteSetting::get('company_name', 'Laboratorios Delta S.A.');
-        $contactEmail = App\Models\SiteSetting::get('contact_email', 'info@delta.lab');
+        $contactEmail = App\Models\SiteSetting::get('contact_email', 'consultas@laboratoriosdelta.net');
         $contactPhone = App\Models\SiteSetting::get('contact_phone', '');
 
         $branches = \App\Models\Branch::query()->active()->ordered()->get();

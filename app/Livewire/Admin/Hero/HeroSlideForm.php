@@ -5,10 +5,10 @@ namespace App\Livewire\Admin\Hero;
 use App\Models\Brand;
 use App\Models\HeroSlide;
 use App\Models\Product;
+use App\Services\ImageOptimizer;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -221,13 +221,23 @@ class HeroSlideForm extends Component
         }
 
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
-        $newFilename = Str::uuid().'.'.$extension;
-        $newPath = 'hero/'.$newFilename;
 
-        Storage::disk('public')->put($newPath, Storage::disk($disk)->get($storagePath));
+        if (! app(ImageOptimizer::class)->allowsExtension($extension)
+            || Storage::disk($disk)->size($storagePath) > 5 * 1024 * 1024) {
+            Storage::disk($disk)->delete($storagePath);
+            Storage::disk($disk)->delete($storagePath.'.json');
+            $this->dispatch('upload:errored', name: $name)->self();
 
-        Storage::disk($disk)->delete($storagePath);
-        Storage::disk($disk)->delete($storagePath.'.json');
+            return;
+        }
+
+        try {
+            $newPath = app(ImageOptimizer::class)->optimizeLivewireTempFile($disk, $storagePath, 'hero_slide');
+        } catch (\Throwable) {
+            $this->dispatch('upload:errored', name: $name)->self();
+
+            return;
+        }
 
         $this->image = $newPath;
 

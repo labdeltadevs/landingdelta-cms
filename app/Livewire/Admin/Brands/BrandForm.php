@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Brands;
 
 use App\Models\Brand;
+use App\Services\ImageOptimizer;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -99,13 +100,23 @@ class BrandForm extends Component
         }
 
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
-        $newFilename = Str::uuid().'.'.$extension;
-        $newPath = 'brands/'.$newFilename;
 
-        Storage::disk('public')->put($newPath, Storage::disk($disk)->get($storagePath));
+        if (! app(ImageOptimizer::class)->allowsExtension($extension)
+            || Storage::disk($disk)->size($storagePath) > 5 * 1024 * 1024) {
+            Storage::disk($disk)->delete($storagePath);
+            Storage::disk($disk)->delete($storagePath.'.json');
+            $this->dispatch('upload:errored', name: $name)->self();
 
-        Storage::disk($disk)->delete($storagePath);
-        Storage::disk($disk)->delete($storagePath.'.json');
+            return;
+        }
+
+        try {
+            $newPath = app(ImageOptimizer::class)->optimizeLivewireTempFile($disk, $storagePath, 'brand');
+        } catch (\Throwable) {
+            $this->dispatch('upload:errored', name: $name)->self();
+
+            return;
+        }
 
         $this->logo = $newPath;
 

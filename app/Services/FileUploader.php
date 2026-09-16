@@ -8,8 +8,24 @@ use Illuminate\Support\Str;
 
 class FileUploader
 {
-    public function upload(UploadedFile $file, string $directory = 'uploads', string $disk = 'public'): string
+    /**
+     * Guarda un archivo subido. Si se indica $entityType y es una imagen,
+     * se optimiza con ImageOptimizer; si no, se guarda tal cual (ej: PDF).
+     */
+    public function upload(UploadedFile $file, string $directory = 'uploads', string $disk = 'public', ?string $entityType = null): string
     {
+        if ($entityType !== null && str_starts_with((string) $file->getMimeType(), 'image/')) {
+            $preset = config("image-optimizer.entities.{$entityType}", []);
+
+            return app(ImageOptimizer::class)->optimizeAndStore(
+                $file->getRealPath(),
+                $directory,
+                $preset['maxWidth'] ?? null,
+                $preset['quality'] ?? null,
+                $preset['format'] ?? null,
+            );
+        }
+
         $extension = $file->getClientOriginalExtension();
         $filename = Str::uuid().'.'.$extension;
 

@@ -32,10 +32,8 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
-<link rel="preconnect" href="https://unpkg.com">
-
 @if (request()->routeIs('public.home'))
-    <link rel="preload" as="image" href="{{ Storage::disk('public')->url('fondo-a.jpeg') }}" fetchpriority="high">
+    <link rel="preload" as="image" type="image/webp" href="{{ Storage::disk('public')->url('fondo-a-1920.webp') }}" fetchpriority="high">
 @endif
 
 @fonts

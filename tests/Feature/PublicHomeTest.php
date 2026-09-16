@@ -93,7 +93,7 @@ test('the home hero renders the entrance cascade, ken burns and parallax hooks',
     $response->assertDontSee('onHeroMouse');
     $response->assertDontSee('parallaxOn');
     $response->assertSee('initHero');
-    // Performance: preload del primer fondo y prioridad del logo
-    $response->assertSee('fondo-a.jpeg');
+    // Performance: preload del primer fondo (WebP) y prioridad del logo
+    $response->assertSee('fondo-a-1920.webp');
     $response->assertSee('fetchpriority="high"', false);
 });
