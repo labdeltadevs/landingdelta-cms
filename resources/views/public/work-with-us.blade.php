@@ -1,6 +1,6 @@
 <x-layouts::public
-    metaTitle="Trabajá con Nosotros"
-    metaDescription="Unite al equipo de Laboratorios Delta S.A. — Vemos las convocatorias laborales vigentes y formá parte de la empresa farmacéutica líder en Bolivia.">
+    metaTitle="Trabaja con Nosotros"
+    metaDescription="Únete al equipo de Laboratorios Delta S.A. — Ve nuestras convocatorias laborales vigentes y forma parte de la empresa farmacéutica líder en Bolivia.">
     @php
         $rawTitle = \App\Models\SiteSetting::get('work_with_us_title');
         $title = is_array($rawTitle) ? $rawTitle['body'] ?? '' : $rawTitle;

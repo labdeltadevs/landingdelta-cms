@@ -89,10 +89,8 @@
                  Primera con fetchpriority alta + eager; resto eager (slideshow activo). --}}
             <template x-for="(src, i) in slides" :key="i">
                 <img :src="src" alt="" aria-hidden="true" draggable="false"
-                    :fetchpriority="i === 0 ? 'high' : 'auto'"
-                    :loading="i === 0 ? 'eager' : 'eager'"
-                    :decoding="i === 0 ? 'sync' : 'async'"
-                    width="1920" height="1080"
+                    :fetchpriority="i === 0 ? 'high' : 'auto'" :loading="i === 0 ? 'eager' : 'eager'"
+                    :decoding="i === 0 ? 'sync' : 'async'" width="1920" height="1080"
                     class="hero-bg-layer absolute inset-0 h-full w-full object-cover"
                     :class="current === i ? (i === 0 && cycle === 0 ? 'hero-bg-first' : 'hero-bg-active') : ''"
                     :style="{ opacity: current === i ? 1 : 0 }">
@@ -158,7 +156,7 @@
         {{-- ================================================= --}}
         {{-- CONTENIDO PRINCIPAL                               --}}
         {{-- ================================================= --}}
-        <div class="relative z-10 mx-auto w-full max-w-[75vw] px-4 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+        <div class="relative z-10 mx-auto min-w-[75vw] lg:max-w-[75vw] px-4 pt-8 pb-2 sm:px-8 lg:px-8">
 
             {{-- Panel principal glassmorphism --}}
             <div
@@ -173,140 +171,193 @@
                     class="pointer-events-none absolute -bottom-40 -left-32 h-64 w-64 rounded-full bg-white/50 blur-3xl sm:h-80 sm:w-80">
                 </div>
 
-                <div class="relative z-10 p-5 sm:p-7 lg:p-8 xl:p-10">
+                <div class="relative z-10 p-4 sm:p-6 lg:p-8 xl:p-10">
 
-                    <div class="flex flex-col gap-8 lg:flex-row lg:items-stretch lg:gap-10 xl:gap-14">
+                    <div
+                        class="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] lg:items-stretch xl:gap-12">
 
                         {{-- ================================================= --}}
                         {{-- ZONA IZQUIERDA                                    --}}
                         {{-- ================================================= --}}
-                        <div class="min-w-0 flex-1">
+                        <div class="flex min-w-0 flex-col justify-between">
 
-                            {{-- Logo --}}
-                            <div class="hero-reveal-scale mb-6 flex items-center justify-center sm:mb-8"
-                                style="animation-delay:150ms">
+                            <div>
+                                {{-- Logo --}}
+                                <div class="hero-reveal-scale mb-7 flex justify-center lg:justify-start"
+                                    style="animation-delay:150ms">
+                                    <img src="{{ Storage::disk('public')->url('logo_delta.png') }}"
+                                        alt="Laboratorios Delta S.A." fetchpriority="high" decoding="sync"
+                                        width="728" height="174"
+                                        class="h-16 w-auto mx-auto max-w-[320px] object-contain drop-shadow-sm sm:h-20 sm:max-w-[420px] lg:h-24 xl:h-28">
+                                </div>
 
-                                <img src="{{ Storage::disk('public')->url('logo_delta.png') }}"
-                                    alt="Laboratorios Delta S.A." fetchpriority="high" decoding="sync"
-                                    width="728" height="174"
-                                    class="h-20 w-auto max-w-[440px] object-contain drop-shadow-md sm:h-24 sm:max-w-[600px] lg:h-28 lg:max-w-[440px] xl:h-32">
-                            </div>
-
-                            {{-- Contenido principal --}}
-                            <div class="hero-reveal mb-3 min-h-[240px] sm:min-h-[220px] lg:min-h-[260px]"
-                                style="animation-delay:250ms">
-                                <h1
-                                    class="max-w-4xl text-3xl font-bold leading-[1.08] tracking-[-0.035em] text-zinc-900 sm:text-4xl md:text-5xl lg:text-6xl">
-                                    Cuidando la salud de nuestra gente
-                                </h1>
-
-                                <p class="mt-5 max-w-2xl text-sm leading-relaxed text-zinc-600 sm:text-base lg:text-lg">
-                                    Comprometidos con la salud y el bienestar de los bolivianos,
-                                    ofreciendo productos farmacéuticos de la más alta calidad.
-                                </p>
-                            </div>
-
-                            {{-- Mensaje institucional --}}
-                            <div class="hero-reveal mb-6 max-w-2xl border-l-2 border-[#ff671f] pl-4 sm:mb-8"
-                                style="animation-delay:350ms">
-
-                                <p
-                                    class="text-xs font-semibold uppercase leading-relaxed tracking-[0.15em] text-[#d95417] sm:text-sm sm:tracking-[0.2em]">
+                                {{-- Badge institucional --}}
+                                <div class="hero-reveal mb-4 inline-flex items-center gap-2 rounded-full border border-[#ff671f]/15 bg-[#ff671f]/8 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#d95417]"
+                                    style="animation-delay:220ms">
+                                    <span class="size-1.5 rounded-full bg-[#ff671f]"></span>
                                     Líder en la industria farmacéutica boliviana
-                                </p>
+                                </div>
+
+                                {{-- Contenido principal --}}
+                                <div class="hero-reveal max-w-4xl" style="animation-delay:280ms">
+                                    <h1
+                                        class="text-2xl font-bold leading-[1.02] tracking-[-0.045em] text-zinc-950 sm:text-5xl lg:text-6xl xl:text-7xl">
+                                        Cuidando la salud de nuestra gente
+                                    </h1>
+
+                                    <p class="mt-5 max-w-2xl text-base leading-7 text-zinc-600 sm:text-lg">
+                                        Comprometidos con la salud y el bienestar de los bolivianos,
+                                        ofreciendo productos farmacéuticos de alta calidad.
+                                    </p>
+                                </div>
+
+                                {{-- Botones principales --}}
+                                <div class="hero-reveal mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
+                                    style="animation-delay:380ms">
+                                    <a href="{{ route('public.products.index') }}"
+                                        class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#ff671f] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#e85d1c] hover:shadow-xl hover:shadow-[#ff671f]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
+                                        <span>Explorar productos</span>
+
+                                        <svg class="size-4 transition-transform duration-300 group-hover:translate-x-0.5"
+                                            fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                            aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                        </svg>
+                                    </a>
+
+                                    <a href="{{ route('public.about') }}"
+                                        class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-zinc-900/10 bg-white/55 px-6 py-3 text-sm font-semibold text-zinc-800 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ff671f]/25 hover:bg-white/80 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
+                                        <span>Nuestra historia</span>
+
+                                        <svg class="size-4 text-zinc-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-[#ff671f]"
+                                            fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                                            aria-hidden="true">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+                                        </svg>
+                                    </a>
+                                </div>
                             </div>
 
-                            {{-- Botones principales --}}
-                            <div class="hero-reveal flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
-                                style="animation-delay:450ms">
+                            {{-- ================================================= --}}
+                            {{-- ESTADÍSTICAS                                      --}}
+                            {{-- ================================================= --}}
+                            <div class="hero-reveal-fade mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3 lg:mt-10"
+                                style="animation-delay:650ms">
+                                <div
+                                    class="rounded-2xl border border-white/70 bg-white/45 p-4 text-center shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/70 hover:shadow-md">
+                                    <p class="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
+                                        Portafolio
+                                    </p>
 
-                                <a href="{{ route('public.products.index') }}"
-                                    class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
+                                    <p class="mt-1 text-3xl font-bold tracking-tight text-[#ff671f] lg:text-4xl">
+                                        +{{ $productsCount }}
+                                    </p>
 
-                                    <span>Explorar productos</span>
+                                    <p class="mt-1 text-xs text-zinc-500">
+                                        productos
+                                    </p>
+                                </div>
 
-                                    <svg class="h-4 w-4 transition-transform duration-300" fill="none"
-                                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                                    </svg>
-                                </a>
+                                <div
+                                    class="rounded-2xl border border-white/70 bg-white/45 p-4 text-center shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/70 hover:shadow-md">
+                                    <p class="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
+                                        Alcance
+                                    </p>
 
-                                <a href="{{ route('public.about') }}"
-                                    class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-zinc-900/10 bg-white/[0.42] px-7 py-3.5 text-sm font-semibold text-zinc-800 shadow-sm backdrop-blur-md transition-all duration-300 hover:border-[#ff671f]/30 hover:bg-white/[0.72] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
+                                    <p class="mt-1 text-3xl font-bold tracking-tight text-[#ff671f] lg:text-4xl">
+                                        +{{ $brands->count() }}
+                                    </p>
 
-                                    <span>Nuestra historia</span>
+                                    <p class="mt-1 text-xs text-zinc-500">
+                                        divisiones
+                                    </p>
+                                </div>
 
-                                    <svg class="h-4 w-4 text-zinc-500 transition-transform duration-300 group-hover:text-[#ff671f]"
-                                        fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                                        aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                                    </svg>
-                                </a>
+                                <div
+                                    class="rounded-2xl border border-white/70 bg-white/45 p-4 text-center shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/70 hover:shadow-md">
+                                    <p class="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
+                                        Presencia
+                                    </p>
+
+                                    <p class="mt-1 text-3xl font-bold tracking-tight text-[#ff671f] lg:text-4xl">
+                                        9
+                                    </p>
+
+                                    <p class="mt-1 text-xs text-zinc-500">
+                                        departamentos
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
                         {{-- ================================================= --}}
                         {{-- ZONA DERECHA                                      --}}
                         {{-- ================================================= --}}
-                        <div class="hero-reveal-right w-full lg:w-[34%] lg:min-w-[290px] lg:max-w-md"
-                            style="animation-delay:550ms">
-
+                        <div class="hero-reveal-right flex lg:min-h-full" style="animation-delay:500ms">
                             <div
-                                class="h-full rounded-[1.25rem] border border-white/[0.75] bg-white/[0.56] p-5 shadow-lg shadow-zinc-900/[0.06] backdrop-blur-xl sm:rounded-[1.5rem] sm:p-6">
+                                class="relative flex w-full flex-col overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/50 p-5 shadow-xl shadow-zinc-900/[0.05] backdrop-blur-xl sm:p-6 lg:p-7">
+
+                                {{-- Decoración minimal --}}
+                                <div
+                                    class="pointer-events-none absolute -right-12 -top-12 size-40 rounded-full bg-[#ff671f]/10 blur-3xl">
+                                </div>
+                                <div
+                                    class="pointer-events-none absolute -bottom-16 left-8 size-36 rounded-full bg-amber-300/10 blur-3xl">
+                                </div>
 
                                 {{-- Encabezado --}}
-                                <div class="flex items-start justify-between gap-3">
-                                    <div>
-                                        <p
-                                            class="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#d95417] sm:text-xs sm:tracking-[0.2em]">
+                                <div class="relative">
+                                    <div class="mb-4 flex items-center justify-between gap-4">
+                                        <div
+                                            class="inline-flex items-center gap-2 rounded-full bg-white/60 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#d95417] ring-1 ring-white/70">
+                                            <span class="size-1.5 rounded-full bg-[#ff671f]"></span>
                                             Nuestra trayectoria
-                                        </p>
+                                        </div>
 
-                                        <h2
-                                            class="mt-2 text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl xl:text-3xl">
-                                            Hechos que nos mueven
-                                        </h2>
-
-                                        <p class="mt-3 text-sm leading-relaxed text-zinc-500">
-                                            Una historia construida con calidad, cercanía y compromiso.
-                                        </p>
+                                        <div
+                                            class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#ff671f]/10 text-[#ff671f] ring-1 ring-[#ff671f]/15">
+                                            <svg class="size-4.5" fill="none" stroke="currentColor"
+                                                stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M12 3v18m9-9H3" />
+                                            </svg>
+                                        </div>
                                     </div>
 
-                                    <div
-                                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#ff671f]/10 text-[#ff671f] sm:h-12 sm:w-12 sm:rounded-2xl">
-                                        <svg class="h-5 w-5 sm:h-6 sm:w-6" fill="none" stroke="currentColor"
-                                            stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m9-9H3" />
-                                        </svg>
-                                    </div>
+                                    <h2
+                                        class="text-2xl font-bold leading-tight tracking-[-0.035em] text-zinc-950 sm:text-3xl">
+                                        Hechos que nos mueven
+                                    </h2>
+
+                                    <p class="mt-3 max-w-sm text-sm leading-6 text-zinc-500">
+                                        Una historia construida con calidad, cercanía y compromiso.
+                                    </p>
                                 </div>
 
                                 {{-- Logros --}}
-                                <div class="mt-5 space-y-2.5 sm:mt-6">
+                                <div class="relative mt-6 flex-1 space-y-3">
                                     @foreach ($galardones as $g)
-                                        <div style="animation-delay: {{ 700 + $loop->index * 90 }}ms"
-                                            class="hero-reveal group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-white/70 bg-white/50 p-3.5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-[#ff671f]/25 hover:bg-white/80 hover:shadow-lg hover:shadow-[#ff671f]/5 hover:-translate-y-px">
-                                            {{-- Glow de fondo al hover --}}
+                                        <div style="animation-delay: {{ 650 + $loop->index * 90 }}ms"
+                                            class="hero-reveal group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-white/70 bg-white/55 p-3.5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ff671f]/20 hover:bg-white/80 hover:shadow-md">
+                                            {{-- Glow hover --}}
                                             <div
                                                 class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                                                 <div
-                                                    class="absolute -left-4 -top-4 size-20 rounded-full bg-[#ff671f]/8 blur-2xl">
+                                                    class="absolute -left-6 -top-6 size-24 rounded-full bg-[#ff671f]/10 blur-2xl">
                                                 </div>
                                             </div>
 
                                             {{-- Icono --}}
                                             <div
-                                                class="relative flex size-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff671f]/15 to-[#ff671f]/5 text-[#ff671f] ring-1 ring-[#ff671f]/20 transition-all duration-300 group-hover:scale-105 group-hover:ring-[#ff671f]/35 sm:size-12">
-                                                {{-- Número de posición como indicador sutil --}}
-                                                @if ($loop->first)
-                                                    <span
-                                                        class="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-[#ff671f] text-[9px] font-bold text-white ring-2 ring-white">
-                                                        ★
-                                                    </span>
-                                                @endif
-                                                <span class="size-5 sm:size-5.5">
+                                                class="relative flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#ff671f]/10 text-[#ff671f] ring-1 ring-[#ff671f]/15 transition-all duration-300 group-hover:scale-105 group-hover:bg-[#ff671f]/15 group-hover:ring-[#ff671f]/25">
+                                                <span
+                                                    class="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-[#ff671f] text-[9px] font-bold text-white ring-2 ring-white">
+                                                    ★
+                                                </span>
+
+                                                <span class="size-5">
                                                     {!! $g['icon'] !!}
                                                 </span>
                                             </div>
@@ -314,76 +365,24 @@
                                             {{-- Contenido --}}
                                             <div class="relative min-w-0 flex-1">
                                                 <span
-                                                    class="block truncate text-sm font-bold leading-tight text-zinc-800">
+                                                    class="block truncate text-sm font-semibold leading-tight text-zinc-850">
                                                     {{ $g['label'] }}
                                                 </span>
-                                                <span
-                                                    class="mt-0.5 block truncate text-[11px] leading-snug text-zinc-500">
+
+                                                <span class="mt-0.5 block truncate text-xs leading-snug text-zinc-500">
                                                     {{ $g['sub'] }}
                                                 </span>
                                             </div>
                                         </div>
                                     @endforeach
                                 </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    {{-- ================================================= --}}
-                    {{-- ESTADÍSTICAS                                      --}}
-                    {{-- ================================================= --}}
-                    <div class="hero-reveal-fade mt-8 border-t border-zinc-900/10 pt-5 sm:mt-10 sm:pt-6"
-                        style="animation-delay:750ms">
-
-                        <div
-                            class="grid grid-cols-1 divide-y divide-zinc-900/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-
-                            <div class="group py-4 text-center sm:px-2 sm:py-0">
-                                <p
-                                    class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500 sm:text-xs">
-                                    Portafolio
-                                </p>
-
-                                <p
-                                    class="mt-1 text-3xl font-bold text-[#ff671f] transition-transform duration-300 sm:text-3xl lg:text-4xl">
-                                    +{{ $productsCount }}
-                                </p>
-
-                                <p class="mt-1 text-xs text-zinc-500">
-                                    productos
-                                </p>
-                            </div>
-
-                            <div class="group py-4 text-center sm:px-2 sm:py-0">
-                                <p
-                                    class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500 sm:text-xs">
-                                    Alcance
-                                </p>
-
-                                <p
-                                    class="mt-1 text-3xl font-bold text-[#ff671f] transition-transform duration-300 sm:text-3xl lg:text-4xl">
-                                    +{{ $brands->count() }}
-                                </p>
-
-                                <p class="mt-1 text-xs text-zinc-500">
-                                    divisiones
-                                </p>
-                            </div>
-
-                            <div class="group py-4 text-center sm:px-2 sm:py-0">
-                                <p
-                                    class="text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-500 sm:text-xs">
-                                    Presencia
-                                </p>
-
-                                <p
-                                    class="mt-1 text-3xl font-bold text-[#ff671f] transition-transform duration-300 sm:text-3xl lg:text-4xl">
-                                    9
-                                </p>
-
-                                <p class="mt-1 text-xs text-zinc-500">
-                                    departamentos
-                                </p>
+                                {{-- Footer de la card --}}
+                                <div class="relative mt-6 border-t border-zinc-900/10 pt-4">
+                                    <p class="text-xs leading-5 text-zinc-500">
+                                        Innovación, responsabilidad y confianza al servicio de la salud boliviana.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -391,7 +390,7 @@
             </div>
 
             {{-- Indicador de scroll --}}
-            <div class="hero-reveal-fade mt-5 flex justify-center sm:mt-6" style="animation-delay:950ms">
+            <div class="hero-reveal-fade mt-2 flex justify-center sm:mt-2" style="animation-delay:950ms">
 
                 <a href="#travesia"
                     class="group inline-flex flex-col items-center gap-2 rounded-full px-4 py-2 text-zinc-600 transition-colors hover:text-[#d95417] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2">
