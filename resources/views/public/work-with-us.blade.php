@@ -31,7 +31,7 @@
                 <div class="h-px w-8 bg-black/10"></div>
             </div>
 
-            <h1 class="text-3xl font-black text-black sm:text-5xl tracking-tight leading-tight" data-aos="fade-up"
+            <h1 class="text-xl font-black text-black sm:text-5xl tracking-tight leading-tight" data-aos="fade-up"
                 data-aos-delay="50">
                 {{ $title ?: 'Trabaja con nosotros' }}
             </h1>

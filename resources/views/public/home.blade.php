@@ -108,15 +108,15 @@
                 style="background:
                 linear-gradient(
                     90deg,
-                    rgba(190,190,190,0.74) 0%,
-                    rgba(190,190,190,0.56) 52%,
-                    rgba(190,190,190,0.64) 100%
+                    rgba(150,150,150,0.74) 0%,
+                    rgba(150,150,150,0.56) 52%,
+                    rgba(150,150,150,0.64) 100%
                 ),
                 linear-gradient(
                     180deg,
-                    rgba(190,190,190,0.32) 0%,
-                    rgba(190,190,190,0.18) 45%,
-                    rgba(190,190,190,0.70) 100%
+                    rgba(150,150,150,0.32) 0%,
+                    rgba(150,150,150,0.18) 45%,
+                    rgba(150,150,150,0.70) 100%
                 );">
             </div>
 
@@ -160,7 +160,7 @@
 
             {{-- Panel principal glassmorphism --}}
             <div
-                class="hero-reveal relative overflow-hidden rounded-[1.5rem] border border-white/[0.72] bg-white/[0.48] shadow-2xl shadow-zinc-900/10 backdrop-blur-2xl sm:rounded-[2rem]">
+                class="hero-reveal relative overflow-hidden rounded-[1.5rem] border border-white/[0.80] bg-white/[0.60] backdrop-blur-2xl sm:rounded-[2rem]">
 
                 {{-- Decoración interna --}}
                 <div
@@ -201,7 +201,7 @@
                                 {{-- Contenido principal --}}
                                 <div class="hero-reveal max-w-4xl" style="animation-delay:280ms">
                                     <h1
-                                        class="text-2xl font-bold leading-[1.02] tracking-[-0.045em] text-zinc-950 sm:text-5xl lg:text-6xl xl:text-7xl">
+                                        class="text-xl leading-[1.02] tracking-[-0.045em] text-zinc-950 sm:text-5xl lg:text-6xl xl:text-7xl">
                                         Cuidando la salud de nuestra gente
                                     </h1>
 
