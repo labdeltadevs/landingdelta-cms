@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Public\WorkWithUsController;
 use App\Livewire\Admin\Branches\BranchForm;
 use App\Livewire\Admin\Branches\BranchIndex;
 use App\Livewire\Admin\Brands\BrandForm;
@@ -182,8 +183,8 @@ Route::get('/nosotros', function () {
     ]);
 })->name('public.about');
 Route::view('/contacto', 'public.contact')->name('public.contact');
-Route::livewire('/trabaja-con-nosotros', 'pages::work-with-us.index')->name('public.work-with-us');
-Route::livewire('/trabaja-con-nosotros/{jobSlug}', 'pages::work-with-us.show')->name('public.work-with-us.show');
+Route::get('/trabaja-con-nosotros', [WorkWithUsController::class, 'index'])->name('public.work-with-us');
+Route::get('/trabaja-con-nosotros/{jobSlug}', [WorkWithUsController::class, 'show'])->name('public.work-with-us.show');
 
 Route::get('/rotafolios', function () {
     return view('public.brochures.index', [

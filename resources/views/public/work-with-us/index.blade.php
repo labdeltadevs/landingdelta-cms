@@ -1,45 +1,6 @@
-<?php
-
-use App\Models\JobOpening;
-use App\Models\SiteSetting;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
-use Livewire\Attributes\Url;
-use Livewire\Component;
-use Livewire\WithPagination;
-
-new #[Layout('layouts.public-page')] #[Title('Trabaja con Nosotros')] class extends Component {
-    use WithPagination;
-
-    #[Url]
-    public string $search = '';
-
-    public function mount(): void
-    {
-        view()->share('metaTitle', 'Trabaja con Nosotros');
-        view()->share('metaDescription', 'Únete al equipo de Laboratorios Delta S.A. — Ve nuestras convocatorias laborales vigentes y forma parte de la empresa farmacéutica líder en Bolivia.');
-    }
-
-    public function updatingSearch(): void
-    {
-        $this->resetPage();
-    }
-}; ?>
-
-<div>
-    @php
-        $rawTitle = SiteSetting::get('work_with_us_title');
-        $title = is_array($rawTitle) ? $rawTitle['body'] ?? '' : $rawTitle;
-
-        $rawDesc = SiteSetting::get('work_with_us_description');
-        $description = is_array($rawDesc) ? $rawDesc['body'] ?? '' : $rawDesc;
-
-        $openings = JobOpening::query()
-            ->published()
-            ->when($this->search !== '', fn ($query) => $query->where('title', 'like', '%'.$this->search.'%'))
-            ->orderByDesc('created_at')
-            ->paginate(12);
-    @endphp
+<x-layouts::public
+    metaTitle="Trabaja con Nosotros"
+    metaDescription="Únete al equipo de Laboratorios Delta S.A. — Ve nuestras convocatorias laborales vigentes y forma parte de la empresa farmacéutica líder en Bolivia.">
 
     {{-- Hero --}}
     <section class="relative overflow-hidden bg-white py-12 sm:py-12">
@@ -111,8 +72,10 @@ new #[Layout('layouts.public-page')] #[Title('Trabaja con Nosotros')] class exte
                         </span>
                     @endif
                 </div>
-                <input type="search" wire:model.live.debounce.300ms="search" placeholder="Buscar convocatoria…"
-                    class="w-full sm:max-w-xs rounded-full border border-zinc-200 bg-white px-4 py-2.5 text-sm text-zinc-800 placeholder-zinc-400 shadow-sm focus:border-[#ff671f]/50 focus:outline-none focus:ring-4 focus:ring-[#ff671f]/10" />
+                <form method="GET" action="{{ route('public.work-with-us') }}" class="w-full sm:max-w-xs">
+                    <input type="search" name="search" value="{{ $search }}" placeholder="Buscar convocatoria…"
+                        class="w-full rounded-full border border-zinc-200 bg-white px-4 py-2.5 text-sm text-zinc-800 placeholder-zinc-400 shadow-sm focus:border-[#ff671f]/50 focus:outline-none focus:ring-4 focus:ring-[#ff671f]/10" />
+                </form>
             </div>
 
             @if ($openings->isNotEmpty())
@@ -161,7 +124,6 @@ new #[Layout('layouts.public-page')] #[Title('Trabaja con Nosotros')] class exte
                                     {{-- Título --}}
                                     <h3 class="text-lg font-bold text-black leading-snug">
                                         <a href="{{ route('public.work-with-us.show', $job) }}"
-                                            wire:navigate
                                             class="transition-colors duration-300 group-hover:text-[#ff671f]">
                                             {{ $job->title }}
                                         </a>
@@ -187,7 +149,6 @@ new #[Layout('layouts.public-page')] #[Title('Trabaja con Nosotros')] class exte
 
                                         <div class="flex items-center gap-2">
                                             <a href="{{ route('public.work-with-us.show', $job) }}"
-                                                wire:navigate
                                                 class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 px-4 py-2.5 text-xs font-semibold text-zinc-700 transition-all duration-300 hover:border-[#ff671f]/40 hover:text-[#ff671f]">
                                                 Ver convocatoria
                                                 <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor"
@@ -234,10 +195,10 @@ new #[Layout('layouts.public-page')] #[Title('Trabaja con Nosotros')] class exte
                     </div>
                     <h3 class="text-lg font-semibold text-black mb-2">No hay convocatorias abiertas</h3>
                     <p class="text-sm text-black/40 max-w-md mx-auto mb-6">
-                        {{ $this->search !== '' ? 'Ninguna convocatoria coincide con tu búsqueda.' : 'En este momento no tenemos ofertas activas.' }}
+                        {{ $search !== '' ? 'Ninguna convocatoria coincide con tu búsqueda.' : 'En este momento no tenemos ofertas activas.' }}
                     </p>
                 </div>
             @endif
         </div>
     </section>
-</div>
+</x-layouts::public>
