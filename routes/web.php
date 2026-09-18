@@ -24,6 +24,7 @@ use App\Models\Branch;
 use App\Models\Brand;
 use App\Models\Brochure;
 use App\Models\Category;
+use App\Models\JobOpening;
 use App\Models\News;
 use App\Models\Product;
 use App\Models\SiteSetting;
@@ -73,10 +74,18 @@ Route::get('/sitemap.xml', function () {
         'lastmod' => $n->updated_at?->toIso8601String(),
     ]);
 
+    $jobs = JobOpening::query()->published()->get()->map(fn ($j) => [
+        'loc' => route('public.work-with-us.show', $j),
+        'priority' => '0.6',
+        'changefreq' => 'weekly',
+        'lastmod' => $j->updated_at?->toIso8601String(),
+    ]);
+
     $urls = collect($staticPages)
         ->concat($products)
         ->concat($brands)
-        ->concat($news);
+        ->concat($news)
+        ->concat($jobs);
 
     $content = '<?xml version="1.0" encoding="UTF-8"?>';
     $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
@@ -173,7 +182,8 @@ Route::get('/nosotros', function () {
     ]);
 })->name('public.about');
 Route::view('/contacto', 'public.contact')->name('public.contact');
-Route::view('/trabaja-con-nosotros', 'public.work-with-us')->name('public.work-with-us');
+Route::livewire('/trabaja-con-nosotros', 'pages::work-with-us.index')->name('public.work-with-us');
+Route::livewire('/trabaja-con-nosotros/{jobSlug}', 'pages::work-with-us.show')->name('public.work-with-us.show');
 
 Route::get('/rotafolios', function () {
     return view('public.brochures.index', [

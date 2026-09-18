@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Products;
 
 use App\Livewire\Admin\Concerns\GeneratesQrCodes;
 use App\Models\Brand;
+use App\Models\JobOpening;
 use App\Models\Product;
 use App\Support\ProductCsv;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -162,7 +163,7 @@ class ProductIndex extends Component
         return Product::query()->findOrFail($id);
     }
 
-    protected function qrRoute(Product|Brand $target): string
+    protected function qrRoute(Product|Brand|JobOpening $target): string
     {
         return route('public.products.show', $target);
     }
@@ -172,7 +173,7 @@ class ProductIndex extends Component
         return 'codigo-producto-'.($target->slug ?? $target->getRouteKey()).'.jpg';
     }
 
-    protected function barcodeValue(Product|Brand $target): string
+    protected function barcodeValue(Product|Brand|JobOpening $target): string
     {
         return filled($target->internal_code ?? null) ? $target->internal_code : $target->slug;
     }

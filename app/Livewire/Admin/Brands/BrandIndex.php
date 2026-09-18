@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Brands;
 
 use App\Livewire\Admin\Concerns\GeneratesQrCodes;
 use App\Models\Brand;
+use App\Models\JobOpening;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
@@ -40,7 +41,7 @@ class BrandIndex extends Component
         return Brand::query()->findOrFail($id);
     }
 
-    protected function qrRoute(Product|Brand $target): string
+    protected function qrRoute(Product|Brand|JobOpening $target): string
     {
         return route('public.brands.show', $target);
     }
@@ -50,7 +51,7 @@ class BrandIndex extends Component
         return 'codigo-division-'.($target->slug ?? $target->getRouteKey()).'.jpg';
     }
 
-    protected function barcodeValue(Product|Brand $target): string
+    protected function barcodeValue(Product|Brand|JobOpening $target): string
     {
         return $target->slug;
     }

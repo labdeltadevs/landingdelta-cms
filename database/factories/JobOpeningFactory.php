@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\JobOpening;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends Factory<JobOpening>
@@ -15,8 +16,11 @@ class JobOpeningFactory extends Factory
      */
     public function definition(): array
     {
+        $title = fake()->jobTitle();
+
         return [
-            'title' => fake()->jobTitle(),
+            'title' => $title,
+            'slug' => Str::slug($title).'-'.Str::lower(Str::random(4)),
             'description' => fake()->paragraphs(3, true),
             'valid_from' => now()->subDays(fake()->numberBetween(0, 15))->format('Y-m-d'),
             'valid_until' => now()->addDays(fake()->numberBetween(15, 60))->format('Y-m-d'),

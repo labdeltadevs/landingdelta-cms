@@ -5,8 +5,15 @@
     <form wire:submit.prevent="save" class="mt-6 space-y-6 max-w-2xl">
         <flux:field>
             <flux:label>Título de la oferta</flux:label>
-            <flux:input wire:model="title" placeholder="Ej: Farmacéutico/a para sucursal Santa Cruz" />
+            <flux:input wire:model.live="title" placeholder="Ej: Farmacéutico/a para sucursal Santa Cruz" />
             <flux:error name="title" />
+        </flux:field>
+
+        <flux:field>
+            <flux:label>Slug (URL pública)</flux:label>
+            <flux:input wire:model="slug" readonly placeholder="Se genera automáticamente desde el título" />
+            <flux:description>Identificador único en la URL. Se genera solo; no es editable.</flux:description>
+            <flux:error name="slug" />
         </flux:field>
 
         <flux:field>

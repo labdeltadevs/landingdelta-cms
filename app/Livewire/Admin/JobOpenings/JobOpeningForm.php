@@ -6,6 +6,7 @@ use App\Models\JobOpening;
 use App\Services\ImageOptimizer;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -22,6 +23,8 @@ class JobOpeningForm extends Component
     public ?JobOpening $jobOpening = null;
 
     public string $title = '';
+
+    public string $slug = '';
 
     public string $description = '';
 
@@ -41,11 +44,19 @@ class JobOpeningForm extends Component
 
         if ($this->jobOpening?->exists) {
             $this->title = $this->jobOpening->title;
+            $this->slug = $this->jobOpening->slug ?? '';
             $this->description = $this->jobOpening->description ?? '';
             $this->application_email = $this->jobOpening->application_email ?? '';
             $this->valid_from = $this->jobOpening->valid_from?->format('Y-m-d') ?? '';
             $this->valid_until = $this->jobOpening->valid_until?->format('Y-m-d') ?? '';
             $this->is_active = $this->jobOpening->is_active;
+        }
+    }
+
+    public function updatedTitle(): void
+    {
+        if (! $this->jobOpening?->exists || blank($this->slug)) {
+            $this->slug = JobOpening::uniqueSlug($this->title, $this->jobOpening?->id);
         }
     }
 
@@ -55,12 +66,17 @@ class JobOpeningForm extends Component
 
         $data = $this->validate([
             'title' => 'required|string|max:255',
+            'slug' => ['nullable', 'string', 'max:255', Rule::unique('job_openings', 'slug')->ignore($this->jobOpening?->id)],
             'description' => 'required|string',
             'application_email' => 'nullable|email|max:255',
             'valid_from' => 'required|date',
             'valid_until' => 'required|date|after_or_equal:valid_from',
             'is_active' => 'boolean',
         ]);
+
+        if (blank($data['slug'] ?? null)) {
+            $data['slug'] = JobOpening::uniqueSlug($data['title'], $this->jobOpening?->id);
+        }
 
         if ($this->image && is_string($this->image)) {
             $data['image_path'] = $this->image;

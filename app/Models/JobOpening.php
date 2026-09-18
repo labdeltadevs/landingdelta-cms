@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
  * @property string $title
+ * @property string|null $slug
  * @property string $description
  * @property string $valid_from
  * @property string $valid_until
@@ -20,7 +22,7 @@ use Illuminate\Support\Facades\Storage;
  * @property bool $is_active
  * @property int $sort
  */
-#[Fillable(['title', 'description', 'application_email', 'valid_from', 'valid_until', 'image_path', 'is_active', 'sort'])]
+#[Fillable(['title', 'slug', 'description', 'application_email', 'valid_from', 'valid_until', 'image_path', 'is_active', 'sort'])]
 class JobOpening extends Model
 {
     /** @use HasFactory<JobOpeningFactory> */
@@ -31,6 +33,39 @@ class JobOpening extends Model
         'valid_from' => 'date',
         'valid_until' => 'date',
     ];
+
+    protected static function booted(): void
+    {
+        static::saving(function (JobOpening $job): void {
+            if (blank($job->slug)) {
+                $job->slug = static::uniqueSlug($job->title);
+            }
+        });
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    public function getNameAttribute(): string
+    {
+        return $this->title;
+    }
+
+    public static function uniqueSlug(string $title, ?int $ignoreId = null): string
+    {
+        $base = Str::slug($title) ?: 'convocatoria';
+
+        do {
+            $slug = $base.'-'.Str::lower(Str::random(4));
+        } while (static::query()
+            ->where('slug', $slug)
+            ->when($ignoreId !== null, fn ($query) => $query->where('id', '!=', $ignoreId))
+            ->exists());
+
+        return $slug;
+    }
 
     public function scopeActive(Builder $query): Builder
     {

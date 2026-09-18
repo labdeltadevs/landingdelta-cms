@@ -1,14 +1,44 @@
-<x-layouts::public
-    metaTitle="Trabaja con Nosotros"
-    metaDescription="Únete al equipo de Laboratorios Delta S.A. — Ve nuestras convocatorias laborales vigentes y forma parte de la empresa farmacéutica líder en Bolivia.">
+<?php
+
+use App\Models\JobOpening;
+use App\Models\SiteSetting;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
+use Livewire\Component;
+use Livewire\WithPagination;
+
+new #[Layout('layouts.public-page')] #[Title('Trabaja con Nosotros')] class extends Component {
+    use WithPagination;
+
+    #[Url]
+    public string $search = '';
+
+    public function mount(): void
+    {
+        view()->share('metaTitle', 'Trabaja con Nosotros');
+        view()->share('metaDescription', 'Únete al equipo de Laboratorios Delta S.A. — Ve nuestras convocatorias laborales vigentes y forma parte de la empresa farmacéutica líder en Bolivia.');
+    }
+
+    public function updatingSearch(): void
+    {
+        $this->resetPage();
+    }
+}; ?>
+
+<div>
     @php
-        $rawTitle = \App\Models\SiteSetting::get('work_with_us_title');
+        $rawTitle = SiteSetting::get('work_with_us_title');
         $title = is_array($rawTitle) ? $rawTitle['body'] ?? '' : $rawTitle;
 
-        $rawDesc = \App\Models\SiteSetting::get('work_with_us_description');
+        $rawDesc = SiteSetting::get('work_with_us_description');
         $description = is_array($rawDesc) ? $rawDesc['body'] ?? '' : $rawDesc;
 
-        $openings = \App\Models\JobOpening::query()->published()->ordered()->get();
+        $openings = JobOpening::query()
+            ->published()
+            ->when($this->search !== '', fn ($query) => $query->where('title', 'like', '%'.$this->search.'%'))
+            ->orderByDesc('created_at')
+            ->paginate(12);
     @endphp
 
     {{-- Hero --}}
@@ -70,17 +100,19 @@
         <div class="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
 
             {{-- Header de sección --}}
-            <div class="flex items-center justify-between mb-10" data-aos="fade-up">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-10" data-aos="fade-up">
                 <div class="flex items-center gap-3">
                     <div class="w-1 h-6 bg-[#ff671f] rounded-full"></div>
                     <h2 class="text-xl font-bold text-black tracking-tight">Convocatorias abiertas</h2>
-                    @if ($openings->isNotEmpty())
+                    @if ($openings->total() > 0)
                         <span
                             class="inline-flex items-center rounded-full bg-black px-2.5 py-0.5 text-xs font-medium text-white">
-                            {{ $openings->count() }}
+                            {{ $openings->total() }}
                         </span>
                     @endif
                 </div>
+                <input type="search" wire:model.live.debounce.300ms="search" placeholder="Buscar convocatoria…"
+                    class="w-full sm:max-w-xs rounded-full border border-zinc-200 bg-white px-4 py-2.5 text-sm text-zinc-800 placeholder-zinc-400 shadow-sm focus:border-[#ff671f]/50 focus:outline-none focus:ring-4 focus:ring-[#ff671f]/10" />
             </div>
 
             @if ($openings->isNotEmpty())
@@ -114,25 +146,6 @@
 
                                     {{-- Badges superiores --}}
                                     <div class="flex flex-wrap items-center gap-2 mb-3">
-                                        @if ($job->contract_type)
-                                            <span
-                                                class="inline-flex items-center rounded-lg bg-[#ff671f]/8 px-2.5 py-1 text-[10px] font-semibold text-[#ff671f] border border-[#ff671f]/10">
-                                                {{ $job->contract_type }}
-                                            </span>
-                                        @endif
-                                        @if ($job->location)
-                                            <span
-                                                class="inline-flex items-center gap-1 rounded-lg bg-black/5 px-2.5 py-1 text-[10px] font-medium text-black/60 border border-black/5">
-                                                <svg class="h-3 w-3" fill="none" stroke="currentColor"
-                                                    stroke-width="2" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                                                </svg>
-                                                {{ $job->location }}
-                                            </span>
-                                        @endif
                                         <span
                                             class="inline-flex items-center gap-1 rounded-lg bg-black/5 px-2.5 py-1 text-[10px] font-medium text-black/60 border border-black/5">
                                             <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2"
@@ -146,9 +159,12 @@
                                     </div>
 
                                     {{-- Título --}}
-                                    <h3
-                                        class="text-lg font-bold text-black group-hover:text-[#ff671f] transition-colors duration-300 leading-snug">
-                                        {{ $job->title }}
+                                    <h3 class="text-lg font-bold text-black leading-snug">
+                                        <a href="{{ route('public.work-with-us.show', $job) }}"
+                                            wire:navigate
+                                            class="transition-colors duration-300 group-hover:text-[#ff671f]">
+                                            {{ $job->title }}
+                                        </a>
                                     </h3>
 
                                     {{-- Descripción --}}
@@ -157,7 +173,7 @@
                                     </div>
 
                                     {{-- Footer con CTA --}}
-                                    <div class="mt-5 flex items-center justify-between">
+                                    <div class="mt-5 flex flex-wrap items-center justify-between gap-3">
                                         <div class="flex items-center gap-2 text-xs text-black/40">
                                             <span class="inline-flex items-center gap-1">
                                                 <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor"
@@ -169,15 +185,27 @@
                                             </span>
                                         </div>
 
-                                        @if ($job->application_email)
-                                            <a href="mailto:{{ $job->application_email }}?subject=Postulación: {{ $job->title }}"
-                                               class="inline-flex items-center gap-2 rounded-lg bg-black px-5 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:bg-[#ff671f] active:scale-[0.98]">
-                                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                                        <div class="flex items-center gap-2">
+                                            <a href="{{ route('public.work-with-us.show', $job) }}"
+                                                wire:navigate
+                                                class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 px-4 py-2.5 text-xs font-semibold text-zinc-700 transition-all duration-300 hover:border-[#ff671f]/40 hover:text-[#ff671f]">
+                                                Ver convocatoria
+                                                <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor"
+                                                    stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                                                 </svg>
-                                                Enviar CV
                                             </a>
-                                        @endif
+                                            @if ($job->application_email)
+                                                <a href="mailto:{{ $job->application_email }}?subject=Postulación: {{ $job->title }}"
+                                                    class="inline-flex items-center gap-2 rounded-lg bg-black px-5 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:bg-[#ff671f] active:scale-[0.98]">
+                                                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                                                    </svg>
+                                                    Enviar CV
+                                                </a>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -188,6 +216,10 @@
                             </div>
                         </div>
                     @endforeach
+                </div>
+
+                <div class="mt-10">
+                    {{ $openings->links() }}
                 </div>
             @else
                 {{-- Estado vacío mejorado --}}
@@ -202,10 +234,10 @@
                     </div>
                     <h3 class="text-lg font-semibold text-black mb-2">No hay convocatorias abiertas</h3>
                     <p class="text-sm text-black/40 max-w-md mx-auto mb-6">
-                        En este momento no tenemos ofertas activas.
+                        {{ $this->search !== '' ? 'Ninguna convocatoria coincide con tu búsqueda.' : 'En este momento no tenemos ofertas activas.' }}
                     </p>
                 </div>
             @endif
         </div>
     </section>
-</x-layouts::public>
+</div>

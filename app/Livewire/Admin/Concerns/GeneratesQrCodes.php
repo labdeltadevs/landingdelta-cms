@@ -3,14 +3,15 @@
 namespace App\Livewire\Admin\Concerns;
 
 use App\Models\Brand;
+use App\Models\JobOpening;
 use App\Models\Product;
 use App\Support\BarcodeGenerator;
 use App\Support\QrCodeGenerator;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Agrega un modal con el QR de la URL pública de un producto o marca,
- * con descarga en JPEG y copiado del enlace.
+ * Agrega un modal con el QR de la URL pública de un producto, marca o
+ * convocatoria, con descarga en JPEG y copiado del enlace.
  */
 trait GeneratesQrCodes
 {
@@ -26,13 +27,13 @@ trait GeneratesQrCodes
 
     public ?string $barcodeValue = null;
 
-    abstract protected function qrTarget(int $id): Product|Brand;
+    abstract protected function qrTarget(int $id): Product|Brand|JobOpening;
 
-    abstract protected function qrRoute(Product|Brand $target): string;
+    abstract protected function qrRoute(Product|Brand|JobOpening $target): string;
 
     abstract protected function qrFilename(Model $target): string;
 
-    abstract protected function barcodeValue(Product|Brand $target): string;
+    abstract protected function barcodeValue(Product|Brand|JobOpening $target): string;
 
     public function showQr(int $id): void
     {
