@@ -57,6 +57,10 @@ test('news article json-ld has valid dates and organization urls', function () {
         ->and($jsonLd['publisher']['@type'])->toBe('Organization')
         ->and($jsonLd['publisher']['url'] ?? null)->not->toBeNull()
         ->and($jsonLd['publisher']['logo']['@type'] ?? null)->toBe('ImageObject');
+
+    // image siempre presente (fallback a logo si no hay cover)
+    expect($jsonLd['image'] ?? null)->not->toBeNull()
+        ->and($jsonLd['image'])->toContain('logo_delta.png');
 });
 
 test('news article json-ld omits dates when null', function () {
@@ -128,7 +132,7 @@ test('product json-ld has required offer fields with correct types', function ()
         ->and($jsonLd)->not->toHaveKey('category');
 });
 
-test('product json-ld omits image when no image exists', function () {
+test('product json-ld falls back to logo when no image exists', function () {
     $product = Product::factory()->create([
         'name' => 'Producto Sin Imagen',
         'main_image_path' => null,
@@ -141,7 +145,7 @@ test('product json-ld omits image when no image exists', function () {
     $jsonLd = extractJsonLd($response->getContent(), 'Product');
 
     expect($jsonLd)->not->toBeNull()
-        ->and($jsonLd)->not->toHaveKey('image');
+        ->and($jsonLd['image'] ?? null)->toContain('logo_delta.png');
 });
 
 test('product json-ld handles missing optional relations', function () {
@@ -161,6 +165,7 @@ test('product json-ld handles missing optional relations', function () {
 
     expect($jsonLd)->not->toBeNull()
         ->and($jsonLd['offers']['price'] ?? null)->not->toBeNull()
+        ->and($jsonLd['image'] ?? null)->toContain('logo_delta.png')
         ->and($jsonLd['brand']['name'] ?? null)->toBe('Laboratorios Delta')
         ->and($jsonLd['additionalProperty'] ?? null)->toBeArray();
 });

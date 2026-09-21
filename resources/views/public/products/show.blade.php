@@ -12,9 +12,9 @@
         'name' => $product->name,
         'description' => (string) Str::of(strip_tags($product->description ?? ''))->limit(300)->trim(),
     ];
-    if ($product->main_image_path) {
-        $productSchema['image'] = $product->main_image_url;
-    }
+    $productSchema['image'] = $product->main_image_path
+        ? $product->main_image_url
+        : Storage::disk('public')->url('logo_delta.png');
     $productSchema['brand'] = [
         '@type' => 'Brand',
         'name' => $product->brand?->name ?? 'Laboratorios Delta',

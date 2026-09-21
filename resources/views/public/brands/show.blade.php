@@ -8,7 +8,7 @@
         "name": "{{ $brand->name }}",
         "description": "División distribuida por Laboratorios Delta S.A. en Bolivia.",
         "url": "{{ url()->current() }}",
-        "logo": "{{ $brand->logo_url }}"
+        "logo": "{{ $brand->logo_path ? $brand->logo_url : Storage::disk('public')->url('logo_delta.png') }}"
     }'>
     <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <nav class="mb-8 text-sm text-zinc-500">

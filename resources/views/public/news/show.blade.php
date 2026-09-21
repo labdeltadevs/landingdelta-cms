@@ -11,6 +11,9 @@
     if ($news->updated_at) {
         $newsSchema['dateModified'] = $news->updated_at->toIso8601String();
     }
+    $newsSchema['image'] = $news->cover_image_path
+        ? Storage::disk('public')->url($news->cover_image_path)
+        : Storage::disk('public')->url('logo_delta.png');
     $newsSchema['author'] = [
         '@type' => 'Organization',
         'name' => 'Laboratorios Delta S.A.',
