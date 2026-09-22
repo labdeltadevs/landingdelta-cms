@@ -105,7 +105,7 @@
 @can('create', App\Models\Product::class)
     <flux:modal name="import-products" class="max-w-lg" wire:close="closeImport">
         <flux:heading>Importar productos desde CSV</flux:heading>
-        <flux:subheading>Actualiza por <span class="font-mono">id</span>; si no existe, crea el producto. El <span class="font-mono">slug</span> existente no se modifica.</flux:subheading>
+        <flux:subheading>Actualiza por <span class="font-mono">id</span>; si no existe, crea el producto. Si cambias el <span class="font-mono">slug</span> en el CSV y es único, se actualiza; si lo dejas vacío o igual, se conserva.</flux:subheading>
 
         <div class="mt-4 space-y-4">
             <flux:field>

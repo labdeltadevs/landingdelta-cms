@@ -164,14 +164,40 @@ class ProductCsv
                 }
             }
 
-            $validator = Validator::make($data, [
+            $pendingSlug = null;
+            if ($product !== null && array_key_exists('slug', $row)) {
+                $rawSlug = trim((string) ($row['slug'] ?? ''));
+                if ($rawSlug !== '') {
+                    $normalized = Str::slug($rawSlug);
+                    if ($normalized === '') {
+                        return ['status' => 'skipped', 'reason' => 'slug inválido', 'id' => $product->id];
+                    }
+                    if ($normalized !== $product->slug) {
+                        if (Product::where('slug', $normalized)->where('id', '!=', $product->id)->exists()) {
+                            return ['status' => 'skipped', 'reason' => 'slug ya existe', 'id' => $product->id];
+                        }
+                        $pendingSlug = $normalized;
+                    }
+                }
+            }
+
+            if ($pendingSlug !== null) {
+                $data['slug'] = $pendingSlug;
+            }
+
+            $rules = [
                 'name' => 'required|string|max:255',
                 'active_ingredient' => 'nullable|string|max:255',
                 'brand_id' => 'nullable|integer',
                 'category_id' => 'nullable|integer',
                 'is_active' => 'boolean',
                 'is_featured' => 'boolean',
-            ]);
+            ];
+            if (isset($data['slug'])) {
+                $rules['slug'] = 'required|string|max:255|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/|unique:products,slug,'.$product->id;
+            }
+
+            $validator = Validator::make($data, $rules);
 
             if ($validator->fails()) {
                 return ['status' => 'skipped', 'reason' => $validator->errors()->first(), 'id' => $product?->id];

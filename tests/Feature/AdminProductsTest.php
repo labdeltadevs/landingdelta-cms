@@ -213,7 +213,7 @@ test('normaliza booleanos en español e ids', function () {
         ->and(ProductCsv::normalizeId('abc'))->toBeNull();
 });
 
-test('importar actualiza por id sin pisar el slug', function () {
+test('importar actualiza por id y aplica el slug si cambia', function () {
     actingAsAdmin();
 
     $product = Product::factory()->create(['name' => 'Viejo', 'slug' => 'viejo-1']);
@@ -230,9 +230,49 @@ test('importar actualiza por id sin pisar el slug', function () {
     $product->refresh();
 
     expect($product->name)->toBe('Nuevo')
-        ->and($product->slug)->toBe('viejo-1')
+        ->and($product->slug)->toBe('nuevo-slug')
         ->and($product->active_ingredient)->toBe('Ibuprofeno')
         ->and($product->is_active)->toBeTrue();
+});
+
+test('importar conserva el slug si viene vacío o igual', function () {
+    actingAsAdmin();
+
+    $product = Product::factory()->create(['name' => 'Viejo', 'slug' => 'viejo-1']);
+
+    $csvVacio = "id;name;internal_code;slug;active_ingredient;brand_id;category_id;is_active;is_featured\n{$product->id};Nuevo2;;;Ibuprofeno;;;1;0\n";
+    $csvIgual = "id;name;internal_code;slug;active_ingredient;brand_id;category_id;is_active;is_featured\n{$product->id};Nuevo3;PROD-9;viejo-1;Ibuprofeno;;;1;0\n";
+
+    Livewire::test(ProductIndex::class)
+        ->set('importFile', UploadedFile::fake()->createWithContent('productos.csv', $csvVacio))
+        ->call('import')
+        ->assertSet('importResult.updated', 1);
+
+    expect($product->refresh()->slug)->toBe('viejo-1');
+
+    Livewire::test(ProductIndex::class)
+        ->set('importFile', UploadedFile::fake()->createWithContent('productos.csv', $csvIgual))
+        ->call('import')
+        ->assertSet('importResult.updated', 1);
+
+    expect($product->refresh()->slug)->toBe('viejo-1');
+});
+
+test('importar reporta skip si el slug ya existe', function () {
+    actingAsAdmin();
+
+    $a = Product::factory()->create(['slug' => 'slug-a']);
+    $b = Product::factory()->create(['slug' => 'slug-b']);
+
+    $csv = "id;name;internal_code;slug;active_ingredient;brand_id;category_id;is_active;is_featured\n{$b->id};B;PROD-9;slug-a;;;;1;0\n";
+
+    Livewire::test(ProductIndex::class)
+        ->set('importFile', UploadedFile::fake()->createWithContent('productos.csv', $csv))
+        ->call('import')
+        ->assertSet('importResult.skipped', 1)
+        ->assertSet('importResult.updated', 0);
+
+    expect($b->refresh()->slug)->toBe('slug-b');
 });
 
 test('importar crea el producto si el id no existe y omite filas sin nombre', function () {
