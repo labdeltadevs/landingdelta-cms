@@ -107,6 +107,9 @@ Route::get('/sitemap.xml', function () {
     return response($content, 200, ['Content-Type' => 'application/xml']);
 });
 
+// === Legacy QR Redirects (antes de la ruta canónica) ===
+require __DIR__.'/legacy-products.php';
+
 // === Public Routes ===
 
 Route::view('/', 'public.home')->name('public.home');
