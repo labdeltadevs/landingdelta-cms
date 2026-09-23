@@ -13,6 +13,8 @@
 <meta name="description" content="{{ $pageDescription }}">
 <link rel="canonical" href="{{ $canonicalUrl }}">
 
+<meta name="google-site-verification" content="yXTZNPRLXiXWlLXPiGvs8D6Li_btH3rbB3otZL1WhqI" />
+
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{{ $siteName }}">
 <meta property="og:title" content="{{ $pageTitle }}">
