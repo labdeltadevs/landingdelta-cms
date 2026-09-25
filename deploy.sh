@@ -86,7 +86,7 @@ run "Storage Patch" \
     php artisan storage:unlink && rm -rf "$REPO_DIR/public/storage" && php artisan storage:link
 
 run "Permissions" \
-    chmod -R 775 "$REPO_DIR/storage" "$REPO_DIR/bootstrap/cache" && chown -R www-data:www-data "$REPO_DIR/storage"
+    chmod -R 775 "$REPO_DIR/storage" "$REPO_DIR/bootstrap/cache"
 
 run "Make Cache" \
     php artisan optimize
