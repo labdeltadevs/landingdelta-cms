@@ -82,11 +82,11 @@ run "Permisos (backfill idempotente)" \
 run "Clear Cache" \
     php artisan optimize:clear
 
-run "Storage Link" \
-    php artisan storage:link
+run "Storage Patch" \
+    php artisan storage:unlink && rm -rf "$REPO_DIR/public/storage" && php artisan storage:link
 
 run "Permissions" \
-    chmod -R 775 "$REPO_DIR/storage" "$REPO_DIR/bootstrap/cache"
+    chmod -R 775 "$REPO_DIR/storage" "$REPO_DIR/bootstrap/cache" && chown -R www-data:www-data "$REPO_DIR/storage"
 
 run "Make Cache" \
     php artisan optimize
