@@ -112,6 +112,7 @@ $legacyMap = [
     'cortirel' => 'cortirel-prednisona-20-mg5ml',
     'glucomed' => 'glucomed',
     'migradol' => 'migradol',
+    'dolomil' => 'dolomil-paracetamol-125-mg-comprimido-masticable',
     'levodel' => 'levodel',
     'parafen' => 'parafen',
     'punacap' => 'punacap',
@@ -119,10 +120,10 @@ $legacyMap = [
     'neoxim' => 'neoxim',
     'tamdu' => 'tamdu', ];
 
-$normalizeLegacyPath = function (string $path): string {
-    $path = urldecode($path);
-    $path = parse_url($path, PHP_URL_PATH) ?? $path;
-    $path = Str::lower(trim($path));
+    $normalizeLegacyPath = function (string $path): string {
+        $path = urldecode($path);
+        $path = parse_url($path, PHP_URL_PATH) ?? $path;
+        $path = Str::lower(trim($path));
     $path = rtrim($path, '/');
 
     return '/'.ltrim($path, '/');
