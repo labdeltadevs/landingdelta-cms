@@ -132,6 +132,40 @@ test('el indice indica con un icono si el producto tiene imagen asignada', funct
         ->assertSee('text-zinc-300', false);
 });
 
+test('los switches de una fila modifican solo el producto correspondiente', function () {
+    actingAsAdmin();
+
+    $other = Product::factory()->create([
+        'name' => 'Otro producto',
+        'is_active' => true,
+        'is_featured' => false,
+    ]);
+    $target = Product::factory()->create([
+        'name' => 'Producto objetivo',
+        'is_active' => true,
+        'is_featured' => false,
+    ]);
+
+    Livewire::test(ProductIndex::class)
+        ->set('activeFilter', 'active')
+        ->assertSee('wire:key="product-'.$target->id.'"', false)
+        ->assertSee('wire:click="toggleActive('.$target->id.')"', false)
+        ->assertSee('wire:click="toggleFeatured('.$target->id.')"', false)
+        ->call('toggleActive', $target->id)
+        ->assertDontSee('Producto objetivo')
+        ->assertSee('Otro producto')
+        ->set('activeFilter', 'all')
+        ->set('featuredFilter', 'not_featured')
+        ->call('toggleFeatured', $target->id)
+        ->assertDontSee('Producto objetivo')
+        ->assertSee('Otro producto');
+
+    expect($target->refresh()->is_active)->toBeFalse()
+        ->and($target->is_featured)->toBeTrue()
+        ->and($other->refresh()->is_active)->toBeTrue()
+        ->and($other->is_featured)->toBeFalse();
+});
+
 test('genera el QR con la URL publica del producto', function () {
     actingAsAdmin();
 
@@ -273,6 +307,20 @@ test('importar reporta skip si el slug ya existe', function () {
         ->assertSet('importResult.updated', 0);
 
     expect($b->refresh()->slug)->toBe('slug-b');
+});
+
+test('el filtro destacado solo muestra productos con is_featured activo', function () {
+    actingAsAdmin();
+
+    Product::factory()->create(['name' => 'Destacado Uno', 'is_featured' => true]);
+    Product::factory()->create(['name' => 'Destacado Dos', 'is_featured' => true]);
+    Product::factory()->create(['name' => 'No destacado', 'is_featured' => false]);
+
+    Livewire::test(ProductIndex::class)
+        ->set('featuredFilter', 'featured')
+        ->assertSet('featuredFilter', 'featured')
+        ->assertSee('Destacado Uno')
+        ->assertSee('Destacado Dos');
 });
 
 test('importar crea el producto si el id no existe y omite filas sin nombre', function () {

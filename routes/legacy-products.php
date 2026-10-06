@@ -118,12 +118,14 @@ $legacyMap = [
     'punacap' => 'punacap',
     'flexco' => 'flexco',
     'neoxim' => 'neoxim',
-    'tamdu' => 'tamdu', ];
+    'tamdu' => 'tamdu',
+    'v-pra-20' => 'v-pra-20',
+];
 
-    $normalizeLegacyPath = function (string $path): string {
-        $path = urldecode($path);
-        $path = parse_url($path, PHP_URL_PATH) ?? $path;
-        $path = Str::lower(trim($path));
+$normalizeLegacyPath = function (string $path): string {
+    $path = urldecode($path);
+    $path = parse_url($path, PHP_URL_PATH) ?? $path;
+    $path = Str::lower(trim($path));
     $path = rtrim($path, '/');
 
     return '/'.ltrim($path, '/');

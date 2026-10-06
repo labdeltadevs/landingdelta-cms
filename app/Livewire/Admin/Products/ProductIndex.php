@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Products;
 
 use App\Livewire\Admin\Concerns\GeneratesQrCodes;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\JobOpening;
 use App\Models\Product;
 use App\Support\ProductCsv;
@@ -28,15 +29,67 @@ class ProductIndex extends Component
 
     public string $search = '';
 
+    public ?int $brandId = null;
+
+    public ?int $categoryId = null;
+
+    public string $activeFilter = 'all';
+
+    public string $featuredFilter = 'all';
+
+    public string $imageFilter = 'all';
+
     public $importFile = null;
 
     public ?array $importResult = null;
 
-    protected $queryString = ['search'];
+    protected $queryString = ['search', 'brandId', 'categoryId', 'activeFilter', 'featuredFilter', 'imageFilter'];
 
     public function updatingSearch(): void
     {
         $this->resetPage();
+    }
+
+    public function updatedBrandId(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedCategoryId(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedActiveFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedFeaturedFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function updatedImageFilter(): void
+    {
+        $this->resetPage();
+    }
+
+    public function getHasActiveFiltersProperty(): bool
+    {
+        return $this->search !== ''
+            || $this->brandId !== null
+            || $this->categoryId !== null
+            || $this->activeFilter !== 'all'
+            || $this->featuredFilter !== 'all'
+            || $this->imageFilter !== 'all';
+    }
+
+    public function clearFilters(): void
+    {
+        $this->reset([
+            'search', 'brandId', 'categoryId', 'activeFilter', 'featuredFilter', 'imageFilter',
+        ]);
     }
 
     public function toggleFeatured(int $id): void
@@ -182,10 +235,19 @@ class ProductIndex extends Component
     {
         $products = Product::query()
             ->with('brand', 'category')
-            ->search($this->search)
+            ->when($this->search, fn ($q) => $q->search($this->search))
+            ->when($this->brandId, fn ($q) => $q->where('brand_id', $this->brandId))
+            ->when($this->categoryId, fn ($q) => $q->where('category_id', $this->categoryId))
+            ->when($this->activeFilter !== 'all', fn ($q) => $q->where('is_active', $this->activeFilter === 'active'))
+            ->when($this->featuredFilter !== 'all', fn ($q) => $q->where('is_featured', $this->featuredFilter === 'featured'))
+            ->when($this->imageFilter === 'with', fn ($q) => $q->whereNotNull('main_image_path'))
+            ->when($this->imageFilter === 'without', fn ($q) => $q->whereNull('main_image_path'))
             ->orderByDesc('id')
             ->paginate(15);
 
-        return view('livewire.admin.products.product-index', compact('products'));
+        $brands = Brand::query()->active()->ordered()->get();
+        $categories = Category::query()->active()->ordered()->get();
+
+        return view('livewire.admin.products.product-index', compact('products', 'brands', 'categories'));
     }
 }
