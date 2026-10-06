@@ -67,8 +67,7 @@
                 </span>
             </div>
 
-            <h1 class="text-2xl font-black text-black sm:text-4xl lg:text-5xl tracking-tight leading-tight"
-                data-aos="fade-up" data-aos-delay="100">
+            <h1 class="text-2xl font-black text-black sm:text-4xl lg:text-5xl tracking-tight leading-tight">
                 {{ $jobOpening->title }}
             </h1>
         </div>

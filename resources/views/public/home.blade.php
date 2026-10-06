@@ -154,13 +154,13 @@
         </div>
 
         {{-- ================================================= --}}
-        {{-- CONTENIDO PRINCIPAL                               --}}
+        {{-- CONTENIDO PRINCIPAL E INICIAL                     --}}
         {{-- ================================================= --}}
         <div class="relative z-10 mx-auto min-w-[75vw] lg:max-w-[75vw] px-4 pt-8 pb-2 sm:px-8 lg:px-8">
 
             {{-- Panel principal glassmorphism --}}
             <div
-                class="hero-reveal relative overflow-hidden rounded-[1.5rem] border border-white/[0.80] bg-white/[0.60] backdrop-blur-2xl sm:rounded-[2rem]">
+                class="hero-reveal relative overflow-hidden rounded-[1.5rem] border border-white/80 bg-white/75 sm:rounded-[2rem]">
 
                 {{-- Decoración interna --}}
                 <div
@@ -184,7 +184,7 @@
                             <div>
                                 {{-- Logo --}}
                                 <div class="hero-reveal-scale mb-7 flex justify-center lg:justify-start"
-                                    style="animation-delay:150ms">
+                                    style="animation-delay:120ms">
                                     <img src="{{ Storage::disk('public')->url('logo_delta.png') }}"
                                         alt="Laboratorios Delta S.A." fetchpriority="high" decoding="sync"
                                         width="728" height="174"
@@ -192,14 +192,13 @@
                                 </div>
 
                                 {{-- Badge institucional --}}
-                                <div class="hero-reveal mb-4 inline-flex items-center gap-2 rounded-full border border-[#ff671f]/15 bg-[#ff671f]/8 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#d95417]"
-                                    style="animation-delay:220ms">
+                                <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-[#ff671f]/15 bg-[#ff671f]/8 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#d95417]">
                                     <span class="size-1.5 rounded-full bg-[#ff671f]"></span>
                                     Líder en la industria farmacéutica boliviana
                                 </div>
 
                                 {{-- Contenido principal --}}
-                                <div class="hero-reveal max-w-4xl" style="animation-delay:280ms">
+                                <div class="hero-reveal max-w-4xl" style="animation-delay:220ms">
                                     <h1
                                         class="text-xl leading-[1.02] tracking-[-0.045em] text-zinc-950 sm:text-5xl lg:text-6xl xl:text-7xl">
                                         Cuidando la salud de nuestra gente
@@ -213,7 +212,7 @@
 
                                 {{-- Botones principales --}}
                                 <div class="hero-reveal mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
-                                    style="animation-delay:380ms">
+                                    style="animation-delay:320ms">
                                     <a href="{{ route('public.products.index') }}"
                                         class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#ff671f] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#e85d1c] hover:shadow-xl hover:shadow-[#ff671f]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
                                         <span>Explorar productos</span>
@@ -227,7 +226,7 @@
                                     </a>
 
                                     <a href="{{ route('public.about') }}"
-                                        class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-zinc-900/10 bg-white/55 px-6 py-3 text-sm font-semibold text-zinc-800 shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ff671f]/25 hover:bg-white/80 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
+                                        class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-zinc-900/10 bg-white/70 px-6 py-3 text-sm font-semibold text-zinc-800 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ff671f]/25 hover:bg-white/85 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
                                         <span>Nuestra historia</span>
 
                                         <svg class="size-4 text-zinc-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-[#ff671f]"
@@ -244,9 +243,9 @@
                             {{-- ESTADÍSTICAS                                      --}}
                             {{-- ================================================= --}}
                             <div class="hero-reveal-fade mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3 lg:mt-10"
-                                style="animation-delay:650ms">
+                                style="animation-delay:480ms">
                                 <div
-                                    class="rounded-2xl border border-white/70 bg-white/45 p-4 text-center shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/70 hover:shadow-md">
+                                    class="rounded-2xl border border-white/70 bg-white/60 p-4 text-center shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/80 hover:shadow-md">
                                     <p class="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
                                         Portafolio
                                     </p>
@@ -261,7 +260,7 @@
                                 </div>
 
                                 <div
-                                    class="rounded-2xl border border-white/70 bg-white/45 p-4 text-center shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/70 hover:shadow-md">
+                                    class="rounded-2xl border border-white/70 bg-white/60 p-4 text-center shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/80 hover:shadow-md">
                                     <p class="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
                                         Alcance
                                     </p>
@@ -276,7 +275,7 @@
                                 </div>
 
                                 <div
-                                    class="rounded-2xl border border-white/70 bg-white/45 p-4 text-center shadow-sm backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/70 hover:shadow-md">
+                                    class="rounded-2xl border border-white/70 bg-white/60 p-4 text-center shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/80 hover:shadow-md">
                                     <p class="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
                                         Presencia
                                     </p>
@@ -295,9 +294,9 @@
                         {{-- ================================================= --}}
                         {{-- ZONA DERECHA                                      --}}
                         {{-- ================================================= --}}
-                        <div class="hero-reveal-right flex lg:min-h-full" style="animation-delay:500ms">
+                        <div class="hero-reveal-right flex lg:min-h-full" style="animation-delay:400ms">
                             <div
-                                class="relative flex w-full flex-col overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/50 p-5 shadow-xl shadow-zinc-900/[0.05] backdrop-blur-xl sm:p-6 lg:p-7">
+                                class="relative flex w-full flex-col overflow-hidden rounded-[1.75rem] border border-white/70 bg-white/65 p-5 shadow-xl shadow-zinc-900/[0.05] sm:p-6 lg:p-7">
 
                                 {{-- Decoración minimal --}}
                                 <div
@@ -339,8 +338,8 @@
                                 {{-- Logros --}}
                                 <div class="relative mt-6 flex-1 space-y-3">
                                     @foreach ($galardones as $g)
-                                        <div style="animation-delay: {{ 650 + $loop->index * 90 }}ms"
-                                            class="hero-reveal group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-white/70 bg-white/55 p-3.5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ff671f]/20 hover:bg-white/80 hover:shadow-md">
+                                        <div style="animation-delay: {{ 480 + $loop->index * 90 }}ms"
+                                            class="hero-reveal group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-white/70 bg-white/70 p-3.5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ff671f]/20 hover:bg-white/85 hover:shadow-md">
                                             {{-- Glow hover --}}
                                             <div
                                                 class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -390,7 +389,7 @@
             </div>
 
             {{-- Indicador de scroll --}}
-            <div class="hero-reveal-fade mt-2 flex justify-center sm:mt-2" style="animation-delay:950ms">
+            <div class="mt-2 flex justify-center sm:mt-2">
 
                 <a href="#travesia"
                     class="group inline-flex flex-col items-center gap-2 rounded-full px-4 py-2 text-zinc-600 transition-colors hover:text-[#d95417] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2">
@@ -400,7 +399,7 @@
                     </span>
 
                     <span
-                        class="flex h-9 w-6 items-start justify-center rounded-full border border-zinc-900/20 bg-white/[0.38] backdrop-blur-sm transition-colors group-hover:border-[#ff671f]/50">
+                        class="flex h-9 w-6 items-start justify-center rounded-full border border-zinc-900/20 bg-white/50 transition-colors group-hover:border-[#ff671f]/50">
 
                         <span class="mt-1.5 h-2 w-1 rounded-full bg-[#ff671f] animate-bounce"></span>
                     </span>
@@ -621,7 +620,7 @@
             <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
                 {{-- Encabezado --}}
-                <div class="mb-14 text-center" data-aos="fade-up">
+                <div class="mb-14 text-center">
                     <span
                         class="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#ff671f]">
                         <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -765,7 +764,7 @@
             <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
                 {{-- Encabezado --}}
-                <div class="mb-14 text-center" data-aos="fade-up">
+                <div class="mb-14 text-center">
                     <span
                         class="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#ff671f]">
                         <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -898,7 +897,7 @@
             <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
                 {{-- Encabezado --}}
-                <div class="mb-14 text-center" data-aos="fade-up">
+                <div class="mb-14 text-center">
                     <span
                         class="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[#ff671f]">
                         <span class="relative flex h-1.5 w-1.5">

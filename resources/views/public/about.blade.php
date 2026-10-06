@@ -71,7 +71,7 @@
         </div>
 
         <div class="relative z-10 mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 py-24">
-            <div class="text-center" data-aos="fade-up">
+            <div class="text-center">
                 {{-- Badge --}}
                 <div
                     class="inline-flex items-center gap-2 rounded-full border border-[#ff671f]/20 bg-[#ff671f]/10 px-5 py-1.5 mb-8">
@@ -158,7 +158,7 @@
 
             <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {{-- Header with glass badge --}}
-                <div class="text-center" data-aos="fade-up">
+                <div class="text-center">
                     <span
                         class="inline-flex items-center gap-2.5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[#ff671f] bg-white/80 backdrop-blur-sm rounded-full shadow-sm border border-[#ff671f]/10">
                         <span class="h-1.5 w-1.5 rounded-full bg-[#ff671f] animate-pulse"></span>
@@ -322,7 +322,7 @@
 
             <div class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
                 {{-- ========== NEWSPAPER MASTHEAD ========== --}}
-                <div class="text-center mb-12" data-aos="fade-up">
+                <div class="text-center mb-12">
                     {{-- Chapter badge --}}
                     <div class="mb-4">
                         <span
@@ -582,7 +582,7 @@
                 class="absolute top-0 left-0 w-1/3 h-1/3 bg-gradient-to-br from-[#ff671f]/5 to-transparent rounded-br-[120px]">
             </div>
             <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-                <div class="text-center" data-aos="fade-up">
+                <div class="text-center">
                     <span
                         class="inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-[#ff671f]">
                         <span class="h-px w-8 bg-[#ff671f]/30"></span>
@@ -652,7 +652,7 @@
                 style="background-image: radial-gradient(circle, #ff671f 1px, transparent 1px); background-size: 32px 32px;">
             </div>
             <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-                <div class="text-center" data-aos="fade-up">
+                <div class="text-center">
                     <span
                         class="inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-[#ff671f]">
                         <span class="h-px w-8 bg-[#ff671f]/30"></span>
@@ -744,7 +744,7 @@
     @if ($hasBranches)
         <section class="relative py-24 sm:py-32 bg-gradient-to-b from-white to-zinc-50 overflow-hidden">
             <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-                <div class="text-center" data-aos="fade-up">
+                <div class="text-center">
                     <span
                         class="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-[#ff671f]">
                         <span class="h-px w-8 bg-[#ff671f]/30"></span>
@@ -820,7 +820,7 @@
         <div class="absolute top-0 left-1/3 h-80 w-80 rounded-full bg-[#ff671f]/8 blur-3xl"></div>
         <div class="absolute bottom-0 right-1/3 h-60 w-60 rounded-full bg-[#ff671f]/5 blur-3xl"></div>
 
-        <div class="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
+        <div class="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold text-white leading-tight">
                 ¿Quieres ser parte de <span class="text-[#ff671f]">nuestra historia</span>?
             </h2>

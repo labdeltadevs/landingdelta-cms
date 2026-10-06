@@ -29,7 +29,7 @@
         <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
 
             {{-- Encabezado --}}
-            <header class="mb-10 text-center" data-aos="fade-up">
+            <header class="mb-10 text-center">
                 <span
                     class="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#ff671f] mb-3">
                     <span class="h-px w-8 bg-[#ff671f]/50"></span>

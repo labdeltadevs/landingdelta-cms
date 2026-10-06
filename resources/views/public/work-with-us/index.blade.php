@@ -22,19 +22,16 @@
                 <div class="h-px w-8 bg-black/10"></div>
             </div>
 
-            <h1 class="text-xl font-black text-black sm:text-5xl tracking-tight leading-tight" data-aos="fade-up"
-                data-aos-delay="50">
+            <h1 class="text-xl font-black text-black sm:text-5xl tracking-tight leading-tight">
                 {{ $title ?: 'Trabaja con nosotros' }}
             </h1>
 
             @if ($description)
-                <p class="mt-5 text-base text-black/50 max-w-2xl mx-auto leading-relaxed" data-aos="fade-up"
-                    data-aos-delay="100">
+                <p class="mt-5 text-base text-black/50 max-w-2xl mx-auto leading-relaxed">
                     {{ $description }}
                 </p>
             @else
-                <p class="mt-5 text-base text-black/50 max-w-2xl mx-auto leading-relaxed" data-aos="fade-up"
-                    data-aos-delay="100">
+                <p class="mt-5 text-base text-black/50 max-w-2xl mx-auto leading-relaxed">
                     Únete al equipo de LABORATORIOS DELTA S.A. y sé parte de un proyecto que impacta la salud de miles
                     de personas.
                 </p>

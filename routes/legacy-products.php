@@ -119,7 +119,7 @@ $legacyMap = [
     'flexco' => 'flexco',
     'neoxim' => 'neoxim',
     'tamdu' => 'tamdu',
-    'v-pra-20' => 'v-pra-20',
+    'v-pra-20' => 'v-pra-20-358',
 ];
 
 $normalizeLegacyPath = function (string $path): string {

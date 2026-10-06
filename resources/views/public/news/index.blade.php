@@ -16,7 +16,7 @@
         <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
 
             {{-- Header editorial --}}
-            <header class="mb-14 text-center" data-aos="fade-up">
+            <header class="mb-14 text-center">
                 <span
                     class="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.25em] text-[#ff671f] mb-4">
                     <span class="h-[2px] w-10 rounded-full bg-[#ff671f]/60"></span>

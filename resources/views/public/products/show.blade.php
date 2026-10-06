@@ -198,7 +198,7 @@
     @if ($related->isNotEmpty())
         <section class="py-16 sm:py-20 bg-zinc-50 border-t border-zinc-100">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-10" data-aos="fade-up">
+                <div class="text-center mb-10">
                     <span class="inline-block text-[11px] font-semibold uppercase tracking-[0.2em] text-[#ff671f] mb-3">
                         Relacionados
                     </span>

@@ -16,7 +16,7 @@
         <div class="absolute bottom-0 left-1/4 w-64 h-64 bg-[#ff671f]/5 rounded-full blur-3xl"></div>
 
         <div class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="text-center" data-aos="fade-up">
+            <div class="text-center">
                 <span class="inline-block text-[14px] font-semibold uppercase tracking-[0.2em] text-[#ff671f] mb-4">
                     Catálogo farmacéutico
                 </span>
@@ -31,7 +31,7 @@
             </div>
 
             {{-- Search Bar --}}
-            <div class="mt-10 max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+            <div class="mt-10 max-w-xl mx-auto">
                 <form action="{{ route('public.products.index') }}" method="GET" class="relative">
                     <div class="relative">
                         <svg class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400" fill="none"
@@ -66,11 +66,11 @@
     </section>
 
     {{-- ============================================================ --}}
-    {{-- CATEGORY FILTER PILLS                                       --}}
+    {{-- CATEGORY FILTER PILLS                                        --}}
     {{-- ============================================================ --}}
     <section class="py-8 border-b border-zinc-200/30">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap items-center justify-center gap-2" data-aos="fade-up" data-aos-delay="50">
+            <div class="flex flex-wrap items-center justify-center gap-2">
                 {{-- "All" pill --}}
                 <a href="{{ route('public.products.index') }}"
                     class="group relative inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-medium transition-all duration-300
