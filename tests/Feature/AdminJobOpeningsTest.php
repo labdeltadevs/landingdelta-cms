@@ -53,6 +53,23 @@ test('genera el QR con la URL publica de la convocatoria', function () {
         ->call('showQr', $job->id)
         ->assertSet('qrUrl', route('public.work-with-us.show', $job))
         ->assertSet('qrName', $job->title)
+        ->assertSet('codeFilename', 'codigo-convocatoria-'.$job->slug)
+        ->assertSet('barcodeSvg', null)
+        ->assertSet('barcodeValue', null)
+        ->assertSee('<svg', false);
+});
+
+test('genera el codigo de barras de la convocatoria sin QR', function () {
+    $this->seed(PermissionSeeder::class);
+    $this->actingAs(User::factory()->withRole('admin')->create());
+
+    $job = JobOpening::factory()->create();
+
+    Livewire::test(JobOpeningIndex::class)
+        ->call('showBarcode', $job->id)
         ->assertSet('barcodeValue', $job->slug)
+        ->assertSet('codeFilename', 'codigo-convocatoria-'.$job->slug)
+        ->assertSet('qrSvg', null)
+        ->assertSet('qrUrl', null)
         ->assertSee('<svg', false);
 });

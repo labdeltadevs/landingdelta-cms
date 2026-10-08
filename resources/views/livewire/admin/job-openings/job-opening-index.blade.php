@@ -36,6 +36,7 @@
                                     <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
                                     <flux:menu>
                                         <flux:menu.item wire:click="showQr({{ $job->id }})" icon="qr-code">Generar QR</flux:menu.item>
+                                        <flux:menu.item wire:click="showBarcode({{ $job->id }})" icon="barcode">Generar Código de Barras</flux:menu.item>
                                         @can('update', $job)
                                             <flux:menu.item :href="route('admin.job-openings.edit', $job)" wire:navigate icon="pencil">Editar</flux:menu.item>
                                         @endcan

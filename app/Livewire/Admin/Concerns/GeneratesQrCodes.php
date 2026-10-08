@@ -10,8 +10,9 @@ use App\Support\QrCodeGenerator;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Agrega un modal con el QR de la URL pública de un producto, marca o
- * convocatoria, con descarga en JPEG y copiado del enlace.
+ * Agrega un modal dinámico con el QR de la URL pública o el código de
+ * barras del código interno de un producto, marca o convocatoria, con
+ * descarga en JPEG y copiado del enlace.
  */
 trait GeneratesQrCodes
 {
@@ -21,7 +22,7 @@ trait GeneratesQrCodes
 
     public ?string $qrUrl = null;
 
-    public ?string $qrFilename = null;
+    public ?string $codeFilename = null;
 
     public ?string $barcodeSvg = null;
 
@@ -31,7 +32,7 @@ trait GeneratesQrCodes
 
     abstract protected function qrRoute(Product|Brand|JobOpening $target): string;
 
-    abstract protected function qrFilename(Model $target): string;
+    abstract protected function codeFilename(Model $target): string;
 
     abstract protected function barcodeValue(Product|Brand|JobOpening $target): string;
 
@@ -40,23 +41,40 @@ trait GeneratesQrCodes
         $target = $this->qrTarget($id);
         $this->authorize('view', $target);
 
+        $this->reset('barcodeSvg', 'barcodeValue');
+
         $this->qrUrl = $this->qrRoute($target);
         $this->qrName = $target->name;
-        $this->qrFilename = $this->qrFilename($target);
         $this->qrSvg = app(QrCodeGenerator::class)->svg($this->qrUrl);
-        $this->barcodeValue = $this->barcodeValue($target);
-        $this->barcodeSvg = app(BarcodeGenerator::class)->svg($this->barcodeValue);
+        $this->codeFilename = $this->codeFilename($target);
 
         $this->dispatch('qr-ready');
     }
 
-    public function closeQr(): void
+    public function showBarcode(int $id): void
     {
-        $this->qrSvg = null;
-        $this->qrName = null;
-        $this->qrUrl = null;
-        $this->qrFilename = null;
-        $this->barcodeSvg = null;
-        $this->barcodeValue = null;
+        $target = $this->qrTarget($id);
+        $this->authorize('view', $target);
+
+        $this->reset('qrSvg', 'qrUrl');
+
+        $this->barcodeValue = $this->barcodeValue($target);
+        $this->barcodeSvg = app(BarcodeGenerator::class)->svg($this->barcodeValue);
+        $this->qrName = $target->name;
+        $this->codeFilename = $this->codeFilename($target);
+
+        $this->dispatch('qr-ready');
+    }
+
+    public function closeCode(): void
+    {
+        $this->reset([
+            'qrSvg',
+            'qrName',
+            'qrUrl',
+            'codeFilename',
+            'barcodeSvg',
+            'barcodeValue',
+        ]);
     }
 }

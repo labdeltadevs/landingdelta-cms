@@ -175,7 +175,23 @@ test('genera el QR con la URL publica del producto', function () {
         ->call('showQr', $product->id)
         ->assertSet('qrUrl', route('public.products.show', $product))
         ->assertSet('qrName', $product->name)
+        ->assertSet('codeFilename', 'codigo-producto-'.($product->slug ?? $product->getRouteKey()))
+        ->assertSet('barcodeSvg', null)
+        ->assertSet('barcodeValue', null)
+        ->assertSee('<svg', false);
+});
+
+test('genera el codigo de barras del producto sin QR', function () {
+    actingAsAdmin();
+
+    $product = Product::factory()->create(['internal_code' => 'PROD-000123']);
+
+    Livewire::test(ProductIndex::class)
+        ->call('showBarcode', $product->id)
         ->assertSet('barcodeValue', 'PROD-000123')
+        ->assertSet('codeFilename', 'codigo-producto-'.($product->slug ?? $product->getRouteKey()))
+        ->assertSet('qrSvg', null)
+        ->assertSet('qrUrl', null)
         ->assertSee('<svg', false);
 });
 

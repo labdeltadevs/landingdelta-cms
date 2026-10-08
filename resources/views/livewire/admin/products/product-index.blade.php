@@ -114,6 +114,7 @@
                                     <flux:button icon="ellipsis-horizontal" variant="ghost" size="sm" />
                                     <flux:menu>
                                         <flux:menu.item wire:click="showQr({{ $product->id }})" icon="qr-code">Generar QR</flux:menu.item>
+                                        <flux:menu.item wire:click="showBarcode({{ $product->id }})" icon="barcode">Generar Código de Barras</flux:menu.item>
                                         @can('update', $product)
                                             <flux:menu.item :href="route('admin.products.edit', $product)" wire:navigate icon="pencil">Editar</flux:menu.item>
                                         @endcan

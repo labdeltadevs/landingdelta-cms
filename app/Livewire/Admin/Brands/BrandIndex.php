@@ -46,9 +46,9 @@ class BrandIndex extends Component
         return route('public.brands.show', $target);
     }
 
-    protected function qrFilename(Model $target): string
+    protected function codeFilename(Model $target): string
     {
-        return 'codigo-division-'.($target->slug ?? $target->getRouteKey()).'.jpg';
+        return 'codigo-division-'.($target->slug ?? $target->getRouteKey());
     }
 
     protected function barcodeValue(Product|Brand|JobOpening $target): string

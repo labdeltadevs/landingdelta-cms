@@ -221,9 +221,9 @@ class ProductIndex extends Component
         return route('public.products.show', $target);
     }
 
-    protected function qrFilename(Model $target): string
+    protected function codeFilename(Model $target): string
     {
-        return 'codigo-producto-'.($target->slug ?? $target->getRouteKey()).'.jpg';
+        return 'codigo-producto-'.($target->slug ?? $target->getRouteKey());
     }
 
     protected function barcodeValue(Product|Brand|JobOpening $target): string

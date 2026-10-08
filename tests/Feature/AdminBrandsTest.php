@@ -46,6 +46,23 @@ test('genera el QR con la URL publica de la marca', function () {
         ->call('showQr', $brand->id)
         ->assertSet('qrUrl', route('public.brands.show', $brand))
         ->assertSet('qrName', $brand->name)
+        ->assertSet('codeFilename', 'codigo-division-'.$brand->slug)
+        ->assertSet('barcodeSvg', null)
+        ->assertSet('barcodeValue', null)
+        ->assertSee('<svg', false);
+});
+
+test('genera el codigo de barras de la marca sin QR', function () {
+    $this->seed(PermissionSeeder::class);
+    $this->actingAs(User::factory()->withRole('admin')->create());
+
+    $brand = Brand::factory()->create();
+
+    Livewire::test(BrandIndex::class)
+        ->call('showBarcode', $brand->id)
         ->assertSet('barcodeValue', $brand->slug)
+        ->assertSet('codeFilename', 'codigo-division-'.$brand->slug)
+        ->assertSet('qrSvg', null)
+        ->assertSet('qrUrl', null)
         ->assertSee('<svg', false);
 });

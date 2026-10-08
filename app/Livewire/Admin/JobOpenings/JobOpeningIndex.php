@@ -46,9 +46,9 @@ class JobOpeningIndex extends Component
         return route('public.work-with-us.show', $target);
     }
 
-    protected function qrFilename(Model $target): string
+    protected function codeFilename(Model $target): string
     {
-        return 'codigo-convocatoria-'.($target->slug ?? $target->getRouteKey()).'.jpg';
+        return 'codigo-convocatoria-'.($target->slug ?? $target->getRouteKey());
     }
 
     protected function barcodeValue(Product|Brand|JobOpening $target): string
