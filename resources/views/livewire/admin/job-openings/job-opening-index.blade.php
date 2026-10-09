@@ -21,7 +21,28 @@
             <flux:table.rows>
                 @foreach ($jobOpenings as $job)
                     <flux:table.row :key="$job->id">
-                        <flux:table.cell variant="strong">{{ $job->title }}</flux:table.cell>
+                        <flux:table.cell variant="strong">
+                            <span class="inline-flex items-center gap-1.5">
+                                @if (filled($job->image_path))
+                                    <svg class="h-4 w-4 shrink-0 text-emerald-500" fill="none" stroke="currentColor"
+                                        stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                                        <title>Con imagen</title>
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                    </svg>
+                                    <span class="sr-only">Con imagen:</span>
+                                @else
+                                    <svg class="h-4 w-4 shrink-0 text-zinc-300 dark:text-zinc-600" fill="none"
+                                        stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
+                                        <title>Sin imagen</title>
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                    </svg>
+                                    <span class="sr-only">Sin imagen:</span>
+                                @endif
+                                {{ $job->title }}
+                            </span>
+                        </flux:table.cell>
                         <flux:table.cell>
                             <span class="text-xs">
                                 {{ $job->valid_from->format('d/m/Y') }} — {{ $job->valid_until->format('d/m/Y') }}

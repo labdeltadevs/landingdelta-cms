@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\JobOpenings;
 use App\Models\JobOpening;
 use App\Services\ImageOptimizer;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
@@ -64,6 +65,14 @@ class JobOpeningForm extends Component
     {
         $this->authorize($this->jobOpening?->exists ? 'update' : 'create', $this->jobOpening ?? JobOpening::class);
 
+        // Un temporal no procesado indica que la subida falló; se avisa al
+        // usuario en vez de guardar la convocatoria sin imagen silenciosamente.
+        if ($this->image instanceof TemporaryUploadedFile) {
+            $this->addError('image', 'La imagen no se pudo procesar. Por favor, inténtalo de nuevo.');
+
+            return;
+        }
+
         $data = $this->validate([
             'title' => 'required|string|max:255',
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('job_openings', 'slug')->ignore($this->jobOpening?->id)],
@@ -117,6 +126,7 @@ class JobOpeningForm extends Component
         $storagePath = FileUploadConfiguration::path($filename, false);
 
         if (! Storage::disk($disk)->exists($storagePath)) {
+            Log::error('Subida de imagen de convocatoria: temporal no encontrado.', ['storagePath' => $storagePath, 'disk' => $disk]);
             $this->dispatch('upload:errored', name: $name)->self();
 
             return;
@@ -126,6 +136,7 @@ class JobOpeningForm extends Component
 
         if (! app(ImageOptimizer::class)->allowsExtension($extension)
             || Storage::disk($disk)->size($storagePath) > 5 * 1024 * 1024) {
+            Log::warning('Subida de imagen de convocatoria rechazada.', ['filename' => $filename, 'extension' => $extension]);
             Storage::disk($disk)->delete($storagePath);
             Storage::disk($disk)->delete($storagePath.'.json');
             $this->dispatch('upload:errored', name: $name)->self();
@@ -135,7 +146,8 @@ class JobOpeningForm extends Component
 
         try {
             $newPath = app(ImageOptimizer::class)->optimizeLivewireTempFile($disk, $storagePath, 'job');
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            Log::error('Error al optimizar la imagen de la convocatoria.', ['filename' => $filename, 'error' => $e->getMessage()]);
             $this->dispatch('upload:errored', name: $name)->self();
 
             return;

@@ -85,6 +85,11 @@ run "Clear Cache" \
 run "Storage Patch" \
     php artisan storage:unlink && rm -rf "$REPO_DIR/public/storage" && php artisan storage:link
 
+# La optimización de imágenes subidas (Livewire) requiere GD con soporte WebP.
+# Sin esto, ImageOptimizer falla y las imágenes se descartan en el servidor.
+run "Check GD + WebP" \
+    php -r 'if (!extension_loaded("gd")) { fwrite(STDERR, "Falta la extension GD\n"); exit(1); } if (!function_exists("imagewebp")) { fwrite(STDERR, "GD no tiene soporte WebP\n"); exit(1); }'
+
 run "Permissions" \
     chmod -R 775 "$REPO_DIR/storage" "$REPO_DIR/bootstrap/cache"
 

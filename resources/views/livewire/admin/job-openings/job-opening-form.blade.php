@@ -47,7 +47,9 @@
             <input type="file" wire:model="image" accept="image/*"
                 class="block w-full text-sm text-zinc-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#ff671f] file:text-white hover:file:bg-[#e55a1a] transition-colors cursor-pointer border border-zinc-300 rounded-lg p-1.5" />
             <flux:error name="image" />
-            @if ($image && is_string($image))
+            @if ($image && $image instanceof \Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
+                <img src="{{ $image->temporaryUrl() }}" class="mt-2 h-40 w-full rounded-lg object-cover" />
+            @elseif ($image && is_string($image))
                 <img src="{{ Storage::disk('public')->url($image) }}" class="mt-2 h-40 w-full rounded-lg object-cover" />
             @elseif ($jobOpening?->image_path)
                 <img src="{{ $jobOpening->image_url }}" class="mt-2 h-40 w-full rounded-lg object-cover" />
