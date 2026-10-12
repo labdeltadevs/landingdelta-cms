@@ -7,7 +7,7 @@
             ->active()
             ->featured()
             ->with('brand', 'category')
-            ->ordered()
+            ->orderBy('updated_at', 'desc')
             ->take(6)
             ->get();
         $brands = \App\Models\Brand::query()->active()->ordered()->get();
