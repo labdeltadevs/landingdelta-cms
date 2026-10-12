@@ -4,7 +4,7 @@
     'iconSvg' => '',
 ])
 
-<div class="relative overflow-hidden rounded-2xl border border-zinc-200/60 bg-white shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1 hover:border-[#ff671f]/20 group/card">
+<div class="relative overflow-hidden rounded-2xl border border-zinc-200/60 bg-white shadow-sm transition-all duration-500 hover:shadow-xl  hover:border-[#ff671f]/20 group/card">
     {{-- Top gradient bar --}}
     <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff671f] via-[#ff671f]/40 to-transparent"></div>
 

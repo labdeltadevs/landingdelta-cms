@@ -132,25 +132,6 @@
             ">
             </div>
 
-            {{-- Barra de progreso --}}
-            <div class="absolute bottom-0 left-0 right-0 h-1 bg-zinc-900/10">
-                <div class="h-full bg-gradient-to-r from-[#ff671f] to-[#ff671f]/30" x-init="const resetProgress = () => {
-                    $el.style.transition = 'none';
-                    $el.style.width = '0%';
-
-                    void $el.offsetWidth;
-
-                    $el.style.transition = 'width 7500ms linear';
-
-                    requestAnimationFrame(() => {
-                        $el.style.width = '100%';
-                    });
-                };
-
-                resetProgress();
-                $watch('current', resetProgress);">
-                </div>
-            </div>
         </div>
 
         {{-- ================================================= --}}
@@ -214,7 +195,7 @@
                                 <div class="hero-reveal mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
                                     style="animation-delay:320ms">
                                     <a href="{{ route('public.products.index') }}"
-                                        class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#ff671f] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#e85d1c] hover:shadow-xl hover:shadow-[#ff671f]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
+                                        class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-[#ff671f] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/20 transition-all duration-300 hover:bg-[#e85d1c] hover:shadow-xl hover:shadow-[#ff671f]/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
                                         <span>Explorar productos</span>
 
                                         <svg class="size-4 transition-transform duration-300 group-hover:translate-x-0.5"
@@ -226,7 +207,7 @@
                                     </a>
 
                                     <a href="{{ route('public.about') }}"
-                                        class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-zinc-900/10 bg-white/70 px-6 py-3 text-sm font-semibold text-zinc-800 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ff671f]/25 hover:bg-white/85 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
+                                        class="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-zinc-900/10 bg-white/70 px-6 py-3 text-sm font-semibold text-zinc-800 shadow-sm transition-all duration-300 hover:border-[#ff671f]/25 hover:bg-white/85 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff671f] focus-visible:ring-offset-2 sm:w-auto">
                                         <span>Nuestra historia</span>
 
                                         <svg class="size-4 text-zinc-400 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-[#ff671f]"
@@ -245,7 +226,7 @@
                             <div class="hero-reveal-fade mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3 lg:mt-10"
                                 style="animation-delay:480ms">
                                 <div
-                                    class="rounded-2xl border border-white/70 bg-white/60 p-4 text-center shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/80 hover:shadow-md">
+                                    class="rounded-2xl border border-white/70 bg-white/60 p-4 text-center shadow-sm transition-all duration-300 hover:bg-white/80 hover:shadow-md">
                                     <p class="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
                                         Portafolio
                                     </p>
@@ -260,7 +241,7 @@
                                 </div>
 
                                 <div
-                                    class="rounded-2xl border border-white/70 bg-white/60 p-4 text-center shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/80 hover:shadow-md">
+                                    class="rounded-2xl border border-white/70 bg-white/60 p-4 text-center shadow-sm transition-all duration-300 hover:bg-white/80 hover:shadow-md">
                                     <p class="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
                                         Alcance
                                     </p>
@@ -275,7 +256,7 @@
                                 </div>
 
                                 <div
-                                    class="rounded-2xl border border-white/70 bg-white/60 p-4 text-center shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/80 hover:shadow-md">
+                                    class="rounded-2xl border border-white/70 bg-white/60 p-4 text-center shadow-sm transition-all duration-300 hover:bg-white/80 hover:shadow-md">
                                     <p class="text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500">
                                         Presencia
                                     </p>
@@ -339,7 +320,7 @@
                                 <div class="relative mt-6 flex-1 space-y-3">
                                     @foreach ($galardones as $g)
                                         <div style="animation-delay: {{ 480 + $loop->index * 90 }}ms"
-                                            class="hero-reveal group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-white/70 bg-white/70 p-3.5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ff671f]/20 hover:bg-white/85 hover:shadow-md">
+                                            class="hero-reveal group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-white/70 bg-white/70 p-3.5 shadow-sm transition-all duration-300 hover:border-[#ff671f]/20 hover:bg-white/85 hover:shadow-md">
                                             {{-- Glow hover --}}
                                             <div
                                                 class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -518,7 +499,7 @@
                     @foreach ($brands as $idx => $brand)
                         <div class="snap-center shrink-0 w-full sm:w-[calc(100%-4rem)] px-4">
                             <div
-                                class="relative max-w-4xl mx-auto bg-white rounded-[2rem] border border-zinc-100 shadow-lg shadow-zinc-200/50 overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-[#ff671f]/5 hover:-translate-y-1">
+                                class="relative max-w-4xl mx-auto bg-white rounded-[2rem] border border-zinc-100 shadow-lg shadow-zinc-200/50 overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-[#ff671f]/5">
                                 {{-- Decorative Orb --}}
                                 <div
                                     class="pointer-events-none absolute top-0 right-0 w-48 h-48 bg-[#ff671f]/5 rounded-full blur-3xl">
@@ -560,7 +541,7 @@
 
                                         <div class="mt-8">
                                             <a href="{{ route('public.brands.show', $brand) }}"
-                                                class="inline-flex items-center gap-2 rounded-full bg-[#ff671f] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all hover:bg-[#e55a1a] hover:-translate-y-0.5 hover:shadow-orange-500/40 active:translate-y-0">
+                                                class="inline-flex items-center gap-2 rounded-full bg-[#ff671f] px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all hover:bg-[#e55a1a] hover:shadow-orange-500/40 active:translate-y-0">
                                                 Ver productos
                                                 <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
                                                     fill="none" stroke="currentColor" stroke-width="2.5"
@@ -652,7 +633,7 @@
                 <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($featured as $product)
                         <a href="{{ route('public.products.show', $product) }}"
-                            class="group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white transition-all duration-500 hover:-translate-y-1.5 hover:border-[#ff671f]/40 hover:shadow-xl hover:shadow-orange-100/70"
+                            class="group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white transition-all duration-500 hover:border-[#ff671f]/40 hover:shadow-xl hover:shadow-orange-100/70"
                             data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">
 
                             {{-- Acento superior --}}
@@ -737,7 +718,7 @@
                 {{-- CTA catálogo --}}
                 <div class="mt-14 text-center" data-aos="fade-up">
                     <a href="{{ route('public.products.index') }}"
-                        class="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-7 py-3.5 text-sm font-semibold text-zinc-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ff671f]/50 hover:text-[#ff671f] hover:shadow-md">
+                        class="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-7 py-3.5 text-sm font-semibold text-zinc-700 shadow-sm transition-all duration-300 hover:border-[#ff671f]/50 hover:text-[#ff671f] hover:shadow-md">
                         Ver catálogo completo
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"
                             viewBox="0 0 24 24">
@@ -797,7 +778,7 @@
                 <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                     @foreach ($categories as $category)
                         <a href="{{ route('public.products.index') }}?category={{ $category->slug }}"
-                            class="group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#ff671f]/40 hover:shadow-xl hover:shadow-orange-100/70"
+                            class="group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 transition-all duration-300 hover:border-[#ff671f]/40 hover:shadow-xl hover:shadow-orange-100/70"
                             data-aos="fade-up" data-aos-delay="{{ $loop->index * 50 }}">
 
                             {{-- Acento superior --}}
@@ -860,7 +841,7 @@
                 {{-- Enlace a catálogo completo --}}
                 <div class="mt-12 text-center" data-aos="fade-up">
                     <a href="{{ route('public.products.index') }}"
-                        class="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-6 py-3 text-sm font-semibold text-zinc-700 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ff671f]/50 hover:text-[#ff671f] hover:shadow-md">
+                        class="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-6 py-3 text-sm font-semibold text-zinc-700 shadow-sm transition-all duration-300 hover:border-[#ff671f]/50 hover:text-[#ff671f] hover:shadow-md">
                         Ver todo el catálogo
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"
                             viewBox="0 0 24 24">
@@ -927,7 +908,7 @@
                 {{-- Tarjetas --}}
                 <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach ($branches as $branch)
-                        <div class="group relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-[#ff671f]/40 hover:shadow-xl hover:shadow-orange-100/60"
+                        <div class="group relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-[#ff671f]/40 hover:shadow-xl hover:shadow-orange-100/60"
                             data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">
 
                             {{-- Acento superior animado --}}

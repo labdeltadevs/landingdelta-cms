@@ -104,7 +104,7 @@
                 {{-- CTAs --}}
                 <div class="mt-10 flex flex-wrap justify-center gap-4">
                     <a href="#travesia"
-                        class="group inline-flex items-center gap-2.5 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:bg-[#e55a1a] hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#ff671f]/30">
+                        class="group inline-flex items-center gap-2.5 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:bg-[#e55a1a]  hover:shadow-xl hover:shadow-[#ff671f]/30">
                         <span>Explora nuestra travesía</span>
                         <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5"
                             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -217,7 +217,7 @@
 
                                 {{-- Card (alternates left/right) --}}
                                 <div class="w-full sm:w-1/2 {{ $isLeft ? 'sm:pr-8 sm:text-right' : 'sm:pl-8 sm:order-2' }}">
-                                    <div class="relative bg-white/70 backdrop-blur-xl border border-[#ff671f]/50 shadow-xl shadow-black/5 rounded-2xl transition-all duration-500 hover:shadow-2xl hover:shadow-[#ff671f]/5 hover:border-[#ff671f]/80 hover:-translate-y-1 group">
+                                    <div class="relative bg-white/70 backdrop-blur-xl border border-[#ff671f]/50 shadow-xl shadow-black/5 rounded-2xl transition-all duration-500 hover:shadow-2xl hover:shadow-[#ff671f]/5 hover:border-[#ff671f]/80  group">
                                         {{-- Glass highlight edge --}}
                                         <div class="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none"></div>
 
@@ -524,7 +524,7 @@
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                             @foreach (array_slice($milestones, 0, 8) as $m)
                                 <div
-                                    class="group relative border border-[#d4c5a9]/40 bg-[#f5f0e8]/60 p-4 text-center transition-all duration-300 hover:bg-[#efe5d5] hover:shadow-sm hover:-translate-y-0.5">
+                                    class="group relative border border-[#d4c5a9]/40 bg-[#f5f0e8]/60 p-4 text-center transition-all duration-300 hover:bg-[#efe5d5] hover:shadow-sm
                                     {{-- Decorative corner dots --}}
                                     <span
                                         class="absolute top-1 left-1 w-1 h-1 rounded-full bg-[#8b7355]/20 group-hover:bg-[#8b7355]/40 transition-colors"></span>
@@ -595,7 +595,7 @@
                 <div class="mt-14 grid gap-8 sm:grid-cols-2" data-aos="fade-up" data-aos-delay="100">
                     @if ($hasMission)
                         <div
-                            class="group relative overflow-hidden rounded-2xl border border-zinc-200/60 bg-gradient-to-br from-white to-zinc-50 p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-[#ff671f]/20">
+                            class="group relative overflow-hidden rounded-2xl border border-zinc-200/60 bg-gradient-to-br from-white to-zinc-50 p-8 transition-all duration-300 hover:shadow-xl  hover:border-[#ff671f]/20">
                             <div
                                 class="absolute -top-10 -right-10 h-28 w-28 rounded-full bg-[#ff671f]/5 transition-all duration-500 group-hover:scale-[3] group-hover:bg-[#ff671f]/10">
                             </div>
@@ -617,7 +617,7 @@
 
                     @if ($hasVision)
                         <div
-                            class="group relative overflow-hidden rounded-2xl border border-zinc-200/60 bg-gradient-to-br from-white to-zinc-50 p-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-[#ff671f]/20">
+                            class="group relative overflow-hidden rounded-2xl border border-zinc-200/60 bg-gradient-to-br from-white to-zinc-50 p-8 transition-all duration-300 hover:shadow-xl  hover:border-[#ff671f]/20">
                             <div
                                 class="absolute -top-10 -right-10 h-28 w-28 rounded-full bg-[#ff671f]/5 transition-all duration-500 group-hover:scale-[3] group-hover:bg-[#ff671f]/10">
                             </div>
@@ -682,7 +682,7 @@
                             ];
                         @endphp
                         <div
-                            class="group relative overflow-hidden rounded-2xl border border-zinc-200/60 bg-white p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-[#ff671f]/15">
+                            class="group relative overflow-hidden rounded-2xl border border-zinc-200/60 bg-white p-6 transition-all duration-300 hover:shadow-lg  hover:border-[#ff671f]/15">
                             <div
                                 class="absolute inset-0 bg-gradient-to-br from-[#ff671f]/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                             </div>
@@ -759,7 +759,7 @@
                 <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3" data-aos="fade-up" data-aos-delay="100">
                     @foreach ($branches as $branch)
                         <div
-                            class="group relative overflow-hidden rounded-2xl border border-zinc-200/60 bg-white p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-[#ff671f]/20">
+                            class="group relative overflow-hidden rounded-2xl border border-zinc-200/60 bg-white p-6 transition-all duration-300 hover:shadow-xl  hover:border-[#ff671f]/20">
                             <div
                                 class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#ff671f] via-[#ff671f]/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                             </div>
@@ -829,7 +829,7 @@
             </p>
             <div class="mt-10 flex flex-wrap justify-center gap-4">
                 <a href="{{ route('public.work-with-us') }}"
-                    class="group inline-flex items-center gap-2.5 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:bg-[#e55a1a] hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#ff671f]/30">
+                    class="group inline-flex items-center gap-2.5 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:bg-[#e55a1a]  hover:shadow-xl hover:shadow-[#ff671f]/30">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z" />

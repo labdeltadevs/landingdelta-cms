@@ -80,7 +80,7 @@
                 @forelse ($brands as $brand)
                     <a href="{{ route('public.brands.show', $brand) }}"
                         data-name="{{ \Illuminate\Support\Str::lower($brand->name) }}"
-                        class="group relative flex flex-col items-center overflow-hidden rounded-2xl border border-zinc-200 bg-white p-8 text-center shadow-[0_2px_12px_-2px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-[#ff671f]/30 hover:shadow-[0_8px_30px_-6px_rgba(255,103,31,0.15)]"
+                        class="group relative flex flex-col items-center overflow-hidden rounded-2xl border border-zinc-200 bg-white p-8 text-center shadow-[0_2px_12px_-2px_rgba(0,0,0,0.05)] transition-all duration-300  hover:border-[#ff671f]/30 hover:shadow-[0_8px_30px_-6px_rgba(255,103,31,0.15)]"
                         data-aos="fade-up" data-aos-delay="{{ ($loop->index % 4) * 60 }}">
 
                         {{-- Línea de acento superior --}}

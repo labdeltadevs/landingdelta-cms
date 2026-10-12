@@ -181,7 +181,7 @@
 
                         @if ($jobOpening->application_email && $isVigente)
                             <a href="mailto:{{ $jobOpening->application_email }}?subject=Postulación: {{ $jobOpening->title }}"
-                                class="flex items-center justify-center gap-2 w-full rounded-2xl bg-[#ff671f] px-6 py-4 text-sm font-bold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:bg-[#e55a1a] hover:-translate-y-0.5 hover:shadow-xl focus:ring-4 focus:ring-[#ff671f]/20">
+                                class="flex items-center justify-center gap-2 w-full rounded-2xl bg-[#ff671f] px-6 py-4 text-sm font-bold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:bg-[#e55a1a]  hover:shadow-xl focus:ring-4 focus:ring-[#ff671f]/20">
                                 <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round"

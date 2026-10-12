@@ -35,7 +35,7 @@
             @if ($featuredNews)
                 <section class="mb-12" data-aos="fade-up" data-aos-delay="50">
                     <a href="{{ route('public.news.show', $featuredNews) }}"
-                        class="group relative block rounded-3xl overflow-hidden bg-white border border-zinc-200 shadow-[0_4px_30px_-10px_rgba(0,0,0,0.08)] transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_50px_-12px_rgba(255,103,31,0.12)] hover:border-[#ff671f]/20">
+                        class="group relative block rounded-3xl overflow-hidden bg-white border border-zinc-200 shadow-[0_4px_30px_-10px_rgba(0,0,0,0.08)] transition-all duration-500  hover:shadow-[0_20px_50px_-12px_rgba(255,103,31,0.12)] hover:border-[#ff671f]/20">
                         <div class="grid md:grid-cols-2 items-stretch">
                             {{-- Imagen grande con efecto de "documento escaneado" --}}
                             <div class="relative h-72 md:h-auto min-h-[340px] overflow-hidden bg-zinc-100">
@@ -107,7 +107,7 @@
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @forelse ($news->skip(1)->take(6) as $item)
                     <a href="{{ route('public.news.show', $item) }}"
-                        class="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white overflow-hidden shadow-[0_2px_12px_-2px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#ff671f]/5 hover:border-[#ff671f]/20">
+                        class="group relative flex flex-col rounded-2xl border border-zinc-200 bg-white overflow-hidden shadow-[0_2px_12px_-2px_rgba(0,0,0,0.05)] transition-all duration-300  hover:shadow-xl hover:shadow-[#ff671f]/5 hover:border-[#ff671f]/20">
                         {{-- "Clip" decorativo de nota en la esquina superior derecha --}}
                         <div class="absolute top-0 right-0 z-10">
                             <div class="h-12 w-12 overflow-hidden">

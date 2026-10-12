@@ -54,7 +54,7 @@
                 <div class="lg:col-span-8 space-y-6" data-aos="fade-up" data-aos-delay="100">
                     <div class="grid gap-6 sm:grid-cols-2">
                         @forelse ($branches as $branch)
-                            <div class="group relative rounded-2xl border border-zinc-200 bg-white p-6 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.05)] transition-all duration-300 hover:border-[#ff671f]/30 hover:shadow-[0_8px_30px_-6px_rgba(255,103,31,0.12)] hover:-translate-y-1"
+                            <div class="group relative rounded-2xl border border-zinc-200 bg-white p-6 shadow-[0_2px_12px_-2px_rgba(0,0,0,0.05)] transition-all duration-300 hover:border-[#ff671f]/30 hover:shadow-[0_8px_30px_-6px_rgba(255,103,31,0.12)]
                                 data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">
 
                                 {{-- Header Badge --}}
@@ -181,7 +181,7 @@
                         <div class="mt-5 space-y-3">
                             @if ($contactPhone)
                                 <a href="tel:{{ preg_replace('/\s+/', '', $contactPhone) }}"
-                                    class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#ff671f] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all hover:bg-[#e55a1a] hover:-translate-y-0.5 hover:shadow-orange-500/40 active:translate-y-0">
+                                    class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#ff671f] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/30 transition-all hover:bg-[#e55a1a]  hover:shadow-orange-500/40 active:translate-y-0">
                                     <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round"

@@ -176,7 +176,7 @@
                     {{-- Actions --}}
                     <div class="mt-8 flex flex-wrap gap-4">
                         <a href="{{ route('public.products.index') }}"
-                           class="inline-flex items-center gap-2 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:bg-[#e55a1a] hover:shadow-[#ff671f]/50 hover:-translate-y-0.5 active:scale-95">
+                           class="inline-flex items-center gap-2 rounded-full bg-[#ff671f] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/25 transition-all duration-300 hover:bg-[#e55a1a] hover:shadow-[#ff671f]/50  active:scale-95">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 010 12h-3"/></svg>
                             Volver a productos
                         </a>
@@ -210,7 +210,7 @@
                 <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach ($related as $rel)
                         <a href="{{ route('public.products.show', $rel) }}"
-                           class="group relative bg-white rounded-2xl border border-zinc-100 overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-[#ff671f]/5 hover:-translate-y-1"
+                           class="group relative bg-white rounded-2xl border border-zinc-100 overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-[#ff671f]/5
                            data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">
                             <div class="relative aspect-square overflow-hidden bg-zinc-50">
                                 @if ($rel->main_image_path)

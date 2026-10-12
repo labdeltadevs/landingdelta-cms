@@ -142,7 +142,7 @@
                         <a href="{{ route('public.products.show', $product) }}"
                             class="group relative bg-white rounded-xl border border-black/8 overflow-hidden
            transition-all duration-500 ease-out
-           hover:border-black/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1"
+           hover:border-black/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)]
                             data-aos="fade-up" data-aos-delay="{{ min($loop->index * 80, 400) }}">
 
                             {{-- Image Container --}}
@@ -258,7 +258,7 @@
                         @endif
                     </p>
                     <a href="{{ route('public.products.index') }}"
-                        class="mt-6 inline-flex items-center gap-2 rounded-full bg-[#ff671f] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/20 transition-all hover:bg-[#e55a1a] hover:-translate-y-0.5">
+                        class="mt-6 inline-flex items-center gap-2 rounded-full bg-[#ff671f] px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-[#ff671f]/20 transition-all hover:bg-[#e55a1a]
                         Ver todos los productos
                     </a>
                 </div>

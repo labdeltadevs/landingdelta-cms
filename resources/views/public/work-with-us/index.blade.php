@@ -80,7 +80,7 @@
                     @foreach ($openings as $job)
                         <div class="group relative bg-white rounded-xl border border-black/8 overflow-hidden
                                     transition-all duration-500 ease-out
-                                    hover:border-black/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:-translate-y-0.5"
+                                    hover:border-black/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]
                             data-aos="fade-up" data-aos-delay="{{ min($loop->index * 80, 400) }}">
 
                             <div class="flex flex-col sm:flex-row">

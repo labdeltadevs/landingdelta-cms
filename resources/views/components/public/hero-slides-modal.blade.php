@@ -49,9 +49,12 @@
                 duration: 6000,
 
                 init() {
+                    // Apertura diferida 2.5s: no compite con el LCP del hero.
                     if (startOpen && !sessionStorage.getItem('hero-slides-modal-dismissed')) {
-                        this.open = true;
-                        this.$nextTick(() => this.start());
+                        this._openTimer = setTimeout(() => {
+                            this.open = true;
+                            this.$nextTick(() => this.start());
+                        }, 2500);
                     }
                 },
 
@@ -59,7 +62,7 @@
                     if (this.slides.length <= 1) return;
 
                     this.progress = 0;
-                    const step = 50;
+                    const step = 100;
                     let elapsed = 0;
 
                     this.timer = setInterval(() => {
@@ -146,7 +149,7 @@
 
                         {{-- Background image --}}
                         <template x-if="slide.image_url">
-                            <img :src="slide.image_url" :alt="slide.title"
+                            <img :src="slide.image_url" :alt="slide.title" loading="lazy" decoding="async"
                                 class="absolute inset-0 h-full w-full object-scale-down" />
                         </template>
 
@@ -155,9 +158,11 @@
                             <div class="absolute inset-0 bg-gradient-to-br from-[#ff671f] via-[#ff8a4c] to-[#ffb37e]"></div>
                         </template>
 
-                        {{-- Ambient glow --}}
-                        <div class="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-[#ff671f]/25 blur-3xl"></div>
-                        <div class="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full bg-[#ff8a4c]/20 blur-3xl"></div>
+                        {{-- Ambient glow: gradientes planos (sin blur) --}}
+                        <div class="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72"
+                            style="background: radial-gradient(circle, rgba(255,103,31,0.25) 0%, transparent 70%);"></div>
+                        <div class="pointer-events-none absolute -top-24 -right-24 h-56 w-56"
+                            style="background: radial-gradient(circle, rgba(255,138,76,0.20) 0%, transparent 70%);"></div>
 
                         {{-- Multi-layer gradient overlay --}}
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-400 via-slate-600/10 to-transparent"></div>
@@ -180,7 +185,7 @@
                             {{-- CTA Button --}}
                             <template x-if="slide.has_cta">
                                 <a :href="slide.cta_url"
-                                    class="group mt-6 inline-flex items-center gap-2.5 rounded-full bg-[#ff671f] px-8 py-4 text-sm font-bold text-white shadow-lg shadow-[#ff671f]/40 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/50 active:translate-y-0 active:shadow-md">
+                                    class="group mt-6 inline-flex items-center gap-2.5 rounded-full bg-[#ff671f] px-8 py-4 text-sm font-bold text-white shadow-lg shadow-[#ff671f]/40 transition-all duration-300 hover:bg-[#e55a1a] hover:shadow-xl hover:shadow-[#ff671f]/50 active:translate-y-0 active:shadow-md">
                                     <span x-text="slide.cta_label"></span>
                                     <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
                                         fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">

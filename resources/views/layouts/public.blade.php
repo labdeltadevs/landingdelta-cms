@@ -31,7 +31,7 @@
             display: none !important;
         }
     </style>
-    <header x-cloak class="sticky top-0 z-50 w-full border-b border-white/20 bg-white/70 backdrop-blur-xl"
+    <header x-cloak class="sticky top-0 z-50 w-full border-b border-white/20 bg-white/90 md:bg-white/70 md:backdrop-blur-xl"
         x-data="{ mobileOpen: false }" @click.away="mobileOpen = false">
         <div class="mx-auto flex h-16 max-w-7xl items-center px-4 sm:px-6 lg:px-8">
             {{-- Spacer for floating logo --}}
@@ -331,10 +331,12 @@
         <div class="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-[#ff671f] via-orange-400 to-amber-500">
         </div>
 
-        {{-- Resplandor ambiental sutil --}}
-        <div class="pointer-events-none absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-[#ff671f]/5 blur-3xl">
+        {{-- Resplandor ambiental sutil: gradientes planos (sin blur) --}}
+        <div class="pointer-events-none absolute -top-24 left-1/4 h-72 w-72"
+            style="background: radial-gradient(circle, rgba(255,103,31,0.05) 0%, transparent 70%);">
         </div>
-        <div class="pointer-events-none absolute bottom-0 right-0 h-56 w-56 rounded-full bg-[#ff671f]/5 blur-3xl">
+        <div class="pointer-events-none absolute bottom-0 right-0 h-56 w-56"
+            style="background: radial-gradient(circle, rgba(255,103,31,0.05) 0%, transparent 70%);">
         </div>
 
         <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
@@ -492,7 +494,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             AOS.init({
                 duration: 800,
-                once: false,
+                once: true,
                 offset: 80,
             });
         });
