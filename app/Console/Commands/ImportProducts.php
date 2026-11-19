@@ -68,6 +68,7 @@ class ImportProducts extends Command
                 'category_id' => $categoryId,
                 'is_active' => true,
                 'is_featured' => false,
+                'is_incoming' => false,
                 'sort' => (int) $row['id'],
             ]);
 

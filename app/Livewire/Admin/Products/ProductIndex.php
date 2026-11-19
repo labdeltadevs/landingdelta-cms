@@ -39,11 +39,13 @@ class ProductIndex extends Component
 
     public string $imageFilter = 'all';
 
+    public string $incomingFilter = 'all';
+
     public $importFile = null;
 
     public ?array $importResult = null;
 
-    protected $queryString = ['search', 'brandId', 'categoryId', 'activeFilter', 'featuredFilter', 'imageFilter'];
+    protected $queryString = ['search', 'brandId', 'categoryId', 'activeFilter', 'featuredFilter', 'imageFilter', 'incomingFilter'];
 
     public function updatingSearch(): void
     {
@@ -75,6 +77,11 @@ class ProductIndex extends Component
         $this->resetPage();
     }
 
+    public function updatedIncomingFilter(): void
+    {
+        $this->resetPage();
+    }
+
     public function getHasActiveFiltersProperty(): bool
     {
         return $this->search !== ''
@@ -82,13 +89,14 @@ class ProductIndex extends Component
             || $this->categoryId !== null
             || $this->activeFilter !== 'all'
             || $this->featuredFilter !== 'all'
-            || $this->imageFilter !== 'all';
+            || $this->imageFilter !== 'all'
+            || $this->incomingFilter !== 'all';
     }
 
     public function clearFilters(): void
     {
         $this->reset([
-            'search', 'brandId', 'categoryId', 'activeFilter', 'featuredFilter', 'imageFilter',
+            'search', 'brandId', 'categoryId', 'activeFilter', 'featuredFilter', 'imageFilter', 'incomingFilter',
         ]);
     }
 
@@ -104,6 +112,13 @@ class ProductIndex extends Component
         $product = Product::query()->findOrFail($id);
         $this->authorize('update', $product);
         $product->update(['is_active' => ! $product->is_active]);
+    }
+
+    public function toggleIncoming(int $id): void
+    {
+        $product = Product::query()->findOrFail($id);
+        $this->authorize('update', $product);
+        $product->update(['is_incoming' => ! $product->is_incoming]);
     }
 
     public function delete(int $id): void
@@ -240,6 +255,7 @@ class ProductIndex extends Component
             ->when($this->categoryId, fn ($q) => $q->where('category_id', $this->categoryId))
             ->when($this->activeFilter !== 'all', fn ($q) => $q->where('is_active', $this->activeFilter === 'active'))
             ->when($this->featuredFilter !== 'all', fn ($q) => $q->where('is_featured', $this->featuredFilter === 'featured'))
+            ->when($this->incomingFilter !== 'all', fn ($q) => $q->where('is_incoming', $this->incomingFilter === 'incoming'))
             ->when($this->imageFilter === 'with', fn ($q) => $q->whereNotNull('main_image_path'))
             ->when($this->imageFilter === 'without', fn ($q) => $q->whereNull('main_image_path'))
             ->orderByDesc('id')

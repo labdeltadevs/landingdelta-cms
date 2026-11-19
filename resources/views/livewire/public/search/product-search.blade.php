@@ -72,7 +72,9 @@
                            class="flex items-center gap-3 px-4 py-3 transition hover:bg-zinc-50"
                            @click="open = false">
                             <div class="h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg bg-zinc-100">
-                                @if ($product->main_image_path)
+                                @if ($product->is_incoming)
+                                    <img src="{{ $product->display_image_url }}" alt="Próximamente" class="h-full w-full object-contain p-2" />
+@elseif ($product->main_image_path)
                                     <img src="{{ $product->main_image_url }}" class="h-full w-full object-cover" />
                                 @endif
                             </div>

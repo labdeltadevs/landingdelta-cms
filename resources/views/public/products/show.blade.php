@@ -12,9 +12,7 @@
         'name' => $product->name,
         'description' => (string) Str::of(strip_tags($product->description ?? ''))->limit(300)->trim(),
     ];
-    $productSchema['image'] = $product->main_image_path
-        ? $product->main_image_url
-        : Storage::disk('public')->url('logo_delta.png');
+    $productSchema['image'] = $product->social_image_url;
     $productSchema['brand'] = [
         '@type' => 'Brand',
         'name' => $product->brand?->name ?? 'Laboratorios Delta',
@@ -23,7 +21,9 @@
     $productSchema['additionalProperty'] = $schemaProps;
     $productSchema['offers'] = [
         '@type' => 'Offer',
-        'availability' => 'https://schema.org/InStock',
+        'availability' => $product->is_incoming
+            ? 'https://schema.org/PreOrder'
+            : 'https://schema.org/InStock',
         'price' => (string) ($product->approx_price ?? 0),
         'priceCurrency' => 'BOB',
         'seller' => [
@@ -37,7 +37,7 @@
 <x-layouts::public
     metaTitle="{{ $product->name }}"
     metaDescription="{{ Str::of(strip_tags($product->description ?? ''))->limit(160)->trim() }}"
-    ogImage="{{ $product->main_image_url }}"
+    ogImage="{{ $product->social_image_url }}"
     :jsonLd="$productJsonLd">
     @php
         $related = \App\Models\Product::query()
@@ -83,7 +83,18 @@
                 {{-- LEFT: Image Gallery --}}
                 <div data-aos="fade-right" data-aos-delay="100">
                     <div class="relative aspect-square overflow-hidden rounded-2xl bg-zinc-50 border border-zinc-100 shadow-lg">
-                        @if ($product->main_image_path)
+                        @if ($product->is_incoming)
+                            <img src="{{ $product->display_image_url }}" alt="Próximamente: {{ $product->name }}" loading="lazy"
+                                 class="h-full w-full object-contain p-16 transition duration-700 hover:scale-105" />
+                            {{-- Listón "Próximamente" al pie de la imagen --}}
+                            <div class="absolute left-0 right-0 bottom-0 px-4 py-2.5 flex items-center gap-1.5 bg-white/80 backdrop-blur-sm border-t border-[#fc671a]/15">
+                                <svg class="h-3 w-3" fill="#c2410c" viewBox="0 0 24 24">
+                                    <path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                                </svg>
+                                <span class="text-xs font-semibold uppercase tracking-wider text-[#c2410c] leading-none">Próximamente</span>
+                            </div>
+                            </span>
+@elseif ($product->main_image_path)
                             <img src="{{ $product->main_image_url }}" alt="{{ $product->name }}" loading="lazy"
                                  class="h-full w-full object-cover transition duration-700 hover:scale-105" />
                         @else
@@ -213,7 +224,18 @@
                            class="group relative bg-white rounded-2xl border border-zinc-100 overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-[#ff671f]/5
                            data-aos="fade-up" data-aos-delay="{{ $loop->index * 80 }}">
                             <div class="relative aspect-square overflow-hidden bg-zinc-50">
-                                @if ($rel->main_image_path)
+                                @if ($rel->is_incoming)
+                                    <img src="{{ $rel->display_image_url }}" alt="Próximamente: {{ $rel->name }}" loading="lazy"
+                                         class="h-full w-full object-contain p-8 transition duration-700" />
+                                    {{-- Listón "Próximamente" al pie de la imagen --}}
+                                    <div class="absolute left-0 right-0 bottom-0 px-4 py-2.5 flex items-center gap-1.5 bg-white/80 backdrop-blur-sm border-t border-[#fc671a]/15">
+                                        <svg class="h-3 w-3" fill="#c2410c" viewBox="0 0 24 24">
+                                            <path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                                        </svg>
+                                        <span class="text-xs font-semibold uppercase tracking-wider text-[#c2410c] leading-none">Próximamente</span>
+                                    </div>
+                                    </span>
+@elseif ($rel->main_image_path)
                                     <img src="{{ $rel->main_image_url }}" alt="{{ $rel->name }}" loading="lazy"
                                          class="h-full w-full object-cover transition duration-700 group-hover:scale-110" />
                                 @else

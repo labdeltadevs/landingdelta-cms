@@ -26,6 +26,19 @@ class ProductCsv
         'category_id',
         'is_active',
         'is_featured',
+        'is_incoming',
+    ];
+
+    public const REQUIRED_HEADERS = [
+        'id',
+        'name',
+        'internal_code',
+        'slug',
+        'active_ingredient',
+        'brand_id',
+        'category_id',
+        'is_active',
+        'is_featured',
     ];
 
     public const DELIMITER = ';';
@@ -81,7 +94,7 @@ class ProductCsv
             'delimiter' => $delimiter,
             'headers' => $headers,
             'rows' => $rows,
-            'missing' => array_values(array_diff(self::HEADERS, $headers)),
+            'missing' => array_values(array_diff(self::REQUIRED_HEADERS, $headers)),
             'malformed' => $malformed,
         ];
     }
@@ -117,6 +130,7 @@ class ProductCsv
             $product->category_id,
             $product->is_active ? '1' : '0',
             $product->is_featured ? '1' : '0',
+            $product->is_incoming ? '1' : '0',
         ];
     }
 
@@ -154,7 +168,7 @@ class ProductCsv
                 'category_id' => $categoryId,
             ];
 
-            foreach (['is_active' => true, 'is_featured' => false] as $field => $default) {
+            foreach (['is_active' => true, 'is_featured' => false, 'is_incoming' => false] as $field => $default) {
                 $raw = trim((string) ($row[$field] ?? ''));
 
                 if ($raw === '') {
@@ -192,6 +206,7 @@ class ProductCsv
                 'category_id' => 'nullable|integer',
                 'is_active' => 'boolean',
                 'is_featured' => 'boolean',
+                'is_incoming' => 'boolean',
             ];
             if (isset($data['slug'])) {
                 $rules['slug'] = 'required|string|max:255|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/|unique:products,slug,'.$product->id;

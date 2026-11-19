@@ -44,6 +44,12 @@
             <option value="not_featured">No destacados</option>
         </flux:select>
 
+        <flux:select wire:model.live="incomingFilter" class="w-40">
+            <option value="all">Todos</option>
+            <option value="incoming">Próximos lanzamientos</option>
+            <option value="not_incoming">No próximos</option>
+        </flux:select>
+
         <flux:select wire:model.live="imageFilter" class="w-40">
             <option value="all">Todos</option>
             <option value="with">Con imagen</option>
@@ -64,6 +70,7 @@
                     <th class="px-4 py-3 text-left text-sm font-medium text-zinc-500">Especialidad</th>
                     <th class="px-4 py-3 text-center text-sm font-medium text-zinc-500">Destacado</th>
                     <th class="px-4 py-3 text-center text-sm font-medium text-zinc-500">Activo</th>
+                    <th class="px-4 py-3 text-center text-sm font-medium text-zinc-500">Próximo</th>
                     <th class="px-4 py-3"></th>
                 </tr>
             </thead>
@@ -90,6 +97,11 @@
                                     <span class="sr-only">Sin imagen:</span>
                                 @endif
                                 {{ $product->name }}
+                                @if ($product->is_incoming)
+                                    <span class="ml-2 inline-flex items-center gap-1 rounded-full bg-[#ff671f]/10 px-2 py-0.5 text-[10px] font-semibold text-[#ff671f]">
+                                        ⏳ Próximamente
+                                    </span>
+                                @endif
                             </span>
                         </td>
                         <td class="px-4 py-3 text-sm text-zinc-500">{{ $product->brand?->name ?? '—' }}</td>
@@ -106,6 +118,13 @@
                                 <flux:switch wire:click="toggleActive({{ $product->id }})" :checked="$product->is_active" />
                             @else
                                 <span class="text-xs text-zinc-400">{{ $product->is_active ? 'Sí' : 'No' }}</span>
+                            @endcan
+                        </td>
+                        <td class="px-4 py-3 text-center">
+                            @can('update', $product)
+                                <flux:switch wire:click="toggleIncoming({{ $product->id }})" :checked="$product->is_incoming" />
+                            @else
+                                <span class="text-xs text-zinc-400">{{ $product->is_incoming ? 'Sí' : 'No' }}</span>
                             @endcan
                         </td>
                         <td class="px-4 py-3 text-right">
@@ -128,7 +147,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-4 py-12 text-center text-sm text-zinc-400">
+                        <td colspan="7" class="px-4 py-12 text-center text-sm text-zinc-400">
                             @if ($this->hasActiveFilters)
                                 Sin resultados para los filtros aplicados.
                                 <flux:button wire:click="clearFilters" variant="ghost" size="sm" class="ml-2">
@@ -160,7 +179,7 @@
                 <flux:label>Archivo CSV</flux:label>
                 <flux:input type="file" wire:model="importFile" accept=".csv,text/csv" />
                 <flux:error name="importFile" />
-                <flux:description>Columnas: id, name, internal_code, slug, active_ingredient, brand_id, category_id, is_active, is_featured. Separador punto y coma o coma.</flux:description>
+                <flux:description>Columnas: id, name, internal_code, slug, active_ingredient, brand_id, category_id, is_active, is_featured, is_incoming. Separador punto y coma o coma.</flux:description>
             </flux:field>
 
             @if ($importResult)

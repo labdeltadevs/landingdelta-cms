@@ -211,7 +211,7 @@ test('exportar descarga el CSV con todos los productos', function () {
 
     $csv = base64_decode($download['content']);
 
-    expect($csv)->toContain('id;name;internal_code;slug;active_ingredient;brand_id;category_id;is_active;is_featured')
+    expect($csv)->toContain('id;name;internal_code;slug;active_ingredient;brand_id;category_id;is_active;is_featured;is_incoming')
         ->and($csv)->toContain('Exportable Uno');
 });
 
@@ -233,6 +233,7 @@ test('el mapeo de exportacion usa las 9 columnas pedidas', function () {
         $product->brand_id,
         $product->category_id,
         '1',
+        '0',
         '0',
     ]);
 });
@@ -357,4 +358,95 @@ test('importar crea el producto si el id no existe y omite filas sin nombre', fu
         ->and($created->category_id)->toBeNull()
         ->and($created->internal_code)->not->toBeNull()
         ->and($created->slug)->not->toBeNull();
+});
+
+test('puede crear un producto como próximo lanzamiento y persiste el estado', function () {
+    actingAsAdmin();
+
+    Livewire::test(ProductForm::class)
+        ->set('name', 'MEDICAMENTO NUEVO 500 mg')
+        ->set('active_ingredient', 'Nuevo Principio')
+        ->set('is_incoming', true)
+        ->call('save')
+        ->assertRedirect(route('admin.products.index'));
+
+    $product = Product::where('name', 'MEDICAMENTO NUEVO 500 mg')->firstOrFail();
+
+    expect($product->is_incoming)->toBeTrue()
+        ->and($product->is_active)->toBeTrue()
+        ->and($product->is_featured)->toBeFalse();
+});
+
+test('puede editar un producto para marcarlo como próximo lanzamiento', function () {
+    actingAsAdmin();
+
+    $product = Product::factory()->create([
+        'name' => 'MEDICAMENTO EXISTENTE',
+        'is_incoming' => false,
+    ]);
+
+    Livewire::test(ProductForm::class, ['product' => $product])
+        ->set('is_incoming', true)
+        ->call('save')
+        ->assertRedirect(route('admin.products.index'));
+
+    expect($product->refresh()->is_incoming)->toBeTrue();
+});
+
+test('toggleIncoming modifica solo el producto objetivo', function () {
+    actingAsAdmin();
+
+    $other = Product::factory()->create([
+        'name' => 'Otro producto',
+        'is_incoming' => false,
+    ]);
+    $target = Product::factory()->create([
+        'name' => 'Producto objetivo',
+        'is_incoming' => false,
+    ]);
+
+    Livewire::test(ProductIndex::class)
+        ->call('toggleIncoming', $target->id)
+        ->assertSet('incomingFilter', 'all');
+
+    expect($target->refresh()->is_incoming)->toBeTrue()
+        ->and($other->refresh()->is_incoming)->toBeFalse();
+});
+
+test('el filtro de próximos lanzamientos muestra solo productos con is_incoming', function () {
+    actingAsAdmin();
+
+    Product::factory()->create(['name' => 'Próximo Uno', 'is_incoming' => true]);
+    Product::factory()->create(['name' => 'Próximo Dos', 'is_incoming' => true]);
+    Product::factory()->create(['name' => 'Producto No Incoming', 'is_incoming' => false]);
+
+    Livewire::test(ProductIndex::class)
+        ->set('incomingFilter', 'incoming')
+        ->assertSet('incomingFilter', 'incoming')
+        ->assertSee('Próximo Uno')
+        ->assertSee('Próximo Dos')
+        ->assertDontSee('Producto No Incoming');
+});
+
+test('importar acepta la columna is_incoming y conserva el valor cuando falta', function () {
+    actingAsAdmin();
+
+    $product = Product::factory()->create(['name' => 'Viejo', 'slug' => 'viejo-1', 'is_incoming' => true]);
+
+    $csvConColumna = "id;name;internal_code;slug;active_ingredient;brand_id;category_id;is_active;is_featured;is_incoming\n{$product->id};Nuevo;PROD-9;nuevo-slug;Ibuprofeno;;;0;0;1\n";
+    $csvSinColumna = "id;name;internal_code;slug;active_ingredient;brand_id;category_id;is_active;is_featured\n{$product->id};Nuevo2;;;Ibuprofeno;;;1;0\n";
+
+    Livewire::test(ProductIndex::class)
+        ->set('importFile', UploadedFile::fake()->createWithContent('productos.csv', $csvConColumna))
+        ->call('import')
+        ->assertSet('importResult.updated', 1);
+
+    expect($product->refresh()->is_incoming)->toBeTrue();
+
+    Livewire::test(ProductIndex::class)
+        ->set('importFile', UploadedFile::fake()->createWithContent('productos.csv', $csvSinColumna))
+        ->call('import')
+        ->assertSet('importResult.updated', 1);
+
+    expect($product->refresh()->is_incoming)->toBeTrue();
 });

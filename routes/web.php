@@ -128,20 +128,24 @@ Route::get('/productos', function () {
 
     $searchTerm = request('q');
     if ($searchTerm) {
-        $like = '%'.$searchTerm.'%';
-        $query->where(function ($q) use ($like) {
-            $q->where('name', 'like', $like)
-                ->orWhere('active_ingredient', 'like', $like)
-                ->orWhere('description', 'like', $like);
-        });
+        $query->search($searchTerm);
+    }
+
+    $incoming = request('incoming') === '1';
+    if ($incoming) {
+        $query->incoming();
     }
 
     return view('public.products.index', [
         'products' => $query->ordered()->paginate(12),
-        'categories' => Category::query()->active()->ordered()->withCount(['products' => function ($q) {
+        'categories' => Category::query()->active()->ordered()->withCount(['products' => function ($q) use ($incoming) {
             $q->active();
+            if ($incoming) {
+                $q->incoming();
+            }
         }])->get(),
         'selectedCategory' => $selectedCategory,
+        'incoming' => $incoming,
     ]);
 })->name('public.products.index');
 

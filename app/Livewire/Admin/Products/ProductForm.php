@@ -52,6 +52,8 @@ class ProductForm extends Component
 
     public bool $is_featured = false;
 
+    public bool $is_incoming = false;
+
     public $upload;
 
     public function mount(?Product $product = null): void
@@ -66,6 +68,7 @@ class ProductForm extends Component
             $this->category_id = $this->product->category_id;
             $this->is_active = $this->product->is_active;
             $this->is_featured = $this->product->is_featured;
+            $this->is_incoming = $this->product->is_incoming;
 
             $this->vademecumRows = array_map(
                 fn (array $row): array => $this->withRowId($row),
@@ -129,6 +132,7 @@ class ProductForm extends Component
             'category_id' => 'nullable|exists:categories,id',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
+            'is_incoming' => 'boolean',
         ]);
 
         $data['description'] = VademecumHtml::build(array_map(

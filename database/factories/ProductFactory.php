@@ -30,6 +30,7 @@ class ProductFactory extends Factory
             'main_image_path' => null,
             'is_active' => true,
             'is_featured' => false,
+            'is_incoming' => false,
             'sort' => 0,
         ];
     }
@@ -42,5 +43,10 @@ class ProductFactory extends Factory
     public function inactive(): static
     {
         return $this->state(fn (): array => ['is_active' => false]);
+    }
+
+    public function incoming(): static
+    {
+        return $this->state(fn (): array => ['is_incoming' => true]);
     }
 }

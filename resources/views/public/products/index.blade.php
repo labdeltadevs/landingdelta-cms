@@ -50,7 +50,7 @@
                             Buscar
                         </button>
                     </div>
-                    @if (request('q') || request('category'))
+                    @if (request('q') || request('category') || request('incoming'))
                         <a href="{{ route('public.products.index') }}"
                             class="mt-2 inline-flex items-center gap-1 text-xs text-zinc-400 hover:text-white transition-colors">
                             <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2"
@@ -81,6 +81,16 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
                     </svg>
                     Todos
+                </a>
+
+                {{-- Próximos lanzamientos pill --}}
+                <a href="{{ route('public.products.index', ['incoming' => '1'] + request()->except(['incoming', 'page'])) }}"
+                    class="group relative inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-medium transition-all duration-300
+                          {{ $incoming ? 'bg-[#ff671f] text-white border-[#ff671f] shadow-md shadow-[#ff671f]/20' : 'bg-white text-zinc-600 border-zinc-200 hover:border-[#ff671f]/30 hover:text-[#ff671f] hover:shadow-sm' }}">
+                    <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0Z" />
+                    </svg>
+                    Próximos lanzamientos
                 </a>
 
                 @foreach ($categories as $category)
@@ -147,7 +157,18 @@
 
                             {{-- Image Container --}}
                             <div class="relative aspect-square overflow-hidden bg-zinc-50">
-                                @if ($product->main_image_path)
+                                @if ($product->is_incoming)
+                                    <img src="{{ $product->display_image_url }}" alt="Próximamente: {{ $product->name }}" loading="lazy"
+                                        class="h-full w-full object-contain p-8 transition duration-500 ease-in-out" />
+                                        {{-- Listón "Próximamente" al pie de la imagen --}}
+                                        <div class="absolute left-0 right-0 bottom-0 px-4 py-2.5 flex items-center gap-1.5 bg-white/80 backdrop-blur-sm border-t border-[#fc671a]/15">
+                                            <svg class="h-3 w-3" fill="#c2410c" viewBox="0 0 24 24">
+                                                <path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                                            </svg>
+                                            <span class="text-xs font-semibold uppercase tracking-wider text-[#c2410c] leading-none">Próximamente</span>
+                                        </div>
+                                    </span>
+@elseif ($product->main_image_path)
                                     <img src="{{ $product->main_image_url }}" alt="{{ $product->name }}" loading="lazy"
                                         class="h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105" />
 
@@ -175,7 +196,7 @@
                                 {{-- Category badge — siempre visible, reposicionado arriba-derecha --}}
                                 @if ($product->category)
                                     <span
-                                        class="absolute bottom-1 left-1 rounded-lg bg-black px-2.5 py-1 text-[10px] font-medium text-white shadow-sm transition-all duration-500 ease-out group-hover:bg-[#ff671f] group-hover:shadow-md">
+                                        class="absolute {{ $product->is_incoming ? 'bottom-9' : 'bottom-1' }} left-1 rounded-lg bg-black px-2.5 py-1 text-[10px] font-medium text-white shadow-sm transition-all duration-500 ease-out group-hover:bg-[#ff671f] group-hover:shadow-md">
                                         {{ $product->category->name }}
                                     </span>
                                 @endif

@@ -36,7 +36,17 @@
                 @foreach ($products as $product)
                     <a href="{{ route('public.products.show', $product) }}" class="group rounded-xl border border-zinc-200 bg-white p-4 transition hover:shadow-md">
                         <div class="aspect-square overflow-hidden rounded-lg bg-zinc-100">
-                            @if ($product->main_image_path)
+                            @if ($product->is_incoming)
+                                <img src="{{ $product->display_image_url }}" alt="Próximamente: {{ $product->name }}" loading="lazy" class="h-full w-full object-contain p-8 transition" />
+                                {{-- Listón "Próximamente" al pie de la imagen --}}
+                                <div class="absolute left-0 right-0 bottom-0 px-4 py-2.5 flex items-center gap-1.5 bg-white/80 backdrop-blur-sm border-t border-[#fc671a]/15">
+                                    <svg class="h-3 w-3" fill="#c2410c" viewBox="0 0 24 24">
+                                        <path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                                    </svg>
+                                    <span class="text-xs font-semibold uppercase tracking-wider text-[#c2410c] leading-none">Próximamente</span>
+                                </div>
+                                </span>
+@elseif ($product->main_image_path)
                                 <img src="{{ $product->main_image_url }}" alt="{{ $product->name }}" loading="lazy" class="h-full w-full object-cover transition group-hover:scale-105" />
                             @else
                                 <div class="flex h-full items-center justify-center text-zinc-300 text-sm">Sin imagen</div>

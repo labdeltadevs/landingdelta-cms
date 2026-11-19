@@ -15,6 +15,7 @@
     $previewCategory = $category_id ? $categories->firstWhere('id', $category_id)?->name : null;
     $previewActive = $is_active;
     $previewFeatured = $is_featured;
+    $previewIncoming = $is_incoming;
     $previewInitial = $previewName ? strtoupper(substr($previewName, 0, 1)) : 'P';
 @endphp
 
@@ -95,7 +96,14 @@
                     <flux:label>Imagen principal</flux:label>
                     <flux:input type="file" wire:model="upload" accept="image/*" />
                     <flux:error name="upload" />
-                    @if ($previewImageUrl)
+                    @if ($previewIncoming)
+                        <div class="mt-2 h-32 w-32 rounded-lg border-2 border-dashed border-zinc-300 flex items-center justify-center bg-zinc-50">
+                            <img src="{{ asset('images/products/proximamente.svg') }}" alt="Próximamente" class="h-24 w-24 object-contain" />
+                        </div>
+                        <p class="mt-1 text-xs text-zinc-500">
+                            Mientras esté como «Próximo lanzamiento» se muestra el SVG de aviso. La imagen cargada se conserva y se usará al desmarcarlo.
+                        </p>
+                    @elseif ($previewImageUrl)
                         <img src="{{ $previewImageUrl }}" class="mt-2 h-32 w-32 rounded-lg object-cover" />
                     @endif
                 </flux:field>
@@ -103,6 +111,7 @@
                 <div class="flex items-center gap-6">
                     <flux:switch wire:model="is_active" :checked="$is_active" label="Activo" />
                     <flux:switch wire:model="is_featured" :checked="$is_featured" label="Destacado" />
+                    <flux:switch wire:model="is_incoming" :checked="$is_incoming" label="Próximo lanzamiento" />
                 </div>
 
                 <div class="flex items-center gap-4">
@@ -119,10 +128,12 @@
                     👁 Vista previa
                 </p>
 
-                <div class="overflow-hidden rounded-2xl border bg-white/90 shadow-lg backdrop-blur-sm transition-all duration-300 {{ $previewActive ? 'border-[#ff671f]/20 shadow-[#ff671f]/5' : 'border-zinc-200 opacity-60' }}">
+                <div class="overflow-hidden rounded-2xl border bg-white/90 shadow-lg backdrop-blur-sm transition-all duration-300 {{ ($previewActive || $previewIncoming) ? 'border-[#ff671f]/20 shadow-[#ff671f]/5' : 'border-zinc-200 opacity-60' }}">
                     {{-- IMAGEN --}}
                     <div class="relative aspect-[16/9] w-full overflow-hidden bg-zinc-100">
-                        @if ($previewImageUrl)
+                        @if ($previewIncoming)
+                            <img src="{{ asset('images/products/proximamente.svg') }}" alt="Próximamente" class="h-full w-full object-contain p-6" />
+                        @elseif ($previewImageUrl)
                             <img src="{{ $previewImageUrl }}" alt="{{ $previewName }}" class="h-full w-full object-cover" />
                         @else
                             <div class="flex h-full w-full items-center justify-center">
@@ -134,7 +145,7 @@
 
                         {{-- BADGES --}}
                         <div class="absolute left-3 top-3 flex flex-wrap gap-2">
-                            @if (!$previewActive)
+                            @if (!$previewActive && !$previewIncoming)
                                 <span class="rounded-full bg-zinc-800/70 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm">
                                     Inactivo
                                 </span>
